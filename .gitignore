@@ -44,3 +44,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# in terminal: $ git   rm   -r   --cached   ./src/environments
+/src/environments/ 

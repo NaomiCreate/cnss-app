@@ -1,0 +1,27 @@
+<!-- page-container is parent to the sidebar -->
+<div class="page-container">
+    <div class="sidebar">
+        <div class= "list-items">
+            <a routerLink="/login" class="list-item">
+                <!-- the arrow icon (we added link in index.html) -->
+                <i class="material-icons">arrow_right</i>
+                Login
+            </a>
+            <a routerLink="/create-timer" routerLinkActive="selected" class="list-item">
+                <i class="material-icons">arrow_right</i>
+                Create Timer
+            </a>
+            <a routerLink="/contact-list" routerLinkActive="selected" class="list-item">
+                <i class="material-icons">arrow_right</i>
+                Contact List
+            </a>
+            <a routerLink="/history" routerLinkActive="selected" class="list-item">
+                <i class="material-icons">arrow_right</i>
+                History
+            </a>
+        </div>
+    </div>
+    <div class="page-content-container">
+        <router-outlet></router-outlet>
+    </div>
+</div>

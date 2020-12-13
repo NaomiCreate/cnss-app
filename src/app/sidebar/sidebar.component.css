@@ -1,0 +1,49 @@
+.page-container{
+    display: flex;
+    height: 100%;
+    background: rgb(27, 16, 34);
+}
+
+.sidebar {
+    height: 100%; 
+    width: 300px;
+    background: rgba(0, 0, 0, 0.329);
+}
+.page-content-container{
+	justify-content: center;
+	align-items: center;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+    background: rgb(27, 16, 34);
+}
+.list-items {
+    padding-top: 100px;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.616);
+    /* top&bottom have 10px pdding, left&right have 20px padding */
+    padding: 10px 20px;
+    /* so the list-item would look clickable */
+    cursor: pointer;
+}
+
+/* when we hover over list-item we will see: */
+.list-item:hover {
+    color: rgb(255, 255, 255);
+    
+}
+
+/* .list-item.selected{
+
+} */
+
+/* the link to icon is in: index.html */
+.list-item i.material-icons{
+    margin: 15px
+}
