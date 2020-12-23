@@ -1,42 +1,39 @@
 import { Component, OnInit } from '@angular/core';
+import { from } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
   email="";
   password="";
+  message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
-
-  constructor(private authservice: AuthService, private router: Router) { }
   
+  constructor(private authservice: AuthService, private router: Router) { }
+
   ngOnInit(): void {
   }
 
-  login()
+  register()
   {
     this.clearErrorMessage();
     if(this.validateForm(this.email, this.password))
     {
-      this.authservice.loginWithEmail(this.email, this.password)
+      this.authservice.registerWithEmail(this.email, this.password)
       .then(() => {
-        this.router.navigate(['/home-page'])
+        this.message = "Your data is registered in firebase"
+        //this.router.navigate(['/login'])
       }).catch(_error =>{
         this.error = _error
-        this.router.navigate(['/login'])
+        this.router.navigate(['/register'])
       })
-    }  
-  }
-
-  clearErrorMessage()
-  {
-    this.errorMessage = '';
-    this.error = {name: '', message:''};
+    }
   }
 
   validateForm(email, password)
@@ -59,5 +56,11 @@ export class LoginComponent implements OnInit {
 
     this.errorMessage = '';
     return true;
+  }
+
+  clearErrorMessage()
+  {
+    this.errorMessage = '';
+    this.error = {name: '', message:''};
   }
 }

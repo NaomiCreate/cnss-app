@@ -3,7 +3,8 @@
 <head>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">	
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
 <title>Login Page</title>
    <!--Made with love by Mutiullah Samim -->
    
@@ -17,7 +18,7 @@
 	
 		<div class="card">
 			<div class="card-header">
-				<h3>Sign In</h3>
+				<h3>Firebase Register</h3>
 				<!-- <div class="d-flex justify-content-end social_icon">
 					<span><i class="fab fa-facebook-square"></i></span>
 					<span><i class="fab fa-google-plus-square"></i></span>
@@ -30,9 +31,10 @@
 					<p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
 					<!-- firebase error handle -->
 					<p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
-
+					<!-- the data registered in firebase -->
+					<p *ngIf="message.length > 0" class="text-info">{{message}}</p>
 				</div>
-				<form (ngSubmit)="login()">
+				<form (ngSubmit)="register()">
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -47,10 +49,10 @@
 						<input type="password" name="password" class="form-control" [(ngModel)]="password" placeholder="password" required>
 					</div>
 					<div class="form-group">
-						<input type="submit" value="Login" class="btn float-right login_btn">
+						<input type="submit" value="Register" class="btn float-right login_btn">
 					</div>
 					<div class="register">
-						<a href="#" routerLink="/register">New User Register</a>
+						<a href="#" routerLink="/login">Back to Login</a>
 					</div>
 				</form>
 			</div>

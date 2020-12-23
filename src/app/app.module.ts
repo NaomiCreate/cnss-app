@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 //import firebase module
 import { AngularFireModule } from '@angular/fire';
@@ -15,6 +16,8 @@ import { CreateTimerComponent } from './create-timer/create-timer.component';
 import { LoginComponent } from './login/login.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { from } from 'rxjs';
+import { RegisterComponent } from './register/register.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -23,11 +26,14 @@ import { from } from 'rxjs';
     HistoryComponent,
     CreateTimerComponent,
     LoginComponent,
-    SidebarComponent
+    SidebarComponent,
+    RegisterComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFirestoreModule

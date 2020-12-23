@@ -1,0 +1,11 @@
+<p>home-page works!</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="text-info" *ngIf = "authservice.currentUser">
+            <h1 class="alldata">user information from firebase:</h1>
+            <h1><b>User ID: </b>{{authservice.currentUserId}}</h1>
+            <h1><b>User email: </b>{{authservice.currentUserName}}</h1>
+            <button class="btn-danger" (click)="authservice.signout()">Logout</button>
+        </div>
+    </div>
+</div>
