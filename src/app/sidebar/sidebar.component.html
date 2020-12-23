@@ -1,6 +1,6 @@
 <!-- page-container is parent to the sidebar -->
 <div class="page-container">
-    <div class="sidebar">
+    <div class="sidebar" *ngIf = "authservice.currentUser">
         <div class= "list-items">
             <a routerLink="/login" class="list-item">
                 <!-- the arrow icon (we added link in index.html) -->
