@@ -1,1 +1,22 @@
 <p>contact-list works!</p>
+<div class="container content-center">
+    <div class="row justify-content-center p-5">
+        <h4>CRUD from fire base</h4>
+    </div>
+    <!-- The following fields will be filled in by the user and will contain the details of the future contact -->
+    <div class="from-group">
+        <input type="text" class="from-control" [(ngModel)]="contactName" placeholder="Contact name">
+    </div>
+    <div class="from-group">
+        <input type="email" class="from-control" [(ngModel)]="contactEmail" placeholder="Contact mail">
+    </div>
+    <div class="from-group">
+        <input type="text" class="from-control" [(ngModel)]="contactPhone" placeholder="Phone number">
+    </div>
+    <div class="from-group" >
+        <button (click)="CreateRecord()" [disabled]="!contactName || !contactEmail || !contactPhone">Create Contact</button>
+    </div>
+    <div class="from-group" >
+        <h4><b>{{message}}</b></h4>
+    </div>
+</div>

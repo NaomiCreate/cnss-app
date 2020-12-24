@@ -6,7 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { environment } from '../environments/environment'
+import { environment } from '../environments/environment';
+
+import { CrudService } from './services/crud.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,7 +40,7 @@ import { HomePageComponent } from './home-page/home-page.component';
     AngularFireDatabaseModule,
     AngularFirestoreModule
   ],
-  providers: [],
+  providers: [CrudService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
