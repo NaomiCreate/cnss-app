@@ -12,6 +12,7 @@ export class ContactListComponent {//implements OnInit {
   contactEmail: string;
   contactPhone: string;
   message:string;
+  
 
   constructor(public crudservice:CrudService) { }
   
@@ -20,6 +21,7 @@ export class ContactListComponent {//implements OnInit {
       this.contact = data.map(c => {
         return {
           id: c.payload.doc.id,
+          isEdit: false,
           name: c.payload.doc.data()['name'],
           email: c.payload.doc.data()['email'],
           phone: c.payload.doc.data()['phone'],
@@ -50,4 +52,22 @@ export class ContactListComponent {//implements OnInit {
     })
   }
 
+  //will fire after the user press "Edit Contant"
+  editRecord(Record)
+  {
+    Record.isEdit = true; //Following this determination, we will see on the screen what appears in html under the tag #elseBlock
+    Record.editName= Record.name;
+    Record.editEmail = Record.email;
+    Record.editPhone= Record.phone;
+  }
+  //will fire after the user press "Edit Contant" and than press "Update"
+  updateRecord(recordData)
+  {
+    let record = {};
+    record['name'] = recordData.editName;
+    record['email'] = recordData.editEmail;
+    record['phone'] = recordData.editPhone;
+    this.crudservice.update_contact(recordData.id, record);//we defined update_contact() in crud.service.ts
+    recordData.isEdit = false;
+  }
 }

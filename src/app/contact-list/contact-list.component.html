@@ -23,20 +23,47 @@
 <!-- the next section will hold the data from firebase -->
 <table>
     <thead>
-      <tr>           
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-    </tr>
+        <tr>           
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of contact">           
-        <td > {{item.name}}</td>
-        <td > {{item.email}}</td>
-        <td > {{item.phone}}</td>
-      </tr>
+        <div *ngFor="let item of contact">
+            <div *ngIf="!item.isEdit; else elseBlock">  
+                <tr>         
+                    <td > {{item.name}}</td>
+                    <td > {{item.email}}</td>
+                    <td > {{item.phone}}</td>
+                    <td>
+                        <span>
+                            <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>
+                            <a routerLink="/contact-list"  class="btn btn-danger">Delete Contact</a> 
+                        </span>
+                    </td>
+                </tr>
+            </div>
+
+            <!-- next lines willshow after pressing Edit Contact: -->
+            <ng-template #elseBlock>    
+                    <td>         
+                        <div class="from-group">
+                            <input type="text" [(ngModel)]="item.editName" class="from-control">
+                            <input type="text" [(ngModel)]="item.editEmail" class="from-control">
+                            <input type="text" [(ngModel)]="item.editPhone" class="from-control">
+                        </div>
+                    </td>
+                    <td>
+                        <a href="/contact-list" (click)="item.isEdit = false">Cancel</a>
+                    </td>
+                    <td>
+                        <a href="/contact-list" (click)="updateRecord(item)">Update Contact</a>
+                    </td>
+            </ng-template>
+        </div>
     </tbody>
-  </table>
+</table>
 
 
 

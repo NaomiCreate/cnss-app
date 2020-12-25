@@ -19,4 +19,10 @@ export class CrudService {
   {
     return this.fireservices.collection('contacts').snapshotChanges();
   }
+
+  //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
+  update_contact(recordId, record)
+  {
+    this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name
+  }
 }
