@@ -7,14 +7,28 @@ import {CrudService} from '../services/crud.service';
   styleUrls: ['./contact-list.component.css']
 })
 export class ContactListComponent {//implements OnInit {
-  contact: string;
+  contact: any;
   contactName: string;
   contactEmail: string;
   contactPhone: string;
   message:string;
 
   constructor(public crudservice:CrudService) { }
-
+  
+  ngOnInit() {
+    this.crudservice.get_AllContacts().subscribe(data =>{
+      this.contact = data.map(c => {
+        return {
+          id: c.payload.doc.id,
+          name: c.payload.doc.data()['name'],
+          email: c.payload.doc.data()['email'],
+          phone: c.payload.doc.data()['phone'],
+        };
+      })
+      console.log(this.contact);
+    });
+  }
+  
   /*CreateRecord() will fire after the user press the "Create Contact" btn*/
   CreateRecord()
   {
@@ -36,8 +50,4 @@ export class ContactListComponent {//implements OnInit {
     })
   }
 
-
-
-  //ngOnInit(): void {
-  //}
 }

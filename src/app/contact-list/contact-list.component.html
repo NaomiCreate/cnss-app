@@ -19,4 +19,27 @@
     <div class="from-group" >
         <h4><b>{{message}}</b></h4>
     </div>
-</div>
+
+<!-- the next section will hold the data from firebase -->
+<table>
+    <thead>
+      <tr>           
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of contact">           
+        <td > {{item.name}}</td>
+        <td > {{item.email}}</td>
+        <td > {{item.phone}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+
+
+
