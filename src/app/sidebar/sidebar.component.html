@@ -1,6 +1,6 @@
 <!-- page-container is parent to the sidebar -->
-<div class="page-container">
-    <div class="sidebar" *ngIf = "authservice.currentUser">
+<div class="page-container" *ngIf = "authservice.currentUser; else elseNotAuthBlock"> 
+    <div class="sidebar">
         <div class= "list-items">
             <a routerLink="/login" class="list-item">
                 <!-- the arrow icon (we added link in index.html) -->
@@ -30,3 +30,10 @@
         <router-outlet></router-outlet>
     </div>
 </div>
+
+<!-- if the user is not logged-in: -->
+<ng-template class="page-container" #elseNotAuthBlock>
+    <div class="page-content-container">
+        <app-login></app-login>
+    </div>
+</ng-template>
