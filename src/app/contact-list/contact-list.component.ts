@@ -70,4 +70,9 @@ export class ContactListComponent {//implements OnInit {
     this.crudservice.update_contact(recordData.id, record);//we defined update_contact() in crud.service.ts
     recordData.isEdit = false;
   }
+  
+  //will fire after the user press "Delete Contact"
+  DeleteContact(recordId){
+    this.crudservice.delete_contact(recordId);
+  }
 }

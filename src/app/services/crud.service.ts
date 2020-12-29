@@ -25,4 +25,9 @@ export class CrudService {
   {
     this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name
   }
+  //delete_contact will delete the contact in firebase. (the function gets the record id)
+  delete_contact(recordId)
+  {
+    this.fireservices.doc('contacts/' + recordId).delete();
+  }
 }
