@@ -54,7 +54,7 @@ export class ContactListComponent implements OnInit {
       console.log(error);
     })
   }
-//-----------------------------------------------------------------
+
   //will fire after the user press "Edit Contant"
   editRecord(Record)
   {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import {Router} from '@angular/router';
 
@@ -9,7 +10,7 @@ import {Router} from '@angular/router';
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(public authservice: AuthService, private router: Router) { }
+  constructor(public authservice: AuthService, private router: Router,public crudservice:CrudService) { }
 
   ngOnInit(): void {
   }

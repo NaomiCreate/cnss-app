@@ -2,7 +2,7 @@
 <div class="page-container" *ngIf = "authservice.currentUser; else elseNotAuthBlock"> 
     <div class="sidebar">
         <div class= "list-items">
-            <a class="logout-item" (click)="authservice.signout()">
+            <a routerLink="/login" class="logout-item" (click)="authservice.signout()">
                 <i class="material-icons">arrow_right</i>
                 Logout
             </a>
@@ -38,7 +38,13 @@
 
 <!-- if the user is not logged-in: -->
 <ng-template class="page-container" #elseNotAuthBlock>
-    <div class="page-content-container">
+    <!-- <div class="page-content-container">
         <app-login></app-login>
+    </div> -->
+    <div class="page-content-container" *ngIf="router.url.includes('/login')">
+        <app-login></app-login>
+    </div>
+    <div class="page-content-container" *ngIf="router.url.includes('/register')">
+        <app-register></app-register>
     </div>
 </ng-template>

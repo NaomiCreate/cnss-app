@@ -8,7 +8,7 @@ import {Router} from '@angular/router';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(public authservice: AuthService, private router: Router) { }
+  constructor(public authservice: AuthService, public router: Router) { }
 
   ngOnInit(): void {
   }
