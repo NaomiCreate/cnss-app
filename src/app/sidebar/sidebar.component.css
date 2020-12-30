@@ -40,11 +40,28 @@
     
 }
 
+.logout-item{
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 18px;
+    color: #ff7c25d8;
+    /* top&bottom have 10px pdding, left&right have 20px padding */
+    padding: 10px 20px;
+    /* so the list-item would look clickable */
+    cursor: pointer;
+}
+.logout-item:hover{
+    color: rgb(255, 255, 255); 
+}
 /* .list-item.selected{
 
 } */
 
 /* the link to icon is in: index.html */
 .list-item i.material-icons{
+    margin: 15px
+}
+.logout-item i.material-icons{
     margin: 15px
 }
