@@ -1,67 +1,63 @@
-<p>contact-list works!</p>
 <div class="container content-center">
-    <div class="row justify-content-center p-5">
-        <h4>CRUD from fire base</h4>
-    </div>
     <!-- The following fields will be filled in by the user and will contain the details of the future contact -->
-    <div class="from-group">
-        <input type="text" class="from-control" [(ngModel)]="contactName" placeholder="Contact name">
-    </div>
-    <div class="from-group">
-        <input type="email" class="from-control" [(ngModel)]="contactEmail" placeholder="Contact mail">
-    </div>
-    <div class="from-group">
-        <input type="text" class="from-control" [(ngModel)]="contactPhone" placeholder="Phone number">
-    </div>
-    <div class="from-group" >
-        <button (click)="CreateRecord()" [disabled]="!contactName || !contactEmail || !contactPhone">Create Contact</button>
-    </div>
-    <div class="from-group" >
-        <h4><b>{{message}}</b></h4>
+    <div class="add-contact-section">
+        <p>Add contact</p>
+        <div class="from-group">
+            <input type="text" class="from-control" [(ngModel)]="contactName" placeholder="Contact name">
+        </div>
+        <div class="from-group">
+            <input type="email" class="from-control" [(ngModel)]="contactEmail" placeholder="Contact mail">
+        </div>
+        <div class="from-group">
+            <input type="text" class="from-control" [(ngModel)]="contactPhone" placeholder="Phone number">
+        </div>
+        <div class="from-group" >
+            <button (click)="CreateRecord()" [disabled]="!contactName || !contactEmail || !contactPhone">Create Contact</button>
+        </div>
+        <div class="from-group" >
+            <h4><b>{{message}}</b></h4>
+        </div>
     </div>
 
 <!-- the next section will hold the data from firebase -->
-<table>
+<table id="table1">
     <thead>
         <tr>           
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>More</th>
         </tr>
-    </thead>
-    <tbody>
-        <div *ngFor="let item of contact">
-            <div *ngIf="!item.isEdit; else elseBlock">  
-                <tr>         
+    </thead> 
+    <tbody *ngFor="let item of contact">
+        <!-- <div *ngFor="let item of contact"> -->
+            <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
+                <tr *ngIf="!item.isEdit; else elseBlock">         
                     <td > {{item.name}}</td>
                     <td > {{item.email}}</td>
                     <td > {{item.phone}}</td>
                     <td>
                         <span>
-                            <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>
-                            <a routerLink="/contact-list"  (click)="DeleteContact(item.id)" class="btn btn-danger">Delete Contact</a> 
+                            <tr><a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a></tr>
+                            <tr><a routerLink="/contact-list"  (click)="DeleteContact(item.id)" class="btn btn-danger">Delete Contact</a> </tr>
                         </span>
                     </td>
                 </tr>
-            </div>
+            <!-- </div> -->
 
             <!-- next lines willshow after pressing Edit Contact: -->
             <ng-template #elseBlock>    
-                    <td>         
-                        <div class="from-group">
-                            <input type="text" [(ngModel)]="item.editName" class="from-control">
-                            <input type="text" [(ngModel)]="item.editEmail" class="from-control">
-                            <input type="text" [(ngModel)]="item.editPhone" class="from-control">
-                        </div>
-                    </td>
+                    <!-- <div class="from-group"> -->
+                        <td><input type="text" [(ngModel)]="item.editName" class="from-control"></td>
+                        <td><input type="text" [(ngModel)]="item.editEmail" class="from-control"></td>
+                        <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
+                    <!-- </div> -->
                     <td>
-                        <a href="/contact-list" (click)="item.isEdit = false">Cancel</a>
-                    </td>
-                    <td>
-                        <a href="/contact-list" (click)="updateRecord(item)">Update Contact</a>
+                        <tr><a href="/contact-list" (click)="item.isEdit = false">Cancel</a></tr>
+                        <tr><a href="/contact-list" (click)="updateRecord(item)">Update Contact</a></tr>
                     </td>
             </ng-template>
-        </div>
+        <!-- </div> -->
     </tbody>
 </table>
 
