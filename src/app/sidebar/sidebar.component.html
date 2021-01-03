@@ -41,6 +41,9 @@
     <!-- <div class="page-content-container">
         <app-login></app-login>
     </div> -->
+    <div class="page-content-container" *ngIf="!(router.url.includes('/login') || router.url.includes('/register'))">
+        <app-page-not-found></app-page-not-found>
+    </div>
     <div class="page-content-container" *ngIf="router.url.includes('/login')">
         <app-login></app-login>
     </div>
