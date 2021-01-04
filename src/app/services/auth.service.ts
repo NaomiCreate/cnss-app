@@ -13,33 +13,6 @@ export class AuthService {
       this.authState = auth;
     }))
   }
-//function in use in register.component.ts
-  registerWithEmail(email: string, password: string){
-    return this.afu.createUserWithEmailAndPassword(email, password)
-    .then((user) => {
-      this.authState = user
-    }).catch(error=>{
-        console.log(error)
-        throw error
-      })
-  }
-//function in use in login.component.ts
-  loginWithEmail(email: string, password: string){
-    return this.afu.signInWithEmailAndPassword(email, password)
-    .then((user) => {
-      this.authState = user
-    }).catch(error=>{
-        console.log(error)
-        throw error
-      })
-  }
-  
-  signout(): void
-  {
-    this.afu.signOut();
-    this.router.navigate(['/login']);
-  }
-
   //get fanctions, to get data from firebase
   get isUserAnonymousLoggedIn(): boolean{
     return (this.authState !== null) ? this.authState.isAnonymous : false
@@ -60,4 +33,46 @@ export class AuthService {
       return false
     }
   } 
+ //-----------------------didnt work
+  // registerWithEmail(email: string, password: string){
+  //   return this.afu.createUserWithEmailAndPassword(email, password)
+  //   .then((user) => {
+  //     this.authState = user
+  //   }).catch(error=>{
+  //       console.log(error)
+  //       throw error
+  //     })
+  // }
+ //-------------------------------
+
+  //function in use in register.component.ts
+  registerWithEmail(email: string, password: string){
+    return new Promise(resolve => {
+      this.afu.createUserWithEmailAndPassword(email, password)
+      .then((credential) => {
+        this.authState = credential.user;
+        resolve(credential.user);
+      }).catch(error=>{
+        console.log(error)
+        throw error;
+      })
+    });
+  }
+
+//function in use in login.component.ts
+  loginWithEmail(email: string, password: string){
+    return this.afu.signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      this.authState = user
+    }).catch(error=>{
+        console.log(error)
+        throw error
+      })
+  }
+  
+  signout(): void
+  {
+    this.afu.signOut();
+    this.router.navigate(['/login']);
+  }
 }

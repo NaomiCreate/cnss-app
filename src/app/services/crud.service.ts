@@ -11,6 +11,24 @@ export class CrudService {
   //constructor(public fireservices:AngularFirestore) { }
   constructor(private authservice: AuthService, public fireservices:AngularFirestore) { }
   
+  //--------
+  create_userInfo(RecordUserInfo)
+  { 
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').add(RecordUserInfo);
+  }
+
+
+
+
+  get_userInfo()
+  {
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();
+            //return this.fireservices.collection('contacts').snapshotChanges();//-before change
+  }
+  //--------
+
+
+
   //create_NewContact adds to the 'contacts' collection in firebase, the contact that the user entered as input
   create_NewContact(Record)
   {  
