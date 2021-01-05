@@ -21,17 +21,25 @@ a {
     color: #fff;
     background-color: #507eb1;
     border-color: #507eb1; 
+    width: 150px;
+    margin: 3px;
 }
 .btn-primary:hover{
     background-color: #8aa2bc;
     border-color:#8aa2bc;
+    width: 150px;
+    margin: 3px;
 }
 .btn-danger {
     color: #fff;
     background-color: #b7434e;
-    border-color:  #b7434e; 
+    border-color:  #b7434e;
+    width: 150px; 
+    margin: 3px;
 }
 .btn-danger:hover{
     background-color: #c5616b;
     border-color:  #c5616b; 
+    width: 150px;
+    margin: 3px;
 }

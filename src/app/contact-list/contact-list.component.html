@@ -34,7 +34,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>More</th>
+            <th></th>
         </tr>
     </thead> 
     <tbody *ngFor="let item of contact">
@@ -46,10 +46,11 @@
                     <td > {{item.phone}}</td>
                     <td>
                         <span>
-                            <tr><a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a></tr>
-                            <tr><a routerLink="/contact-list"  (click)="DeleteContact(item.id)" class="btn btn-danger">Delete Contact</a> </tr>
+                            <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>
+                            <a routerLink="/contact-list"  (click)="DeleteContact(item.id)" class="btn btn-danger">Delete Contact</a>
                         </span>
                     </td>
+                    
                 </tr>
             <!-- </div> -->
 
@@ -61,8 +62,8 @@
                         <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
                     <!-- </div> -->
                     <td>
-                        <tr><a href="/contact-list" (click)="item.isEdit = false">Cancel</a></tr>
-                        <tr><a href="/contact-list" (click)="updateRecord(item)">Update Contact</a></tr>
+                        <a href="/contact-list" (click)="item.isEdit = false">Cancel</a>
+                        <a href="/contact-list" (click)="updateRecord(item)">Update Contact</a>
                     </td>
             </ng-template>
         <!-- </div> -->
