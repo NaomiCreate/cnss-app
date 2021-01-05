@@ -51,20 +51,21 @@ export class ProfileComponent implements OnInit {
   //will fire after the user press "Edit" and than press "Update"
   updateRecord(recordData)
   {
-  //if(this.validateForm(recordData.email, recordData.name, recordData.phone)==true)
-  //{
-    let record = {};
-    record['name'] = recordData.editName;
-    record['email'] = recordData.editEmail;
-    record['phone'] = recordData.editPhone;
-    record['is-user-own-cnss'] = recordData.editIsUserOwnCnss;
+    if(confirm("are you sure you want to edit this contact?"))
+    {
+    //if(this.validateForm(recordData.email, recordData.name, recordData.phone)==true)
+    //{
+      let record = {};
+      record['name'] = recordData.editName;
+      record['email'] = recordData.editEmail;
+      record['phone'] = recordData.editPhone;
+      record['is-user-own-cnss'] = recordData.editIsUserOwnCnss;
 
-    this.crudservice.update_user(recordData.id, record);//we defined update_contact() in crud.service.ts
-    this.message = "The update was successful";
-    recordData.isEdit = false;
-
+      this.crudservice.update_user(recordData.id, record);//we defined update_contact() in crud.service.ts
+      this.message = "The update was successful";
+      recordData.isEdit = false;
+    }
   //}
-  //recordData.isEdit = false;
   }
 
   validateForm(email, name, phone)

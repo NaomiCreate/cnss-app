@@ -38,24 +38,27 @@ export class ContactListComponent implements OnInit {
   /*CreateRecord() will fire after the user press the "Create Contact" btn*/
   CreateRecord()
   {
-    if(this.validateForm(this.contactEmail, this.contactName, this.contactPhone)==true)
+    if(confirm("a new contact is going be be created"))
     {
-      //The function stores within the relevant fields in "Record" variable, the user's input
-      let Record = {};
-      Record['name'] = this.contactName;
-      Record['email'] = this.contactEmail;
-      Record['phone'] = this.contactPhone;
-      
-      //create_NewContact is defined in crud.service.ts file
-      this.crudservice.create_NewContact(Record).then(res => {
-        this.contactName = "";
-        this.contactEmail = "";
-        this.contactPhone = "";
-        console.log(res);
-        this.message = "New contact added";
-      }).catch(error => {
-        console.log(error);
-      })
+    if(this.validateForm(this.contactEmail, this.contactName, this.contactPhone)==true)
+      {
+        //The function stores within the relevant fields in "Record" variable, the user's input
+        let Record = {};
+        Record['name'] = this.contactName;
+        Record['email'] = this.contactEmail;
+        Record['phone'] = this.contactPhone;
+        
+        //create_NewContact is defined in crud.service.ts file
+        this.crudservice.create_NewContact(Record).then(res => {
+          this.contactName = "";
+          this.contactEmail = "";
+          this.contactPhone = "";
+          console.log(res);
+          this.message = "New contact added";
+        }).catch(error => {
+          console.log(error);
+        })
+      }
     }
   }
 
@@ -70,6 +73,8 @@ export class ContactListComponent implements OnInit {
   //will fire after the user press "Edit Contant" and than press "Update"
   updateRecord(recordData)
   {
+    if(confirm("are you sure you want to edit this contact?"))
+    {
     //if(this.validateForm(recordData.email, recordData.name, recordData.phone)==true)
     //{
       let record = {};
@@ -80,14 +85,17 @@ export class ContactListComponent implements OnInit {
       recordData.isEdit = false;
       this.message = "The update was successful"
     //}
-    //recordData.isEdit = false;
+    }
   }
 
   //will fire after the user press "Delete Contact"
   DeleteContact(recordId){
-    if(this.authservice.currentUser != null)//We will make sure the user is logged in
+    if(confirm("are you sure you want to delete this contact?"))
     {
-      this.crudservice.delete_contact(recordId);
+      if(this.authservice.currentUser != null)//We will make sure the user is logged in
+      {
+        this.crudservice.delete_contact(recordId);
+      }
     }
   }
 
