@@ -1,0 +1,11 @@
+tbody{
+    position: absolute;
+    left: 53%;
+    top: 15%;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.616);
+}
+.btn-primary{
+    position: relative;
+    /* left: 18.5%; */
+}

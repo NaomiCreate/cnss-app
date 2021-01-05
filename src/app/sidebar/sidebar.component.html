@@ -2,9 +2,13 @@
 <div class="page-container" *ngIf = "authservice.currentUser; else elseNotAuthBlock"> 
     <div class="sidebar">
         <div class= "list-items">
-            <a routerLink="/login" class="logout-item" (click)="authservice.signout()">
+            <a routerLink="/login" class="list-item" (click)="authservice.signout()">
                 <i class="material-icons">arrow_right</i>
                 Logout
+            </a>
+            <a routerLink="/profile" routerLinkActive="selected" class="list-item">
+                <i class="material-icons">arrow_right</i>
+                My Profile
             </a>
             <!-- after the user is logged in there is no reson the login will show in the sidebar -->
             <!-- the arrow icon (we added link in index.html)  -->
@@ -25,10 +29,14 @@
                 <i class="material-icons">arrow_right</i>
                 Contact List
             </a>
-            <a routerLink="/history" routerLinkActive="selected" class="list-item">
+            <a routerLink="/connected-to" routerLinkActive="selected" class="list-item">
+                <i class="material-icons">arrow_right</i>
+                Connected To
+            </a>
+            <!-- <a routerLink="/history" routerLinkActive="selected" class="list-item">
                 <i class="material-icons">arrow_right</i>
                 History
-            </a>
+            </a> -->
         </div>
     </div>
     <div class="page-content-container">

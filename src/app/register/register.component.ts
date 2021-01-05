@@ -13,11 +13,10 @@ export class RegisterComponent implements OnInit {
   user: any;
   email="";
   password="";
-  message = '';
   name="";
   phone="";
   isOwningCNSS:boolean;
-
+  message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
   

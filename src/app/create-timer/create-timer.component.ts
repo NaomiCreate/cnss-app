@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-timer.component.css']
 })
 export class CreateTimerComponent implements OnInit {
-
+  isNewProfile;
   constructor() { }
 
   ngOnInit(): void {

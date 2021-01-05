@@ -12,19 +12,22 @@ export class CrudService {
   constructor(private authservice: AuthService, public fireservices:AngularFirestore) { }
   
   //--------
+  //create_userInfo adds to the collection 'user-info', a document in firebase, that including details about the registrant 
   create_userInfo(RecordUserInfo)
   { 
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').add(RecordUserInfo);
   }
-
-
-
-
   get_userInfo()
   {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();
             //return this.fireservices.collection('contacts').snapshotChanges();//-before change
   }
+    //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
+    update_user(recordId, record)
+    {
+      this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
+              //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
+    }
   //--------
 
 

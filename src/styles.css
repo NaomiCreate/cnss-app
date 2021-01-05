@@ -9,3 +9,29 @@ html, body {
 a {
     text-decoration: none;
 }
+/* .btn-danger{
+    color: rgb(51, 48, 48);
+    background-color:rgba(71, 16, 16, 0.664);
+}
+.btn-primary{
+    color: rgb(51, 48, 48);
+    background-color:rgba(190, 190, 190, 0.739); 
+} */
+.btn-primary {
+    color: #fff;
+    background-color: #507eb1;
+    border-color: #507eb1; 
+}
+.btn-primary:hover{
+    background-color: #8aa2bc;
+    border-color:#8aa2bc;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #b7434e;
+    border-color:  #b7434e; 
+}
+.btn-danger:hover{
+    background-color: #c5616b;
+    border-color:  #c5616b; 
+}

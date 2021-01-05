@@ -1,7 +1,15 @@
 <div class="container content-center">
     <!-- The following fields will be filled in by the user and will contain the details of the future contact -->
     <div class="add-contact-section">
-        <p>Add contact</p>
+        <h4>Add contact:</h4>
+        <div class="form-group">
+            <!-- user error -->
+            <p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
+            <!-- firebase error handle -->
+            <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
+            <!-- the data registered in firebase -->
+            <p *ngIf="message.length > 0" class="text-info">{{message}}</p>
+        </div>
         <div class="from-group">
             <input type="text" class="from-control" [(ngModel)]="contactName" placeholder="Contact name">
         </div>
@@ -12,7 +20,7 @@
             <input type="text" class="from-control" [(ngModel)]="contactPhone" placeholder="Phone number">
         </div>
         <div class="from-group" >
-            <button (click)="CreateRecord()" [disabled]="!contactName || !contactEmail || !contactPhone">Create Contact</button>
+            <button id="add-contact-btn" (click)="CreateRecord()" [disabled]="!contactName || !contactEmail || !contactPhone">Create Contact</button>
         </div>
         <div class="from-group" >
             <h4><b>{{message}}</b></h4>
@@ -21,7 +29,7 @@
 
 <!-- the next section will hold the data from firebase -->
 <table id="table1">
-    <thead>
+    <thead >
         <tr>           
             <th>Name</th>
             <th>Email</th>

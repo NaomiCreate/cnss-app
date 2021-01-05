@@ -21,6 +21,8 @@ import { from } from 'rxjs';
 import { RegisterComponent } from './register/register.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ConnectedToComponent } from './connected-to/connected-to.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     SidebarComponent,
     RegisterComponent,
     HomePageComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ProfileComponent,
+    ConnectedToComponent
   ],
   imports: [
     BrowserModule,
