@@ -25,7 +25,8 @@ export class LoginComponent implements OnInit {
     {
       this.authservice.loginWithEmail(this.email, this.password)
       .then(() => {
-        this.router.navigate(['/home-page'])
+        // this.router.navigate(['/home-page'])
+        this.router.navigate(['/profile'])
       }).catch(_error =>{
         this.error = _error
         this.router.navigate(['/login'])

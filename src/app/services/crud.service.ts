@@ -45,7 +45,11 @@ export class CrudService {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').snapshotChanges();
             //return this.fireservices.collection('contacts').snapshotChanges();//-before change
   }
-
+  get_AllConnections()
+  {
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('connected-to').snapshotChanges();
+            //return this.fireservices.collection('contacts').snapshotChanges();//-before change
+  }
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
   update_contact(recordId, record)
   {
@@ -56,6 +60,12 @@ export class CrudService {
   delete_contact(recordId)
   {
     this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + recordId).delete();
+            //this.fireservices.doc('contacts/' + recordId).delete();//-before change
+  }
+
+  delete_connection(recordId)
+  {
+    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + recordId).delete();
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
 }

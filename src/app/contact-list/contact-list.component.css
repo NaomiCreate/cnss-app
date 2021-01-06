@@ -13,7 +13,11 @@ input{
     border-radius: 5px;
     height: 40px;
 }
-
+.edit-from-control{
+    border-radius: 5px;
+    height: 30px;
+    width: 140px;
+}
 .add-contact-section{
     color: black;
     position: absolute;
@@ -24,7 +28,7 @@ input{
 
 #add-contact-btn{
     position: relative;
-    left: 15%;
+    left: 10%;
     color: black;
     background-color:rgba(190, 190, 190, 0.739); 
     margin:3px;
@@ -49,7 +53,7 @@ table {
   
   th, td{
     border: solid 2px  rgba(0, 0, 0, 0.329);
-    padding: 8px 20px;
+    padding: 8px 18px;
     /*color: rgba(190, 190, 190, 0.739);*/
     font-family: 'Open Sans' ;/*is this needed??*/
     color: aliceblue;
@@ -68,3 +72,6 @@ table {
         font-family:'Open Sans'; 
         font-weight: bold;
   }
+td a{
+margin: 7px;
+}

@@ -22,9 +22,9 @@
         <div class="from-group" >
             <button id="add-contact-btn" (click)="CreateRecord()" [disabled]="!contactName || !contactEmail || !contactPhone">Create Contact</button>
         </div>
-        <div class="from-group" >
+        <!-- <div class="from-group" >
             <h4><b>{{message}}</b></h4>
-        </div>
+        </div> -->
     </div>
 
 <!-- the next section will hold the data from firebase -->
@@ -57,9 +57,9 @@
             <!-- next lines willshow after pressing Edit Contact: -->
             <ng-template #elseBlock>    
                     <!-- <div class="from-group"> -->
-                        <td><input type="text" [(ngModel)]="item.editName" class="from-control"></td>
-                        <td><input type="text" [(ngModel)]="item.editEmail" class="from-control"></td>
-                        <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
+                        <td><input type="text" [(ngModel)]="item.editName" class="edit-from-control"></td>
+                        <td><input type="text" [(ngModel)]="item.editEmail" class="edit-from-control"></td>
+                        <td><input type="text" [(ngModel)]="item.editPhone" class="edit-from-control"></td>
                     <!-- </div> -->
                     <td>
                         <a href="/contact-list" (click)="item.isEdit = false">Cancel</a>

@@ -23,6 +23,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ConnectedToComponent } from './connected-to/connected-to.component';
+import { SystemControlComponent } from './system-control/system-control.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ConnectedToComponent } from './connected-to/connected-to.component';
     HomePageComponent,
     PageNotFoundComponent,
     ProfileComponent,
-    ConnectedToComponent
+    ConnectedToComponent,
+    SystemControlComponent
   ],
   imports: [
     BrowserModule,

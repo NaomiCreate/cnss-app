@@ -2,6 +2,7 @@
 .page-container{
     display: flex;
     height: 100%;
+    /* background-size: cover; */
     background: rgb(27, 16, 34);
 }
 
@@ -16,7 +17,8 @@
     align-content: center;
     height: 100%;
     width: 100%;
-    background: rgb(27, 16, 34);
+    /* background-size:cover; */
+    background-color: rgb(27, 16, 34);
 }
 .list-items {
     padding-top: 100px;
@@ -41,10 +43,9 @@
     
 }
 
-
-/* .list-item.selected{
-
-} */
+.list-item.selected{
+color:  #ffa76cd8; 
+} 
 
 /* the link to icon is in: index.html */
 .list-item i.material-icons{

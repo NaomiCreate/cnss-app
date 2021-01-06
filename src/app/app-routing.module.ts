@@ -10,6 +10,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ConnectedToComponent } from './connected-to/connected-to.component';
+import { SystemControlComponent } from './system-control/system-control.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full' },//empty string because we will see this page at the path: http://localhost:4200/
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'history', component: HistoryComponent },
   {path: 'profile', component: ProfileComponent },
   {path: 'connected-to', component: ConnectedToComponent },
+  {path: 'system-control', component: SystemControlComponent },
   {path: "**", component: PageNotFoundComponent}
 
 ];

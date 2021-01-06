@@ -68,7 +68,9 @@ export class RegisterComponent implements OnInit {
           this.CreateRecordUserInfo();
 
           this.message = "Your data is registered in firebase"
-          this.router.navigate(['/home-page'])
+          // this.router.navigate(['/home-page'])
+          this.router.navigate(['/profile'])
+
       }).catch(_error =>{
         this.error = _error
         this.router.navigate(['/register'])

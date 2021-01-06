@@ -1,21 +1,47 @@
+<h3 *ngFor="let item of user">Welcome back {{item.name}},</h3>
 
-<tbody *ngFor="let item of user">
-    <div *ngIf="!item.isEdit; else elseBlock">
-        <tr>Name:    {{item.name}}</tr>
-        <tr>Email:   {{item.email}}</tr>
-        <tr>Phone Number:   {{item.phone}}</tr>
-        <tr *ngIf="item.isOwningCNSS; else elseNotOwningCNSSBlock">Do I own CNSS?   Yes</tr>
-        <ng-template #elseNotOwningCNSSBlock>Do I own CNSS?     No</ng-template>
-        <p></p>
-        <p></p>
-        <tr><a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary">Edit</a></tr>
-    </div>
-    <!-- next lines willshow after pressing Edit Contact: -->
-    <ng-template #elseBlock>    
-        <!-- <div class="from-group"> -->
-            <tr><input type="text" [(ngModel)]="item.editName" class="from-control"></tr>
-            <tr><input type="text" [(ngModel)]="item.editEmail" class="from-control"></tr>
-            <tr><input type="text" [(ngModel)]="item.editPhone" class="from-control"></tr>
+<h4>Your Details:</h4>
+<table>
+    <tbody *ngFor="let item of user">
+        <div *ngIf="!item.isEdit; else elseBlock">
+            <tr>
+                <th>Name:</th>    
+                <td>{{item.name}}</td>
+            </tr>
+            <tr>
+                <th>Email:</th>   
+                <td>{{item.email}}</td>
+            </tr>
+            <tr>
+                <th>Phone Number:</th>   
+                <td>{{item.phone}}</td>
+            </tr>
+            <tr *ngIf="item.isOwningCNSS; else elseNotOwningCNSSBlock">
+                <th>Do I own CNSS?</th>  
+                <td>Yes</td>
+            </tr>
+            <ng-template #elseNotOwningCNSSBlock>
+                <th>Do I own CNSS?</th>     
+                <td>No</td>
+            </ng-template>
+            <p></p>
+            <p></p>
+            <tr><a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary">Edit</a></tr>
+        </div>
+        <!-- next lines willshow after pressing Edit Contact: -->
+        <ng-template #elseBlock>  
+            <tr>
+                <th>Name:</th>    
+                <td><input type="text" [(ngModel)]="item.editName" class="from-control"></td>
+            </tr>
+            <tr>
+                <th>Email:</th>   
+                <td><input type="text" [(ngModel)]="item.editEmail" class="from-control"></td>
+            </tr>
+            <tr>
+                <th>Phone Number:</th>   
+                <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
+            </tr>
             <tr>
                 <select [(ngModel)]="item.editIsUserOwnCnss" class="form-control" name="selectOwnOrNotCNSS">
                     <option [value]="undefined" disabled hidden>Select...</option>
@@ -23,9 +49,12 @@
                     <option [ngValue]="false">I dont own a security system</option>
                 </select>
             </tr>
-            <!-- </div> -->
-            <tr><a href="/profile" (click)="updateRecord(item)">Update</a></tr>
-            <tr><a href="/profile" (click)="item.isEdit = false">Cancel</a></tr>            
-    </ng-template>
+                <!-- </div> -->
+                <tr><a href="/profile" (click)="updateRecord(item)">Update</a></tr>
+                <tr><a href="/profile" (click)="item.isEdit = false">Cancel</a></tr>            
+        </ng-template>
+    </tbody> 
+</table>
 
-</tbody> 
+
+
