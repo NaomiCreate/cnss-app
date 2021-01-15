@@ -13,6 +13,7 @@ export class RegisterComponent implements OnInit {
   user: any;
   email="";
   password="";
+  passwordVerify="";//
   name="";
   phone="";
   isOwningCNSS:boolean;
@@ -56,7 +57,7 @@ export class RegisterComponent implements OnInit {
   register()
   {
     this.clearErrorMessage();
-    if(this.validateForm(this.email, this.password, this.isOwningCNSS, this.name, this.phone))
+    if(this.validateForm(this.email, this.password, this.passwordVerify,this.isOwningCNSS, this.name, this.phone))
     {
       this.authservice.registerWithEmail(this.email, this.password)
       .then(() => {
@@ -78,7 +79,7 @@ export class RegisterComponent implements OnInit {
     }
   }
   
-  validateForm(email, password, isOwningCNSS, name, phone)
+  validateForm(email, password, passwordVerify, isOwningCNSS, name, phone)
   {
     if(email.length === 0)
     {
@@ -93,6 +94,11 @@ export class RegisterComponent implements OnInit {
     if(password.length < 5)
     {
       this.errorMessage = "password should be at least 5 chars";
+      return false
+    }
+    if(!(passwordVerify === password))
+    {
+      this.errorMessage = "the verifying password is different from the password";
       return false
     }
     if(name.length === 0)
