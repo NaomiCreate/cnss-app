@@ -43,11 +43,17 @@
                 <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
             </tr>
             <tr>
-                <select [(ngModel)]="item.editIsUserOwnCnss" class="form-control" name="selectOwnOrNotCNSS">
+                <div class="selectOwnOrNotCNSS" name="selectOwnOrNotCNSS">
+                    <input type="radio"  [(ngModel)]="item.editIsUserOwnCnss" [value]="true" />  
+                    <label>I own a security system</label><br>  
+                    <input type="radio"  [(ngModel)]="item.editIsUserOwnCnss" [value]="false" />
+                    <label>I dont own a security system</label><br>  
+                </div>
+                <!-- <select [(ngModel)]="item.editIsUserOwnCnss" class="form-control" name="selectOwnOrNotCNSS">
                     <option [value]="undefined" disabled hidden>Select...</option>
                     <option [ngValue]="true">I own a security system</option>
                     <option [ngValue]="false">I dont own a security system</option>
-                </select>
+                </select> -->
             </tr>
                 <!-- </div> -->
                 <tr><a href="/profile" (click)="updateRecord(item)">Update</a></tr>
