@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact-list',
@@ -16,9 +17,11 @@ export class ContactListComponent implements OnInit {
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
 
-  constructor(private authservice: AuthService,public crudservice:CrudService) { }
+  constructor(private router: Router, private authservice: AuthService,public crudservice:CrudService) { }
   
   ngOnInit() {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
     {
       this.crudservice.get_AllContacts().subscribe(data => {
@@ -31,6 +34,7 @@ export class ContactListComponent implements OnInit {
             phone: c.payload.doc.data()['phone'],
           };
         })
+        console.log("this.contact is:");
         console.log(this.contact);
       });  
     }

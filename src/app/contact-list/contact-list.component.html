@@ -62,14 +62,15 @@
                         <td><input type="text" [(ngModel)]="item.editPhone" class="edit-from-control"></td>
                     <!-- </div> -->
                     <td>
-                        <a href="/contact-list" (click)="item.isEdit = false">Cancel</a>
-                        <a href="/contact-list" (click)="updateRecord(item)">Update Contact</a>
+                        <button  (click)="item.isEdit = false">Cancel</button>
+                        <button  (click)="updateRecord(item)">Update Contact</button>
+                        <!-- <a href="/contact-list" (click)="item.isEdit = false">Cancel</a>
+                        <a href="/contact-list" (click)="updateRecord(item)">Update Contact</a>                     -->
                     </td>
             </ng-template>
         <!-- </div> -->
     </tbody>
 </table>
-
 
 
 

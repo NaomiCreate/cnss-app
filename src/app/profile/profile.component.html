@@ -56,9 +56,11 @@
                 </select> -->
             </tr>
                 <!-- </div> -->
-                <tr><a href="/profile" (click)="updateRecord(item)">Update</a></tr>
-                <tr><a href="/profile" (click)="item.isEdit = false">Cancel</a></tr>            
-        </ng-template>
+                <tr><button (click)="updateRecord(item)">Update</button></tr>
+                <tr><button (click)="item.isEdit = false">Cancel</button></tr>            
+            <!-- <tr><a href="/profile" (click)="updateRecord(item)">Update</a></tr> -->
+                <!-- <tr><a href="/profile" (click)="item.isEdit = false">Cancel</a></tr>             -->
+            </ng-template>
     </tbody> 
 </table>
 

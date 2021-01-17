@@ -14,7 +14,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { HistoryComponent } from './history/history.component';
-import { CreateTimerComponent } from './create-timer/create-timer.component';
 import { LoginComponent } from './login/login.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { from } from 'rxjs';
@@ -30,7 +29,6 @@ import { SystemControlComponent } from './system-control/system-control.componen
     AppComponent,
     ContactListComponent,
     HistoryComponent,
-    CreateTimerComponent,
     LoginComponent,
     SidebarComponent,
     RegisterComponent,

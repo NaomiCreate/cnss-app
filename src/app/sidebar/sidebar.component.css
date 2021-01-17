@@ -1,7 +1,8 @@
 /* test */
 .page-container{
     display: flex;
-    height: 100%;
+    height: 150%;
+    width: 150%;
     /* background-size: cover; */
     background: rgb(27, 16, 34);
 }
