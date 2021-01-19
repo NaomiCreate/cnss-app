@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit {
   passwordVerify="";//
   name="";
   phone="";
+  system_id=""; //NEED TO CHECK THAT SYSTEM EXISTS IN FIREBASE AND ONLY THEN ALLOW REGISTRATION
   isOwningCNSS:boolean;
   message = '';
   errorMessage = ''; //validation error handle

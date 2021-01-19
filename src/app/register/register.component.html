@@ -24,7 +24,7 @@
 		</div>					
 		<div class="card">
 			<div class="card-header">
-				<h3>Firebase Register</h3>
+				<h3>Registration Form</h3>
 				<!-- <div class="d-flex justify-content-end social_icon">
 					<span><i class="fab fa-facebook-square"></i></span>
 					<span><i class="fab fa-google-plus-square"></i></span>
@@ -38,19 +38,19 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fa fa-envelope"></i></span>
 							</div>
-							<input type="email" name="email" class="form-control" [(ngModel)]="email" placeholder="Enter email Id" required>	
+							<input type="email" name="email" class="form-control" [(ngModel)]="email" placeholder="Enter email" required>	
 						</div>
 						<div class="input-group form-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<input type="password" name="password" class="form-control" [(ngModel)]="password" placeholder="password" required>
+							<input type="password" name="password" class="form-control" [(ngModel)]="password" placeholder="Enter password" required>
 						</div>
 						<div class="input-group form-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<input type="password" name="password-verify" class="form-control" [(ngModel)]="passwordVerify" placeholder="password verify" required>
+							<input type="password" name="password-verify" class="form-control" [(ngModel)]="passwordVerify" placeholder="Verify password" required>
 						</div>
 						<!-- <button (click)="CreateRecordUserInfo()" >Create info</button> -->
 
@@ -59,20 +59,27 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fas fa-user"></i></span>
 							</div>
-							<input type="name" name="name" class="form-control" [(ngModel)]="name" placeholder="name" required>
+							<input type="name" name="name" class="form-control" [(ngModel)]="name" placeholder="Enter name" required>
 						</div>
 						<div class="input-group form-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fas fa-phone"></i></span>
 							</div>
-							<input type="phone" name="phone" class="form-control" [(ngModel)]="phone" placeholder="phone" required>
+							<input type="phone" name="phone" class="form-control" [(ngModel)]="phone" placeholder="Enter phone number" required>
+						</div>
+						<div class="input-group form-group" *ngIf="isOwningCNSS">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="far fa-id-card"></i></span>
+							</div>
+							<input type="system_id" name="system_id" class="form-control" [(ngModel)]="system_id" placeholder="Enter system id" required>
 						</div>
 						<div class="selectOwnOrNotCNSS">
 							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="isOwningCNSS" [value]="true" />  
-							<label>I own a security system</label><br>  
+							<label> I own a security system</label><br>  
 							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="isOwningCNSS" [value]="false" />
-							<label>I dont own a security system</label><br>  
+							<label> I don't own a security system</label><br>  
 						</div>
+
 						<!-- <select [(ngModel)]="isOwningCNSS" class="form-control" name="selectOwnOrNotCNSS">
 							<option [value]="undefined" disabled hidden>Select...</option>
 							<option [ngValue]="true">I own a security system</option>

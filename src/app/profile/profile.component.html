@@ -1,6 +1,6 @@
-<div>
+<!-- <div>
     {{reloadPage()}}
-</div>
+</div> -->
 <h3 *ngFor="let item of user">Welcome back {{item.name}},</h3>
 
 <h4>Your Details:</h4>
@@ -20,11 +20,11 @@
                 <td>{{item.phone}}</td>
             </tr>
             <tr *ngIf="item.isOwningCNSS; else elseNotOwningCNSSBlock">
-                <th>Do I own CNSS?</th>  
+                <th>System Owner?</th>  
                 <td>Yes</td>
             </tr>
             <ng-template #elseNotOwningCNSSBlock>
-                <th>Do I own CNSS?</th>     
+                <th>System Owner?</th>     
                 <td>No</td>
             </ng-template>
             <p></p>

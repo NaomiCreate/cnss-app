@@ -89,7 +89,7 @@ export class ProfileComponent implements OnInit {
     return true;
   }
   //from: https://medium.com/@mertkadirgrsoy/how-to-refresh-a-page-only-once-with-javascript-cdbaf079fc73
-   reloadPage() {
+  /* reloadPage() {
     // The last "domLoading" Time //
     var currentDocumentTimestamp =
     new Date(performance.timing.domLoading).getTime();
@@ -102,5 +102,5 @@ export class ProfileComponent implements OnInit {
     if (now > plusTenSec) {
     location.reload();
     } else {}
-    }
+    }*/
 }
