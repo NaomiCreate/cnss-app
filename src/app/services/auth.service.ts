@@ -60,7 +60,7 @@ export class AuthService {
   }
 
 //function in use in login.component.ts
-  loginWithEmail(email: string, password: string){
+ loginWithEmail(email: string, password: string){
     return this.afu.signInWithEmailAndPassword(email, password)
     .then((user) => {
       this.authState = user
@@ -69,6 +69,20 @@ export class AuthService {
         throw error
       })
   }
+
+  //function in use in login.component.ts
+  /*loginWithEmail(email: string, password: string){
+    return new Promise(resolve => {
+      this.afu.signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        this.authState = user
+        resolve(user);
+      }).catch(error=>{
+          console.log(error)
+          throw error
+        })
+    });
+  }*/
   
   signout(): void
   {
