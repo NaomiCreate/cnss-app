@@ -88,4 +88,19 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = '';
     return true;
   }
+  //from: https://medium.com/@mertkadirgrsoy/how-to-refresh-a-page-only-once-with-javascript-cdbaf079fc73
+   reloadPage() {
+    // The last "domLoading" Time //
+    var currentDocumentTimestamp =
+    new Date(performance.timing.domLoading).getTime();
+    // Current Time //
+    var now = Date.now();
+    // Ten Seconds //
+    var tenSec = 10 * 1000;
+    // Plus Ten Seconds //
+    var plusTenSec = currentDocumentTimestamp + tenSec;
+    if (now > plusTenSec) {
+    location.reload();
+    } else {}
+    }
 }
