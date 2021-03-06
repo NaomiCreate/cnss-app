@@ -39,6 +39,10 @@ export class RegisterComponent implements OnInit {
       RecordUserInfo['phone'] = this.phone;
       RecordUserInfo['is-user-own-cnss'] = this.isOwningCNSS;
 
+      this.crudservice.add_EmailToUid(this.email)
+      .then(res => {console.log(res);})
+      .catch(error => {console.log(error);})
+
       //create_NewContact is defined in crud.service.ts file
       this.crudservice.create_userInfo(RecordUserInfo)
       .then(res => {
@@ -67,6 +71,7 @@ export class RegisterComponent implements OnInit {
 
           console.log(this.authservice.currentUser);
           //we will save the user-info in collection named 'user-info'
+
           this.CreateRecordUserInfo();
 
           this.message = "Your data is registered in firebase"

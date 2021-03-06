@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css']
 })
+
 export class ContactListComponent implements OnInit {
   contact: any;
   contactName: string;
@@ -39,6 +40,7 @@ export class ContactListComponent implements OnInit {
       });  
     }
   }
+
   /*CreateRecord() will fire after the user press the "Create Contact" btn*/
   CreateRecord()
   {
@@ -51,6 +53,21 @@ export class ContactListComponent implements OnInit {
         Record['name'] = this.contactName;
         Record['email'] = this.contactEmail;
         Record['phone'] = this.contactPhone;
+
+
+        let uid = this.crudservice.get_uidFromEmail(this.contactEmail).toPromise().then((doc) => {
+          if (doc.exists) {
+              console.log("Document data:", doc.data()[this.contactEmail]);
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+      }).catch((error) => {
+          console.log("Error getting document:", error);
+      });
+         
+        console.log("!!!!LOOKHERE!!!");
+        console.log(uid);
         
         //create_NewContact is defined in crud.service.ts file
         this.crudservice.create_NewContact(Record).then(res => {
@@ -74,6 +91,7 @@ export class ContactListComponent implements OnInit {
       Record.editEmail = Record.email;
       Record.editPhone= Record.phone;
   }
+
   //will fire after the user press "Edit Contant" and than press "Update"
   updateRecord(recordData)
   {

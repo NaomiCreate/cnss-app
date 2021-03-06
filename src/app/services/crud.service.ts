@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { from } from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
+import { snapshotChanges } from '@angular/fire/database';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,22 @@ export class CrudService {
   { 
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').add(RecordUserInfo);
   }
+
+  /* This function will add to collection emailToUid a record  [email:uid] of current resitration */
+  add_EmailToUid(email:string)
+  {
+    let record = {}
+    record[email] = this.authservice.currentUserId
+
+    return this.fireservices.collection('emailToUid').doc(email).set(record);
+  }
+
+get_uidFromEmail(email:string)
+{
+  //return this.fireservices.collection('emailToUid').doc(email)
+  return this.fireservices.collection('emailToUid').doc(email).get()
+
+}
   get_userInfo()
   {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();
@@ -45,11 +62,13 @@ export class CrudService {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').snapshotChanges();
             //return this.fireservices.collection('contacts').snapshotChanges();//-before change
   }
+
   get_AllConnections()
   {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('connected-to').snapshotChanges();
             //return this.fireservices.collection('contacts').snapshotChanges();//-before change
   }
+
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
   update_contact(recordId, record)
   {
