@@ -52,34 +52,42 @@ export class ContactListComponent implements OnInit {
         let Record = {};
         Record['name'] = this.contactName;
         Record['email'] = this.contactEmail;
-        Record['phone'] = this.contactPhone;
+        Record['uid'] = "";
+        // Record['phone'] = this.contactPhone;
 
 
-        let uid = this.crudservice.get_uidFromEmail(this.contactEmail).toPromise().then((doc) => {
+        this.crudservice.get_uidFromEmail(this.contactEmail)
+        .then((doc) => {
           if (doc.exists) {
-              console.log("Document data:", doc.data()[this.contactEmail]);
+
+            Record['uid'] = doc.data()[this.contactEmail]; //The phone number will come from the user-info by uid
+            console.log("LOOKHERE")
+            console.log(Record)
+
+            //create_NewContact is defined in crud.service.ts file
+            this.crudservice.create_NewContact(Record).then(res => {
+              this.contactName = "";
+              this.contactEmail = "";
+              this.contactPhone = "";
+              this.message = "New contact added";
+            }).catch(error => {
+              console.log(error);
+            })
+          
+
           } else {
               // doc.data() will be undefined in this case
-              console.log("No such document!");
+              alert("The users email does not exist in the system!");
           }
-      }).catch((error) => {
+        }).catch((error) => {
           console.log("Error getting document:", error);
-      });
-         
-        console.log("!!!!LOOKHERE!!!");
-        console.log(uid);
+        });
+
+        console.log("LOOKHERE")
+        console.log(Record)
         
-        //create_NewContact is defined in crud.service.ts file
-        this.crudservice.create_NewContact(Record).then(res => {
-          this.contactName = "";
-          this.contactEmail = "";
-          this.contactPhone = "";
-          console.log(res);
-          this.message = "New contact added";
-        }).catch(error => {
-          console.log(error);
-        })
-      }
+        
+      }  
     }
   }
 

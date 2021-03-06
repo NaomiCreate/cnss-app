@@ -28,32 +28,38 @@ export class CrudService {
     return this.fireservices.collection('emailToUid').doc(email).set(record);
   }
 
-get_uidFromEmail(email:string)
-{
-  //return this.fireservices.collection('emailToUid').doc(email)
-  return this.fireservices.collection('emailToUid').doc(email).get()
+  get_uidFromEmail(email:string)
+  {
+    //return this.fireservices.collection('emailToUid').doc(email)
+    return this.fireservices.collection('emailToUid').doc(email).get().toPromise()
 
-}
+  }
   get_userInfo()
   {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();
-            //return this.fireservices.collection('contacts').snapshotChanges();//-before change
+    
   }
-    //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
-    update_user(recordId, record)
-    {
-      this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
-              //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
-    }
+
+  //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
+  update_user(recordId, record)
+  {
+    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
+            //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
+  }
   //--------
 
+  update_connectedTo(uid:string)
+  {
+     /*Update Record[uid] conected-to*/  
+  }
 
 
   //create_NewContact adds to the 'contacts' collection in firebase, the contact that the user entered as input
   create_NewContact(Record)
-  {  
-      return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').add(Record);
-            //return this.fireservices.collection('contacts').add(Record);//-before change
+  {
+    /*Update contact-list with new record*/
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').doc(Record['email']).set(Record);
+            
   }
 
   //get_AllContacts gets the 'contacts' collection from firebase
