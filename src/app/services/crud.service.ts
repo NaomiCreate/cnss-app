@@ -51,6 +51,9 @@ export class CrudService {
   update_connectedTo(uid:string)
   {
      /*Update Record[uid] conected-to*/  
+    let record = {}
+    record[this.authservice.currentUserId] = true;
+    return this.fireservices.collection('users').doc(uid).collection('connected-to').doc(this.authservice.currentUserName).set(record);
   }
 
 

@@ -64,6 +64,13 @@ export class ContactListComponent implements OnInit {
             console.log("LOOKHERE")
             console.log(Record)
 
+            this.crudservice.update_connectedTo(Record['uid'])
+            .then(res => {
+              console.log("Contact updated")
+            }).catch(error=> {
+              console.log(error);
+            })
+
             //create_NewContact is defined in crud.service.ts file
             this.crudservice.create_NewContact(Record).then(res => {
               this.contactName = "";
