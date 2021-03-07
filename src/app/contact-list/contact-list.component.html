@@ -37,7 +37,7 @@
             <th></th>
         </tr>
     </thead> 
-    <tbody *ngFor="let item of contact">
+    <tbody *ngFor="let item of contacts">
         <!-- <div *ngFor="let item of contact"> -->
             <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
                 <tr *ngIf="!item.isEdit; else elseBlock">         
@@ -56,11 +56,12 @@
 
             <!-- next lines willshow after pressing Edit Contact: -->
             <ng-template #elseBlock>    
-                    <!-- <div class="from-group"> -->
                         <td><input type="text" [(ngModel)]="item.editName" class="edit-from-control"></td>
-                        <td><input type="text" [(ngModel)]="item.editEmail" class="edit-from-control"></td>
-                        <td><input type="text" [(ngModel)]="item.editPhone" class="edit-from-control"></td>
-                    <!-- </div> -->
+                        <td > {{item.email}}</td>
+                        <td > {{item.phone}}</td>
+                                <!-- We omitted cause it doesnt make sense to edit it: -->
+                                <!-- <td><input type="text" [(ngModel)]="item.editEmail" class="edit-from-control"></td>
+                                <td><input type="text" [(ngModel)]="item.editPhone" class="edit-from-control"></td> -->
                     <td>
                         <button  (click)="item.isEdit = false">Cancel</button>
                         <button  (click)="updateRecord(item)">Update Contact</button>

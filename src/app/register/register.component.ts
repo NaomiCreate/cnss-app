@@ -16,12 +16,12 @@ export class RegisterComponent implements OnInit {
   passwordVerify="";//
   name="";
   phone="";
-  system_id=""; //NEED TO CHECK THAT SYSTEM EXISTS IN FIREBASE AND ONLY THEN ALLOW REGISTRATION
   isOwningCNSS:boolean;
+  device_id=""//added 7.3.21 (it called "system_id") //NEED TO CHECK THAT SYSTEM EXISTS IN FIREBASE AND ONLY THEN ALLOW REGISTRATION
   message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
-  
+
   constructor(private authservice: AuthService, private router: Router, public crudservice:CrudService) { }
 
   ngOnInit(){
@@ -38,6 +38,7 @@ export class RegisterComponent implements OnInit {
       RecordUserInfo['email'] = this.email;
       RecordUserInfo['phone'] = this.phone;
       RecordUserInfo['is-user-own-cnss'] = this.isOwningCNSS;
+      RecordUserInfo['device-id'] = this.device_id;//added 7.3.21
 
       this.crudservice.add_EmailToUid(this.email)
       .then(res => {console.log(res);})
@@ -49,6 +50,7 @@ export class RegisterComponent implements OnInit {
         this.name = "";
         this.email = "";
         this.phone = "";
+        this.device_id = "";//added 7.3.21
         // this.isOwningCNSS;
         //console.log(res);
         this.message = "user-info data save done";
@@ -62,7 +64,7 @@ export class RegisterComponent implements OnInit {
   register()
   {
     this.clearErrorMessage();
-    if(this.validateForm(this.email, this.password, this.passwordVerify,this.isOwningCNSS, this.name, this.phone))
+    if(this.validateForm(this.email, this.password, this.passwordVerify,this.isOwningCNSS, this.name, this.phone,this.device_id))
     {
       this.authservice.registerWithEmail(this.email, this.password)
       .then(() => {
@@ -85,8 +87,10 @@ export class RegisterComponent implements OnInit {
     }
   }
   
-  validateForm(email, password, passwordVerify, isOwningCNSS, name, phone)
+  validateForm(email, password, passwordVerify, isOwningCNSS, name, phone, dvice_id)
   {
+    //if isOwningCNSS==TRUE -> need to check if the device_id is stored in the system//added 7.3.21
+
     if(email.length === 0)
     {
       this.errorMessage = "please enter email id";

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 
 export class ContactListComponent implements OnInit {
-  contact: any;
+  contacts= [] ;//CHANGE FROM CONTACT TO CONTACTS
   contactName: string;
   contactEmail: string;
   contactPhone: string;
@@ -25,19 +25,34 @@ export class ContactListComponent implements OnInit {
 
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
     {
-      this.crudservice.get_AllContacts().subscribe(data => {
-        this.contact = data.map(c => {
-          return {
-            id: c.payload.doc.id,
-            isEdit: false,
-            name: c.payload.doc.data()['name'],
-            email: c.payload.doc.data()['email'],
-            phone: c.payload.doc.data()['phone'],
-          };
-        })
-        console.log("this.contact is:");
-        console.log(this.contact);
-      });  
+      this.crudservice.get_AllContacts().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          let contact = {
+            name: doc.data()['name'],
+            email:doc.data()['email'],
+            phone:doc.data()['phone'],
+          } 
+          console.log("get_contact_phone(doc.data()['uid'])!!!!!!!");
+          console.log(this.crudservice.get_contact_phone(doc.data()['uid']));
+          this.contacts.push(contact);
+        });
+      }).catch(error => {
+        console.log(error);
+      }) 
+      
+      // this.crudservice.get_AllContacts().subscribe(data => {
+      //   this.contact = data.map(c => {
+      //     return {
+      //       id: c.payload.doc.id,
+      //       isEdit: false,
+      //       name: c.payload.doc.data()['name'],
+      //       email: c.payload.doc.data()['email'],
+      //       phone: c.payload.doc.data()['phone'],
+      //     };
+      //   })
+      //   console.log("this.contact is:");
+      //   console.log(this.contact);
+      // });  
     }
   }
 
@@ -103,8 +118,8 @@ export class ContactListComponent implements OnInit {
   {
       Record.isEdit = true; //Following this determination, we will see on the screen what appears in html under the tag #elseBlock
       Record.editName= Record.name;
-      Record.editEmail = Record.email;
-      Record.editPhone= Record.phone;
+      //Record.editEmail = Record.email;//We omitted cause it doesnt make sense to edit it
+     //Record.editPhone= Record.phone;//We omitted cause it doesnt make sense to edit it
   }
 
   //will fire after the user press "Edit Contant" and than press "Update"
@@ -116,8 +131,8 @@ export class ContactListComponent implements OnInit {
     //{
       let record = {};
       record['name'] = recordData.editName;
-      record['email'] = recordData.editEmail;
-      record['phone'] = recordData.editPhone;
+      //record['email'] = recordData.editEmail;//We omitted cause it doesnt make sense to edit it
+      //record['phone'] = recordData.editPhone;//We omitted cause it doesnt make sense to edit it
       this.crudservice.update_contact(recordData.id, record);//we defined update_contact() in crud.service.ts
       recordData.isEdit = false;
       this.message = "The update was successful"
@@ -125,7 +140,8 @@ export class ContactListComponent implements OnInit {
     }
   }
 
-  //will fire after the user press "Delete Contact"
+
+//will fire after the user press "Delete Contact"
   DeleteContact(recordId){
     if(confirm("are you sure you want to delete this contact?"))
     {
