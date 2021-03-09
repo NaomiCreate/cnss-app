@@ -16,8 +16,8 @@ export class RegisterComponent implements OnInit {
   passwordVerify="";//
   name="";
   phone="";
-  isOwningCNSS:boolean;
-  device_id=""//added 7.3.21 (it called "system_id") //NEED TO CHECK THAT SYSTEM EXISTS IN FIREBASE AND ONLY THEN ALLOW REGISTRATION
+  is_device_owner:boolean;
+  device_id=""//(called "system_id") //NEED TO CHECK THAT SYSTEM EXISTS IN FIREBASE AND ONLY THEN ALLOW REGISTRATION
   message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
@@ -37,23 +37,23 @@ export class RegisterComponent implements OnInit {
       RecordUserInfo['name'] = this.name;
       RecordUserInfo['email'] = this.email;
       RecordUserInfo['phone'] = this.phone;
-      RecordUserInfo['is-user-own-cnss'] = this.isOwningCNSS;
+      RecordUserInfo['is_device_owner'] = this.is_device_owner;
       RecordUserInfo['device-id'] = this.device_id;//added 7.3.21
 
-      this.crudservice.add_EmailToUid(this.email)
-      .then(res => {console.log(res);})
+      this.crudservice.add_EmailToUid(this.email).then()
       .catch(error => {console.log(error);})
 
       //create_NewContact is defined in crud.service.ts file
       this.crudservice.create_userInfo(RecordUserInfo)
-      .then(res => {
+      .then(() => {
+        this.password="";
+        this.passwordVerify="";
         this.name = "";
         this.email = "";
         this.phone = "";
         this.device_id = "";//added 7.3.21
-        // this.isOwningCNSS;
-        //console.log(res);
-        this.message = "user-info data save done";
+        // this.is_device_owner;
+        this.message = "user-info was saved succefully";
       }).catch(error => {
         console.log(error);
       })
@@ -64,20 +64,13 @@ export class RegisterComponent implements OnInit {
   register()
   {
     this.clearErrorMessage();
-    if(this.validateForm(this.email, this.password, this.passwordVerify,this.isOwningCNSS, this.name, this.phone,this.device_id))
+    if(this.validateForm(this.email, this.password, this.passwordVerify,this.is_device_owner, this.name, this.phone,this.device_id))
     {
       this.authservice.registerWithEmail(this.email, this.password)
       .then(() => {
-          console.log("stamp");
-          console.log(this.authservice.currentUserId);
-
-          console.log(this.authservice.currentUser);
           //we will save the user-info in collection named 'user-info'
-
           this.CreateRecordUserInfo();
-
           this.message = "Your data is registered in firebase"
-          // this.router.navigate(['/home-page'])
           this.router.navigate(['/profile'])
 
       }).catch(_error =>{
@@ -87,9 +80,10 @@ export class RegisterComponent implements OnInit {
     }
   }
   
-  validateForm(email, password, passwordVerify, isOwningCNSS, name, phone, dvice_id)
+  
+  validateForm(email, password, passwordVerify, is_device_owner, name, phone, dvice_id)
   {
-    //if isOwningCNSS==TRUE -> need to check if the device_id is stored in the system//added 7.3.21
+    //if is_device_owner==TRUE -> need to check if the device_id is stored in the system//added 7.3.21
 
     if(email.length === 0)
     {
@@ -116,7 +110,7 @@ export class RegisterComponent implements OnInit {
       this.errorMessage = "please enter your name";
       return false
     }
-    if(isOwningCNSS===undefined)
+    if(is_device_owner===undefined)
     {
       this.errorMessage = "select option";
       return false

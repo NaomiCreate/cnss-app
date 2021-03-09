@@ -32,10 +32,9 @@ export class ProfileComponent implements OnInit {
             name: c.payload.doc.data()['name'],
             email: c.payload.doc.data()['email'],
             phone: c.payload.doc.data()['phone'],
-            isOwningCNSS: c.payload.doc.data()['is-user-own-cnss'],
+            is_device_owner: c.payload.doc.data()['is_device_owner'],
           };
         })
-        console.log(this.user);
       });  
     }
   }
@@ -59,7 +58,7 @@ export class ProfileComponent implements OnInit {
       record['name'] = recordData.editName;
       record['email'] = recordData.editEmail;
       record['phone'] = recordData.editPhone;
-      record['is-user-own-cnss'] = recordData.editIsUserOwnCnss;
+      record['is_device_owner'] = recordData.editIsUserOwnCnss;
 
       this.crudservice.update_user(recordData.id, record);//we defined update_contact() in crud.service.ts
       this.message = "The update was successful";

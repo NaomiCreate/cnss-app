@@ -63,12 +63,9 @@ export class ContactListComponent implements OnInit {
           if (doc.exists) {
 
             Record['uid'] = doc.data()[this.contactEmail]; //The phone number will come from the user-info by uid
-            // console.log("LOOKHERE")
-            // console.log(Record)
-
             this.crudservice.update_connectedTo(Record['uid'])
-            .then(res => {
-              console.log("Contact updated")
+            .then(() => {
+              this.message = "Contact updated succesfully"
             }).catch(error=> {
               console.log(error);
             })
@@ -90,12 +87,7 @@ export class ContactListComponent implements OnInit {
           }
         }).catch((error) => {
           console.log("Error getting document:", error);
-        });
-
-        console.log("LOOKHERE")
-        console.log(Record)
-        
-        
+        });  
       }  
     }
   }
@@ -119,9 +111,7 @@ export class ContactListComponent implements OnInit {
       let record = {};
       record['name'] = recordData.editName;
       //record['uid'] = recordData.id;
-
       //record['email'] = recordData.editEmail;
-
       //record['email'] = recordData.editEmail;//We omitted cause it doesnt make sense to edit it
       //record['phone'] = recordData.editPhone;//We omitted cause it doesnt make sense to edit it
       this.crudservice.update_contact(recordData['email'],record);//we defined update_contact() in crud.service.ts

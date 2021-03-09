@@ -81,10 +81,6 @@ export class CrudService {
   }
 
   get_contact_details(email:string,uid:string){
-    console.log('print email:');
-    console.log(email);
-    console.log('print uid:');
-    console.log(uid);
     return this.fireservices.collection('users').doc(uid).collection('user-info').doc(email).get().toPromise();
 
     // return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
@@ -120,4 +116,6 @@ export class CrudService {
     this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + connection_email).delete();
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
+
+
 }

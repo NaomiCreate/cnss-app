@@ -33,7 +33,6 @@ export class ConnectedToComponent implements OnInit {
           }).catch(error => {console.log(error)});
           return connection;
         })
-        console.log(this.connections);
       });  
     }
   }

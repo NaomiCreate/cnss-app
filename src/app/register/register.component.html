@@ -67,20 +67,20 @@
 							</div>
 							<input type="phone" name="phone" class="form-control" [(ngModel)]="phone" placeholder="Enter phone number" required>
 						</div>
-						<div class="input-group form-group" *ngIf="isOwningCNSS">
+						<div class="input-group form-group" *ngIf="is_device_owner">
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="far fa-id-card"></i></span>
 							</div>
 							<input type="device_id" name="device_id" class="form-control" [(ngModel)]="device_id" placeholder="Enter device id" required>
 						</div>
 						<div class="selectOwnOrNotCNSS">
-							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="isOwningCNSS" [value]="true" />  
+							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="is_device_owner" [value]="true" />  
 							<label> I own a security system</label><br>  
-							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="isOwningCNSS" [value]="false" />
+							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="is_device_owner" [value]="false" />
 							<label> I don't own a security system</label><br>  
 						</div>
 
-						<!-- <select [(ngModel)]="isOwningCNSS" class="form-control" name="selectOwnOrNotCNSS">
+						<!-- <select [(ngModel)]="is_device_owner" class="form-control" name="selectOwnOrNotCNSS">
 							<option [value]="undefined" disabled hidden>Select...</option>
 							<option [ngValue]="true">I own a security system</option>
 							<option [ngValue]="false">I dont own a security system</option>

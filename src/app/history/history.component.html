@@ -1,3 +1,14 @@
-<p>history works!</p>
-<p>history works!</p>
-<p>history works!</p>
+<p>Welcome to the history page!</p>
+
+
+
+ <!--For Alerts-->
+ <div *ngFor="let alert of  alerts"> 
+        <br/>
+        <br/>
+        <p>"Alert"</p>
+        <p>{{alert.path}}</p>
+        <p>{{alert.timestamp}}</p>
+        <p>{{alert.notes}}</p>
+ </div>
+<!--For Files-->

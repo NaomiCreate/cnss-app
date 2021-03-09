@@ -9,6 +9,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
 import { CrudService } from './services/crud.service';
+import { RealTimeService } from './services/real-time.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,7 +47,8 @@ import { SystemControlComponent } from './system-control/system-control.componen
     AngularFireDatabaseModule,
     AngularFirestoreModule
   ],
-  providers: [CrudService],
+  providers: [CrudService,
+              RealTimeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

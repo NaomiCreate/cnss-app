@@ -25,10 +25,9 @@ export class HomePageComponent implements OnInit {
             name: c.payload.doc.data()['name'],
             // userEmail: c.payload.doc.data()['email'],
             // userPhone: c.payload.doc.data()['phone'],
-            // isOwningCNSS: c.payload.doc.data()['is-user-own-cnss'],
+            // is_device_owner: c.payload.doc.data()['is-user-own-cnss'],
           };
         })
-        console.log(this.user);
       });  
     }
   }
