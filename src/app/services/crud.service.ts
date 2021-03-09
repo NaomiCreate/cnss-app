@@ -106,15 +106,18 @@ export class CrudService {
   }
 
   //delete_contact will delete the contact in firebase. (the function gets the record id)
-  delete_contact(record)
+  delete_contact(contact_uid:string, contact_email:string)
   {
-    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + record['email']).delete();
+    this.fireservices.doc('users/' + contact_uid + '/' + 'connected-to/' + this.authservice.currentUserName).delete();
+    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + contact_email).delete();
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
 
-  delete_connection(email:string)
+  delete_connection(connection_uid:string, connection_email:string)
   {
-    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + email).delete();
+
+    this.fireservices.doc('users/' + connection_uid + '/' + 'contacts/' + this.authservice.currentUserName).delete();
+    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + connection_email).delete();
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
 }

@@ -63,8 +63,8 @@ export class ContactListComponent implements OnInit {
           if (doc.exists) {
 
             Record['uid'] = doc.data()[this.contactEmail]; //The phone number will come from the user-info by uid
-            console.log("LOOKHERE")
-            console.log(Record)
+            // console.log("LOOKHERE")
+            // console.log(Record)
 
             this.crudservice.update_connectedTo(Record['uid'])
             .then(res => {
@@ -133,12 +133,17 @@ export class ContactListComponent implements OnInit {
 
 
 //will fire after the user press "Delete Contact"
-  DeleteContact(email,recordId){
+  DeleteContact(email:string){
     if(confirm("are you sure you want to delete this contact?"))
     {
       if(this.authservice.currentUser != null)//We will make sure the user is logged in
       {
-        this.crudservice.delete_contact(email);
+        this.crudservice.get_uidFromEmail(email)
+          .then((doc) => {
+            if(doc.exists){
+                this.crudservice.delete_contact(doc.data()[email],email);
+            }
+          }).catch(error => {console.log(error)});
       }
     }
   }

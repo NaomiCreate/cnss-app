@@ -44,7 +44,12 @@ export class ConnectedToComponent implements OnInit {
   {
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
     {
-      this.crudservice.delete_connection(email);
+      this.crudservice.get_uidFromEmail(email)
+          .then((doc) => {
+            if(doc.exists){
+              this.crudservice.delete_connection(doc.data()[email], email);
+            }
+        }).catch(error => {console.log(error)});
     }
   }
 }
