@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { concat } from 'rxjs';
+//import { error } from 'console';
 
 @Component({
   selector: 'app-contact-list',
@@ -24,35 +26,20 @@ export class ContactListComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
-    {
-      this.crudservice.get_AllContacts().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          let contact = {
-            name: doc.data()['name'],
-            email:doc.data()['email'],
-            phone:doc.data()['phone'],
-          } 
-          console.log("get_contact_phone(doc.data()['uid'])!!!!!!!");
-          console.log(this.crudservice.get_contact_phone(doc.data()['uid']));
-          this.contacts.push(contact);
-        });
-      }).catch(error => {
-        console.log(error);
-      }) 
-      
-      // this.crudservice.get_AllContacts().subscribe(data => {
-      //   this.contact = data.map(c => {
-      //     return {
-      //       id: c.payload.doc.id,
-      //       isEdit: false,
-      //       name: c.payload.doc.data()['name'],
-      //       email: c.payload.doc.data()['email'],
-      //       phone: c.payload.doc.data()['phone'],
-      //     };
-      //   })
-      //   console.log("this.contact is:");
-      //   console.log(this.contact);
-      // });  
+    {      
+      this.crudservice.get_AllContacts().subscribe(res => {
+        this.contacts = res.map(c=> {
+            let contact = {
+                      name: c.payload.doc.data()['name'],
+                      email: c.payload.doc.data()['email'],
+            }
+            this.crudservice.get_contact_details(contact['email'],c.payload.doc.data()['uid'])
+            .then((doc) => { 
+              contact['phone']= doc.data()['phone'];
+            }).catch(error => {console.log(error)});
+            return contact;  
+        })
+      });
     }
   }
 
@@ -131,9 +118,13 @@ export class ContactListComponent implements OnInit {
     //{
       let record = {};
       record['name'] = recordData.editName;
+      //record['uid'] = recordData.id;
+
+      //record['email'] = recordData.editEmail;
+
       //record['email'] = recordData.editEmail;//We omitted cause it doesnt make sense to edit it
       //record['phone'] = recordData.editPhone;//We omitted cause it doesnt make sense to edit it
-      this.crudservice.update_contact(recordData.id, record);//we defined update_contact() in crud.service.ts
+      this.crudservice.update_contact(recordData['email'],record);//we defined update_contact() in crud.service.ts
       recordData.isEdit = false;
       this.message = "The update was successful"
     //}
@@ -142,12 +133,12 @@ export class ContactListComponent implements OnInit {
 
 
 //will fire after the user press "Delete Contact"
-  DeleteContact(recordId){
+  DeleteContact(email,recordId){
     if(confirm("are you sure you want to delete this contact?"))
     {
       if(this.authservice.currentUser != null)//We will make sure the user is logged in
       {
-        this.crudservice.delete_contact(recordId);
+        this.crudservice.delete_contact(email);
       }
     }
   }

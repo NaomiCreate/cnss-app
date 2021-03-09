@@ -17,7 +17,9 @@ export class CrudService {
   //create_userInfo adds to the collection 'user-info', a document in firebase, that including details about the registrant 
   create_userInfo(RecordUserInfo)
   { 
-    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').add(RecordUserInfo);
+    //return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').add(RecordUserInfo);
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').doc(RecordUserInfo.email).set(RecordUserInfo);//added in 8.3.21
+
   }
 
   /* This function will add to collection emailToUid a record  [email:uid] of current resitration */
@@ -44,7 +46,8 @@ export class CrudService {
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
   update_user(recordId, record)
   {
-    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
+    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + record.email).update(record);//'contacts' is the collection name
+    //this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
             //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
   }
   //--------
@@ -69,13 +72,24 @@ export class CrudService {
   //get_AllContacts gets the 'contacts' collection from firebase
   get_AllContacts()
   {
-    //return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').snapshotChanges();
-    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').get().toPromise();
+
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').snapshotChanges();
+    //return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').get().toPromise();
+
+    //return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').get().toPromise();
 
   }
 
-  get_contact_phone(uid:string){
-    return this.fireservices.collection('users').doc(uid).collection('user-info').get().toPromise();
+  get_contact_details(email:string,uid:string){
+    console.log('print email:');
+    console.log(email);
+    console.log('print uid:');
+    console.log(uid);
+    return this.fireservices.collection('users').doc(uid).collection('user-info').doc(email).get().toPromise();
+
+    // return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
+//    return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
+
   }
 
   get_AllConnections()
@@ -85,15 +99,16 @@ export class CrudService {
   }
 
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
-  update_contact(recordId, record)
+  update_contact(email,  record)
   {
-    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'contacts/' + recordId).update(record);//'contacts' is the collection name
+    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'contacts/' + email).update(record);//'contacts' is the collection name
             //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
   }
+
   //delete_contact will delete the contact in firebase. (the function gets the record id)
-  delete_contact(recordId)
+  delete_contact(record)
   {
-    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + recordId).delete();
+    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + record['email']).delete();
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
 
