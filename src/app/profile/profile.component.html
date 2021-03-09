@@ -19,7 +19,7 @@
                 <th>Phone Number:</th>   
                 <td>{{item.phone}}</td>
             </tr>
-            <tr *ngIf="item.isOwningCNSS; else elseNotOwningCNSSBlock">
+            <tr *ngIf="item.is_device_owner; else elseNotOwningCNSSBlock">
                 <th>System Owner?</th>  
                 <td>Yes</td>
             </tr>
