@@ -112,9 +112,9 @@ export class CrudService {
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
 
-  delete_connection(recordId)
+  delete_connection(email:string)
   {
-    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + recordId).delete();
+    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + email).delete();
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
 }

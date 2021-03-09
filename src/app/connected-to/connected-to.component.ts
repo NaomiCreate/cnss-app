@@ -21,47 +21,30 @@ export class ConnectedToComponent implements OnInit {
     {
       this.crudservice.get_AllConnections().subscribe(data => {
         this.connections = data.map(c => {
-          //console.log('c.payload.doc.id');
-         // console.log(c.payload.doc.id);
-          //console.log('Object');
-          //console.log(Object.keys(c.payload.doc.data())[0]);
-          let connection={};
 
+          let connection={};
           this.crudservice.get_contact_details(c.payload.doc.id, Object.keys(c.payload.doc.data())[0])
           .then((doc) => { 
-            connection = {
-              phone: doc.data()['phone'],
-              name: doc.data()['name'],
-              email: doc.data()['email']
-            } 
-            console.log(connection);
-            return connection;
-            //this.connections.push(connection);
+           
+            connection['phone'] = doc.data()['phone'];
+            connection['name'] = doc.data()['name'];
+            connection['email'] = doc.data()['email'];
+            
           }).catch(error => {console.log(error)});
-          //console.log('connection');
-          //console.log(connection);
-                 //return connection;
-          // return {
-          //   name: Object.keys(c.payload.doc)[0],
-
-          //   //name: c.payload.doc,
-          //   //name: c.payload.doc.data()['name'],
-          //   email: c.payload.doc.id,//in Firestore, the id of the doc is the mail
-          //   //phone: c.payload.doc.data()['phone'],
-          //   //phone: this.crudservice.get_contact_phone(email:string,uid:string)
-          // };
+          return connection;
         })
         console.log(this.connections);
       });  
     }
   }
+
  //will fire after the user press "Delete Contact"
- DeleteConnection(recordId){
+ DeleteConnection(email:string){
   if(confirm("are you sure you want to delete this connection?"))
   {
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
     {
-      this.crudservice.delete_connection(recordId);
+      this.crudservice.delete_connection(email);
     }
   }
 }
