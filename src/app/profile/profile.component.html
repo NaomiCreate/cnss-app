@@ -45,7 +45,17 @@
                 <th>Phone Number:</th>   
                 <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
             </tr>
-            <tr>
+            <tr *ngIf="item.editIsUserOwnCnss">
+                <th>Device Id:</th>   
+                <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
+<!-- 
+                <div class="input-group form-group" *ngIf="item.is_device_owner">
+                         <span class="input-group-text"><i class="far fa-id-card"></i></span> 
+                    <input type="device_id" name="device_id" class="form-control" [(ngModel)]="item.device_id" placeholder="Enter device id" required>
+                </div> -->
+            </tr>
+            <tr *ngIf="!item.editIsUserOwnCnss">
+            <!-- <tr> -->
                 <div class="selectOwnOrNotCNSS" name="selectOwnOrNotCNSS">
                     <input type="radio"  [(ngModel)]="item.editIsUserOwnCnss" [value]="true" />  
                     <label>I own a security system</label><br>  

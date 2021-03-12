@@ -2,18 +2,60 @@ import { Injectable } from '@angular/core';
 import { from } from 'rxjs';
 import {AngularFirestore} from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
-import { snapshotChanges } from '@angular/fire/database';
+import { AngularFireDatabase, snapshotChanges } from '@angular/fire/database';
 //import { userInfo } from 'os';
+
+//For real time data base
+import { RealTimeService } from '../services/real-time.service';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CrudService {
+  constructor(private authservice: AuthService, public fireservices:AngularFirestore,private db: AngularFireDatabase) { }
+//--------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  //For real time data base
+  device_listed(device_id: string,is_device_owner:boolean){
+    if(is_device_owner == true)
+    {
+      const dbPath = `/device-list/` + 'device_id';//beginig of path to realtime database
+      const dbData = this.db.list(dbPath).snapshotChanges()
+      .subscribe(data => {
+        //console.log("data[0].payload.exists()",data[0].payload.exists());
+        if(data[0]==undefined)
+          return true;
+          //console.log("not exist");
+        else{
+          return false;
+          //console.log("exist");
 
-  //constructor(public fireservices:AngularFirestore) { }
-  constructor(private authservice: AuthService, public fireservices:AngularFirestore) { }
+         // if(data[0].payload.exists() == true)
+          //  return true;
+          //else{
+          //  console.log("tont exists",data[0].payload.exists());
+            //this.db.list(dbPath).update("is_in_use", "true");
+          //  return false;
+         // }
+        }
+      })
+    }
+    // const dbPath = `/device-list/` + device_id ;//beginig of path to realtime database
+    // const dbData = this.db.list(dbPath).snapshotChanges()
+    // .subscribe(data => {
+    //   console.log(data[0].payload.exists());
+    //   if(data[0].payload.exists() == true)
+    //     return true;
+    //   else{
+    //     this.db.list(dbPath).update("is_in_use", "true");
+    //     return false;
+    //   }
+    // })
+
+  }
+ 
   
-  //--------
+//--------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   //create_userInfo adds to the collection 'user-info', a document in firebase, that including details about the registrant 
   create_userInfo(RecordUserInfo)
   { 
@@ -87,6 +129,7 @@ export class CrudService {
 //    return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
 
   }
+
 
   get_AllConnections()
   {

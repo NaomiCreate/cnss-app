@@ -8,7 +8,8 @@
         <br/>
         <p>"Alert"</p>
         <p>{{alert.path}}</p>
-        <p>{{alert.timestamp}}</p>
+        <!-- <p>{{alert.timestamp}}</p> -->
+        <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
         <p>{{alert.notes}}</p>
  </div>
 <!--For Files-->

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -10,15 +12,13 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
   user: any;
-  // userName: string;
-  // userEmail: string;
-  // userPhone: string;
+  
   message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
-
-  constructor(public authservice: AuthService, private router: Router,public crudservice:CrudService) { }
-  //constructor() { }
+  
+  dbData;
+  constructor(public authservice: AuthService, private router: Router,public crudservice:CrudService,private db: AngularFireDatabase) { }
 
   ngOnInit(){
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
@@ -33,11 +33,13 @@ export class ProfileComponent implements OnInit {
             email: c.payload.doc.data()['email'],
             phone: c.payload.doc.data()['phone'],
             is_device_owner: c.payload.doc.data()['is_device_owner'],
+            device_id: c.payload.doc.data()['device_id'],
           };
         })
       });  
     }
   }
+
   //will fire after the user press "Edit Contant"
   editRecord(Record)
   {        
@@ -45,30 +47,51 @@ export class ProfileComponent implements OnInit {
     Record.editName= Record.name;
     Record.editEmail = Record.email;
     Record.editPhone = Record.phone;
-    Record.editIsUserOwnCnss = Record.isOwningCNSS;
+    Record.editIsUserOwnCnss = Record.is_device_owner;
+    Record.editDeviceID = Record.device_id;
   }
+
   //will fire after the user press "Edit" and than press "Update"
   updateRecord(recordData)
   {
-    if(confirm("are you sure you want to edit this contact?"))
+    if(confirm("are you sure you want to edit your details?"))
     {
-    //if(this.validateForm(recordData.email, recordData.name, recordData.phone)==true)
-    //{
+      let dbPath = '';//`/devices-list/` + record['device_id'] ;//beginig of path to realtime database
       let record = {};
       record['name'] = recordData.editName;
       record['email'] = recordData.editEmail;
       record['phone'] = recordData.editPhone;
       record['is_device_owner'] = recordData.editIsUserOwnCnss;
+      record['device_id'] = recordData.editDeviceID;
 
-      this.crudservice.update_user(recordData.id, record);//we defined update_contact() in crud.service.ts
-      this.message = "The update was successful";
-      recordData.isEdit = false;
+      dbPath = `/device-list/` + record['device_id'] ;//beginig of path to realtime database
+      this.dbData = this.db.list(dbPath).snapshotChanges()
+      .subscribe(data => {
+        //console.log("data[0].payload.exists()",data[0].payload.exists());
+        if(data[0]==undefined|| (record['device_id'].length==0 && record['is_device_owner']==true))//The device does not exist in the system Or emty
+          alert("The device does not exist in the system");
+        else//The device exist in the system OR record['is_device_owner']==false
+        {
+          this.crudservice.update_user(recordData.id, record);
+          this.message = "The update was successful";
+          recordData.isEdit = false;
+        }
+      })
     }
-  //}
   }
 
-  validateForm(email, name, phone)
-  {
+  validateForm(is_device_owner,email, name, phone,device_id)
+  {    
+    var dbPath = `/devices-list/` + device_id ;//beginig of path to realtime database
+    let dbData = this.db.list(dbPath).snapshotChanges()
+    .subscribe(data => {
+      //console.log("data[0].payload.exists()",data[0].payload.exists());
+      if(data[0]==undefined || device_id.length==0)//The device ID does not exist in the system Or empty
+      {
+        alert("The device does not exist in the system");
+        return false;
+      }
+    })
     if(email.length === 0)
     {
       this.errorMessage = "please enter email id";
@@ -87,19 +110,9 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = '';
     return true;
   }
-  //from: https://medium.com/@mertkadirgrsoy/how-to-refresh-a-page-only-once-with-javascript-cdbaf079fc73
-  /* reloadPage() {
-    // The last "domLoading" Time //
-    var currentDocumentTimestamp =
-    new Date(performance.timing.domLoading).getTime();
-    // Current Time //
-    var now = Date.now();
-    // Ten Seconds //
-    var tenSec = 10 * 1000;
-    // Plus Ten Seconds //
-    var plusTenSec = currentDocumentTimestamp + tenSec;
-    if (now > plusTenSec) {
-    location.reload();
-    } else {}
-    }*/
+
+  ngOnDestroy(){
+    if(this.dbData != undefined)
+      this.dbData.unsubscribe();
+  }
 }

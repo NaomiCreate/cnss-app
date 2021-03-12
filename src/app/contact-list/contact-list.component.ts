@@ -29,15 +29,16 @@ export class ContactListComponent implements OnInit {
     {      
       this.crudservice.get_AllContacts().subscribe(res => {
         this.contacts = res.map(c=> {
+
             let contact = {
                       name: c.payload.doc.data()['name'],
-                      email: c.payload.doc.data()['email'],
+                      email: c.payload.doc.data()['email'],                      
             }
             this.crudservice.get_contact_details(contact['email'],c.payload.doc.data()['uid'])
             .then((doc) => { 
               contact['phone']= doc.data()['phone'];
             }).catch(error => {console.log(error)});
-            return contact;  
+           return contact;  
         })
       });
     }
@@ -83,7 +84,7 @@ export class ContactListComponent implements OnInit {
 
           } else {
               // doc.data() will be undefined in this case
-              alert("The users email does not exist in the system!");
+              alert("The user's email does not exist in the system!");
           }
         }).catch((error) => {
           console.log("Error getting document:", error);
@@ -140,11 +141,20 @@ export class ContactListComponent implements OnInit {
 
   validateForm(email, name, phone)
   {
+    //check email filed:
     if(email.length === 0)
     {
       this.errorMessage = "please enter email id";
       return false
     }
+    //checking if the user's email does not exist in the system-> redundant, the test is done in CreateRecord()
+    /*
+    if(this.crudservice.get_uidFromEmail(email) == undefined)
+    {
+      this.errorMessage = "The email is not in the system";
+      return false
+    }
+    */
     if(name.length === 0)
     {
       this.errorMessage = "please enter your name";

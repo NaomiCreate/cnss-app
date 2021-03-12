@@ -3,6 +3,7 @@ import { from } from 'rxjs';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import {Router} from '@angular/router';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @Component({
   selector: 'app-register',
@@ -21,8 +22,9 @@ export class RegisterComponent implements OnInit {
   message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
-
-  constructor(private authservice: AuthService, private router: Router, public crudservice:CrudService) { }
+  
+  dbData;
+  constructor(private authservice: AuthService, private router: Router, public crudservice:CrudService,private db: AngularFireDatabase) { }
 
   ngOnInit(){
     
@@ -38,7 +40,7 @@ export class RegisterComponent implements OnInit {
       RecordUserInfo['email'] = this.email;
       RecordUserInfo['phone'] = this.phone;
       RecordUserInfo['is_device_owner'] = this.is_device_owner;
-      RecordUserInfo['device-id'] = this.device_id;//added 7.3.21
+      RecordUserInfo['device_id'] = this.device_id;
 
       this.crudservice.add_EmailToUid(this.email).then()
       .catch(error => {console.log(error);})
@@ -51,7 +53,7 @@ export class RegisterComponent implements OnInit {
         this.name = "";
         this.email = "";
         this.phone = "";
-        this.device_id = "";//added 7.3.21
+        this.device_id = "";
         // this.is_device_owner;
         this.message = "user-info was saved succefully";
       }).catch(error => {
@@ -63,20 +65,60 @@ export class RegisterComponent implements OnInit {
 
   register()
   {
+    let dbPath = '';//`/device-list/` + record['device_id'] ;//beginig of path to realtime database
     this.clearErrorMessage();
     if(this.validateForm(this.email, this.password, this.passwordVerify,this.is_device_owner, this.name, this.phone,this.device_id))
     {
-      this.authservice.registerWithEmail(this.email, this.password)
-      .then(() => {
-          //we will save the user-info in collection named 'user-info'
-          this.CreateRecordUserInfo();
-          this.message = "Your data is registered in firebase"
-          this.router.navigate(['/profile'])
-
-      }).catch(_error =>{
-        this.error = _error
-        this.router.navigate(['/register'])
+      //----------
+      if(this.is_device_owner==true)
+      {
+      dbPath = `/device-list/` + this.device_id ;//beginig of path to realtime database
+      this.dbData = this.db.list(dbPath).snapshotChanges()
+      .subscribe(data => {
+        //console.log("data[0].payload.exists()",data[0].payload.exists());
+        if(data[0]==undefined|| (this.device_id.length==0 && this.is_device_owner==true))//The device does not exist in the system Or emty
+          alert("The device does not exist in the system");
+        else//The device exist in the system OR record['is_device_owner']==false
+        {
+          this.authservice.registerWithEmail(this.email, this.password)
+          .then(() => {
+              //we will save the user-info in collection named 'user-info'
+              this.CreateRecordUserInfo();
+              this.message = "Your data is registered in firebase"
+              this.router.navigate(['/profile'])
+    
+          }).catch(_error =>{
+            this.error = _error
+            this.router.navigate(['/register'])
+          })
+        }
       })
+    }
+    else{
+      this.authservice.registerWithEmail(this.email, this.password)
+          .then(() => {
+              //we will save the user-info in collection named 'user-info'
+              this.CreateRecordUserInfo();
+              this.message = "Your data is registered in firebase"
+              this.router.navigate(['/profile'])
+    
+          }).catch(_error =>{
+            this.error = _error
+            this.router.navigate(['/register'])
+          })
+    }
+      //----------
+      // this.authservice.registerWithEmail(this.email, this.password)
+      // .then(() => {
+      //     //we will save the user-info in collection named 'user-info'
+      //     this.CreateRecordUserInfo();
+      //     this.message = "Your data is registered in firebase"
+      //     this.router.navigate(['/profile'])
+
+      // }).catch(_error =>{
+      //   this.error = _error
+      //   this.router.navigate(['/register'])
+      // })
     }
   }
   
@@ -128,5 +170,10 @@ export class RegisterComponent implements OnInit {
   {
     this.errorMessage = '';
     this.error = {name: '', message:''};
+  }
+
+  ngOnDestroy(){
+    if(this.dbData != undefined)
+      this.dbData.unsubscribe();
   }
 }
