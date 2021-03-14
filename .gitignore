@@ -47,3 +47,12 @@ Thumbs.db
 
 # in terminal: $ git   rm   -r   --cached   ./src/environments
 /src/environments/ 
+
+# hosting and deploy directories and files
+/.firebase
+/.firebaserc
+/firebase.json
+
+
+
+

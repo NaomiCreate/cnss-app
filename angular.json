@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "CNS-App": {
+    "CNSS-App": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/CNS-App",
+            "outputPath": "dist/CNSS-App",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -65,18 +65,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "CNS-App:build"
+            "browserTarget": "CNSS-App:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "CNS-App:build:production"
+              "browserTarget": "CNSS-App:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "CNS-App:build"
+            "browserTarget": "CNSS-App:build"
           }
         },
         "test": {
@@ -113,15 +113,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "CNS-App:serve"
+            "devServerTarget": "CNSS-App:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "CNS-App:serve:production"
+              "devServerTarget": "CNSS-App:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "CNS-App"
+  "defaultProject": "CNSS-App"
 }
