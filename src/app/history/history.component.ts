@@ -7,6 +7,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ValueTransformer } from '@angular/compiler/src/util';
 import { CrudService } from '../services/crud.service';
+import { Subscription } from 'rxjs';
 
 export interface Alert {
   path: string; //url :URL
@@ -25,16 +26,19 @@ export class HistoryComponent implements OnInit {
   private alertArray: Array<Alert> = [];//each file contains name and url
   
   public alertURL;//protected imageURL
-  private dbData;//will hold object from firebase
+  private dbData: Subscription;//will hold object from firebase
+  private userInfo:Subscription; // will hold firestore subscription
   private deviceID;
   private isOwner = false;
+
   
 
   constructor(private crudservice: CrudService, private realtimeservice: RealTimeService, 
               private db: AngularFireDatabase, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    this.crudservice.get_userInfo().subscribe(data => {
+
+    this.userInfo = this.crudservice.get_userInfo().subscribe(data => {
         this.deviceID = data.map(c => {
           if (c.payload.doc.data()['is_device_owner'] == true){
             this.isOwner = true;
@@ -46,16 +50,13 @@ export class HistoryComponent implements OnInit {
             return "";
           }
         });
-        //console.log("device_id", this.deviceID[0]);
-        if(this.dbPath == "/devices/")
-          this.dbPath += `${this.deviceID[0]}/history`;//add end of path
+
+        this.dbPath += `${this.deviceID[0]}/history`;//add end of path
         console.log("dbPath",this.dbPath);
 
         this.get_alert_details();
 
-        console.log(this.alertArray);
     });
-
     
   
   }
@@ -77,7 +78,11 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnDestroy(){
+
     if(this.dbData != undefined)
       this.dbData.unsubscribe();
+    
+    if(this.userInfo != undefined)
+      this.userInfo.unsubscribe();
   }
 }
