@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { concat } from 'rxjs';
 //import { error } from 'console';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -20,6 +21,8 @@ export class ContactListComponent implements OnInit {
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
 
+  subscription: Subscription;
+
   constructor(private router: Router, private authservice: AuthService,public crudservice:CrudService) { }
   
   ngOnInit() {
@@ -27,7 +30,7 @@ export class ContactListComponent implements OnInit {
 
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
     {      
-      this.crudservice.get_AllContacts().subscribe(res => {
+      this.subscription = this.crudservice.get_AllContacts().subscribe(res => {
         this.contacts = res.map(c=> {
 
             let contact = {
@@ -168,4 +171,12 @@ export class ContactListComponent implements OnInit {
     this.errorMessage = '';
     return true;
   }
+
+  ngOnDestroy(){
+
+    if(this.subscription != undefined)
+        this.subscription.unsubscribe();
+  }
+
+  
 }

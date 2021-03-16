@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { of } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -17,26 +18,30 @@ export class ProfileComponent implements OnInit {
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
   
-  dbData;
+  dbData: Subscription;
+  subscriptions: Subscription[] = [];
+
   constructor(public authservice: AuthService, private router: Router,public crudservice:CrudService,private db: AngularFireDatabase) { }
 
   ngOnInit(){
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
     {
       //this.isEdit= false;
-      this.crudservice.get_userInfo().subscribe(data => {
-        this.user = data.map(c => {
-          return {
-            id: c.payload.doc.id,
-            isEdit: false,
-            name: c.payload.doc.data()['name'],
-            email: c.payload.doc.data()['email'],
-            phone: c.payload.doc.data()['phone'],
-            is_device_owner: c.payload.doc.data()['is_device_owner'],
-            device_id: c.payload.doc.data()['device_id'],
-          };
+      this.subscriptions.push(
+        this.crudservice.get_userInfo().subscribe(data => {
+          this.user = data.map(c => {
+            return {
+              id: c.payload.doc.id,
+              isEdit: false,
+              name: c.payload.doc.data()['name'],
+              email: c.payload.doc.data()['email'],
+              phone: c.payload.doc.data()['phone'],
+              is_device_owner: c.payload.doc.data()['is_device_owner'],
+              device_id: c.payload.doc.data()['device_id'],
+            };
+          })
         })
-      });  
+      ); 
     }
   }
 
@@ -83,15 +88,16 @@ export class ProfileComponent implements OnInit {
   validateForm(is_device_owner,email, name, phone,device_id)
   {    
     var dbPath = `/devices-list/` + device_id ;//beginig of path to realtime database
-    let dbData = this.db.list(dbPath).snapshotChanges()
-    .subscribe(data => {
-      //console.log("data[0].payload.exists()",data[0].payload.exists());
-      if(data[0]==undefined || device_id.length==0)//The device ID does not exist in the system Or empty
-      {
-        alert("The device does not exist in the system");
-        return false;
-      }
-    })
+    this.subscriptions.push(
+      this.db.list(dbPath).snapshotChanges().subscribe(data => {
+        //console.log("data[0].payload.exists()",data[0].payload.exists());
+        if(data[0]==undefined || device_id.length==0)//The device ID does not exist in the system Or empty
+        {
+          alert("The device does not exist in the system");
+          return false;
+        }
+      })
+    );
     if(email.length === 0)
     {
       this.errorMessage = "please enter email id";
@@ -107,12 +113,18 @@ export class ProfileComponent implements OnInit {
     //   this.errorMessage = "phone number is not valid";
     //   return false
     // }
-    this.errorMessage = '';
-    return true;
+      this.errorMessage = '';
+      return true;
   }
 
   ngOnDestroy(){
+
     if(this.dbData != undefined)
       this.dbData.unsubscribe();
+
+    this.subscriptions.forEach((subscription) => {
+        if(subscription instanceof Subscription)
+            subscription.unsubscribe();
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import {Router} from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -13,12 +14,13 @@ export class HomePageComponent implements OnInit {
   userName: string;
   // userEmail: string;
   // userPhone: string;
+  subscription: Subscription;
   constructor(public authservice: AuthService, private router: Router,public crudservice:CrudService) { }
 
   ngOnInit(){
     if(this.authservice.currentUser != null)//We will make sure the user is logged in
     {
-      this.crudservice.get_userInfo().subscribe(data => {
+      this.subscription = this.crudservice.get_userInfo().subscribe(data => {
         this.user = data.map(c => {
           return {
             id: c.payload.doc.id,
@@ -30,6 +32,12 @@ export class HomePageComponent implements OnInit {
         })
       });  
     }
+  }
+
+  ngOnDestroy(){
+
+    if(this.subscription != undefined)
+        this.subscription.unsubscribe();
   }
 
 }
