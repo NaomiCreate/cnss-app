@@ -2,48 +2,73 @@ h3{
   color: aliceblue;
   font-weight: bold;
   margin-top: 20%;
+  font-family: URW Chancery L, cursive;
+  margin-bottom: 40px;
 }
 
-h4{
+/* h4{
   color: aliceblue;
-  font-weight: bold;
-  font-style: italic;
-  margin-top: 20px;
-}
+  margin-top:40px;
+} */
 
-table {
-  border: solid 1px rgb(27, 16, 34);
-  /* border-collapse: collapse; */
-  /* margin-top: 10px; */
-  /* position: absolute;
-  top: 30%;
-  left: 30%; */
-}
+
 
 th, td{
-  border: solid 3px  rgb(0, 0, 0);
-  padding: 8px 18px;
-  /*color: rgba(190, 190, 190, 0.739);*/
-  /* font-family: 'Open Sans' ;/*is this needed??*/
-  /* color: aliceblue;  */
+  border: solid 3px  rgba(0, 0, 0, 0.527);
+  padding: 8px 20px;
+  background-color: rgba(0, 128, 128, 0.52);
+  /* font-family: 'Snell Roundhand, cursive' ;/*is this needed??*/
+  color: aliceblue; 
 }
 
 th {
-  /* font-size: 18px; */
-  color:  rgba(190, 190, 190, 0.918);
+  color:  rgba(243, 239, 239, 0.918);
   text-align: left;
   background-color:rgba(0, 0, 0, 0.329);
 }
 
-table thead th {
-      /* color: aliceblue; */
-      /* font-size:  18px; 
-      font-family:'Open Sans'; 
-      font-weight: bold; */
+
+tr.noBorder{
+  margin-top:30px;
 }
-td a{
-  /* margin: 7px; */
+
+
+a{
+  color: bisque;
+  background-color: #3e3f41;
+  border-color: #3e3f41; 
+  width: 150px;
+  margin: 3px;     
+  margin:3px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 150px;
 }
+
+a:hover{
+  color: bisque;
+  background-color: #747679;
+  border-color:  #747679; 
+
+}
+
+#cancel{
+  margin-bottom: 40px;
+}
+.ownership{
+  margin-top: 20px;
+}
+
 label{
-  /* color: aliceblue; */
+  margin-left: 10px;
+}
+
+input{
+  border-radius: 5px;
+  border-color: #3e3f419a;
+  padding-right: 10px;
+}
+
+.error-msg{
+  background-color: rgb(236, 236, 236);
 }

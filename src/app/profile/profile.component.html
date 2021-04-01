@@ -1,6 +1,6 @@
 <h3 *ngFor="let item of record">Welcome {{item.firstName}},</h3>
 
-<h4>Your Details:</h4>
+<!-- <h4>Your Details:</h4> -->
 
 <div class="error-msg">
 	<!-- user error -->
@@ -38,9 +38,11 @@
                 <th>System Owner?</th>     
                 <td>No</td>
             </ng-template>
-            <p></p>
-            <p></p>
-            <tr><a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary">Edit</a></tr>
+            <tr class="noBorder">
+                <p></p>
+                <p></p>
+                <a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary">Edit</a>
+            </tr>
         </div>
         
         <!-- next lines willshow after pressing Edit Contact: -->
@@ -77,9 +79,8 @@
                 </div>
         
             </tr>
-                <!-- </div> -->
                 <tr><button (click)="updateRecord(item)">Update</button></tr>
-                <tr><button (click)="inEdit = false">Cancel</button></tr>            
+                <tr><button id="cancel" (click)="inEdit = false">Cancel</button></tr>            
             </ng-template>
     </tbody> 
 </table>

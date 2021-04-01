@@ -65,7 +65,8 @@ export class ProfileComponent implements OnInit {
 
   //will fire after the user clicks "Edit Contant"
   editRecord(item:any)
-  {        
+  {    
+    this.message ='';    
     this.inEdit = true; //Following this determination, we will see on the screen what appears in html under the tag #elseBlock
     item.editFirstName= item.firstName;
     item.editLastName= item.lastName;
@@ -98,6 +99,9 @@ export class ProfileComponent implements OnInit {
           if(data[0]==undefined|| (new_record['device_id'].length==0 && new_record['is_device_owner']==true))//The device does not exist in the system Or emty
             alert("The device does not exist in the system");
           else {//The device exist in the system OR record['is_device_owner']==false
+            if(new_record['is_device_owner']==false){
+              new_record['device_id'] = '';
+            }
             this.crudservice.update_user(this.record.doc_id, new_record);
             this.message = "The update was successful";
             this.inEdit = false;
