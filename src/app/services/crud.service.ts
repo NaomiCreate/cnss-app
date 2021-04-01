@@ -14,9 +14,12 @@ import * as firebase from 'firebase';
 })
 export class CrudService {
 
+  static isOwner:any;
+
 
   constructor(private authservice: AuthService, public fireservices:AngularFirestore,private db: AngularFireDatabase) { }
-//--------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+  //--------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   
 
 //For real time data base
@@ -72,28 +75,6 @@ export class CrudService {
     return this.fireservices.collection('emailToUid').doc(email).get().toPromise()
   }
 
-  // get isOwner():boolean{
-
-  //   let is_device_owner:any;
-  //   let dbData:any;
-
-  //   if(this.authservice.isUserEmailLoggedIn){
-  //     dbData = this.get_userInfo().subscribe(data => {
-  //     is_device_owner = data.map(c => {
-  //       console.log("'is_device_owner'", c.payload.doc.data()['is_device_owner'], typeof(c.payload.doc.data()['is_device_owner']))
-  //       return  c.payload.doc.data()['is_device_owner']; 
-  //     })
-  //   })
-  //   if(is_device_owner == 'true'){
-  //     dbData.unsubscribe();
-  //     return true
-  //   }
-  //   else{
-  //     dbData.unsubscribe();
-  //     return false;
-  //   }
-  //   }
-  //}
 
   get_userInfo()
   {
@@ -175,4 +156,17 @@ export class CrudService {
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
 
+
+  get is_owner(){
+    console.log("getting is Owner", CrudService.isOwner)
+    return CrudService.isOwner;
+  }
+
+  set_is_owner(val){
+    CrudService.isOwner = val;
+    console.log("setting is Owner", CrudService.isOwner)
+  }
+
+
 }
+      

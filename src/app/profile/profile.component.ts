@@ -48,6 +48,9 @@ export class ProfileComponent implements OnInit {
           /**This trcord is displayed in HTML, it returns an array */
           this.record = data.map(c => {
 
+            //set device ownership for owner guard
+            this.crudservice.set_is_owner(c.payload.doc.data()['is_device_owner']);
+
             return {
               email:c.payload.doc.data()['email'],
               firstName:c.payload.doc.data()['firstName'],
@@ -102,6 +105,7 @@ export class ProfileComponent implements OnInit {
             if(new_record['is_device_owner']==false){
               new_record['device_id'] = '';
             }
+            this.crudservice.set_is_owner(new_record['is_device_owner']); //set device ownership for owner guard
             this.crudservice.update_user(this.record.doc_id, new_record);
             this.message = "The update was successful";
             this.inEdit = false;
