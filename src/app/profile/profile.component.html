@@ -1,15 +1,27 @@
-<!-- <div>
-    {{reloadPage()}}
-</div> -->
-<h3 *ngFor="let item of user">Welcome back {{item.name}},</h3>
+
+<h3 *ngFor="let item of record">Welcome {{item.firstName}},</h3>
 
 <h4>Your Details:</h4>
+
+<div class="error-msg">
+	<!-- user error -->
+	<p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
+	<!-- firebase error handle -->
+	<p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
+	<!-- the data registered in firebase -->
+	<p *ngIf="message.length > 0" class="text-info">{{message}}</p>
+</div>
+
 <table>
-    <tbody *ngFor="let item of user">
-        <div *ngIf="!item.isEdit; else elseBlock">
+    <tbody *ngFor="let item of record">
+        <div *ngIf="!inEdit; else elseBlock">
             <tr>
-                <th>Name:</th>    
-                <td>{{item.name}}</td>
+                <th>First Name:</th>    
+                <td>{{item.firstName}}</td>
+            </tr>
+            <tr>
+                <th>Last Name:</th>    
+                <td>{{item.lastName}}</td>
             </tr>
             <tr>
                 <th>Email:</th>   
@@ -31,11 +43,16 @@
             <p></p>
             <tr><a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary">Edit</a></tr>
         </div>
+        
         <!-- next lines willshow after pressing Edit Contact: -->
         <ng-template #elseBlock>  
             <tr>
-                <th>Name:</th>    
-                <td><input type="text" [(ngModel)]="item.editName" class="from-control"></td>
+                <th>First Name:</th>    
+                <td><input type="text" [(ngModel)]="item.editFirstName" class="from-control"></td>
+            </tr>
+            <tr>
+                <th>Last Name:</th>    
+                <td><input type="text" [(ngModel)]="item.editLastName" class="from-control"></td>
             </tr>
             <tr>
                 <th>Email:</th>   
@@ -45,34 +62,25 @@
                 <th>Phone Number:</th>   
                 <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
             </tr>
-            <tr *ngIf="item.editIsUserOwnCnss">
-                <th>Device Id:</th>   
+
+            <tr *ngIf="item.editIsDeviceOwner">
+                <th>Device ID:</th>   
                 <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
-<!-- 
-                <div class="input-group form-group" *ngIf="item.is_device_owner">
-                         <span class="input-group-text"><i class="far fa-id-card"></i></span> 
-                    <input type="device_id" name="device_id" class="form-control" [(ngModel)]="item.device_id" placeholder="Enter device id" required>
-                </div> -->
             </tr>
-            <tr *ngIf="!item.editIsUserOwnCnss">
-            <!-- <tr> -->
-                <div class="selectOwnOrNotCNSS" name="selectOwnOrNotCNSS">
-                    <input type="radio"  [(ngModel)]="item.editIsUserOwnCnss" [value]="true" />  
+
+            <!-- <tr *ngIf="!item.editIsDeviceOwner"> -->
+            <tr>
+                <div class="ownership" name="ownership">
+                    <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="true" />  
                     <label>I own a security system</label><br>  
-                    <input type="radio"  [(ngModel)]="item.editIsUserOwnCnss" [value]="false" />
+                    <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="false" />
                     <label>I dont own a security system</label><br>  
                 </div>
-                <!-- <select [(ngModel)]="item.editIsUserOwnCnss" class="form-control" name="selectOwnOrNotCNSS">
-                    <option [value]="undefined" disabled hidden>Select...</option>
-                    <option [ngValue]="true">I own a security system</option>
-                    <option [ngValue]="false">I dont own a security system</option>
-                </select> -->
+        
             </tr>
                 <!-- </div> -->
                 <tr><button (click)="updateRecord(item)">Update</button></tr>
-                <tr><button (click)="item.isEdit = false">Cancel</button></tr>            
-            <!-- <tr><a href="/profile" (click)="updateRecord(item)">Update</a></tr> -->
-                <!-- <tr><a href="/profile" (click)="item.isEdit = false">Cancel</a></tr>             -->
+                <tr><button (click)="inEdit = false">Cancel</button></tr>            
             </ng-template>
     </tbody> 
 </table>

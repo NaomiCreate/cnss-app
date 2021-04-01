@@ -2,14 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import {Router} from '@angular/router';
 
+interface UserCredentials{
+  email:string;
+  password:string;
+}
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  email="";
-  password="";
+
+  user: UserCredentials = {
+    email: '',
+    password: ''
+  }
+  
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
 
@@ -21,16 +30,13 @@ export class LoginComponent implements OnInit {
   login()
   {
     this.clearErrorMessage();
-    if(this.validateForm(this.email, this.password))
+    if(this.validateForm())
     {
-      this.authservice.loginWithEmail(this.email, this.password)
+      this.authservice.loginWithEmail(this.user.email, this.user.password)
       .then(() => {
         // this.router.navigate(['/home-page'])
         this.router.navigate(['/profile'])
-      }).catch(_error =>{
-        this.error = _error
-        this.router.navigate(['/login'])
-      })
+      }).catch()
     }  
   }
 
@@ -40,21 +46,21 @@ export class LoginComponent implements OnInit {
     this.error = {name: '', message:''};
   }
 
-  validateForm(email, password)
+  validateForm()
   {
-    if(email.length === 0)
+    if(this.user.email.length === 0)
     {
-      this.errorMessage = "please enter email id";
+      this.errorMessage = "please enter email";
       return false
     }
-    if(password.length === 0)
+    if(this.user.password.length === 0)
     {
       this.errorMessage = "please enter password";
       return false
     }
-    if(password.length < 5)
+    if(this.user.password.length < 5)
     {
-      this.errorMessage = "password should be at least 5 chars";
+      this.errorMessage = "password should be at least 5 characters";
       return false
     }
 

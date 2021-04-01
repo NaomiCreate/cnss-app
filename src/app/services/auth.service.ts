@@ -57,6 +57,7 @@ export class AuthService {
         resolve(credential.user);
       }).catch(error=>{
         console.log(error)
+        alert("Error: The email or password are incorrect, please try again");
         throw error;
       })
     });
@@ -67,31 +68,5 @@ export class AuthService {
     this.afu.signOut();
     this.router.navigate(['/login']);
   }
-
-  //-----------------------didnt work
-  // registerWithEmail(email: string, password: string){
-  //   return this.afu.createUserWithEmailAndPassword(email, password)
-  //   .then((user) => {
-  //     this.authState = user
-  //   }).catch(error=>{
-  //       console.log(error)
-  //       throw error
-  //     })
-  // }
- //-------------------------------
-
-  //function in use in login.component.ts
-  /*loginWithEmail(email: string, password: string){
-    return new Promise(resolve => {
-      this.afu.signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        this.authState = user
-        resolve(user);
-      }).catch(error=>{
-          console.log(error)
-          throw error
-        })
-    });
-  }*/
   
 }

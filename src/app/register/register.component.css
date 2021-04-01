@@ -2,12 +2,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
-/* html,body{
- background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg'); 
-background-repeat: no-repeat; 
-height:   100%;
-font-family: 'Numans', sans-serif;
-} */
 .error-msg{
     text-align: center;
 }
@@ -19,24 +13,26 @@ font-family: 'Numans', sans-serif;
 } 
 
 .card{
-    /* justify-content: center;
-	align-items: center;
-    align-content: center; */
-height: 560px;
-/* position:fixed; */
-/* top: 50%;
-left: 50%; */
 
-position: fixed;
-top: 0;
-bottom: 0;
+margin: auto;
+/*display: flex;
+flex-wrap: wrap;
+position: fixed;*/
+/*top: 10px;*/
+/*bottom: 0;*/
 left: 0;
 right: 0;
-margin: auto;
+/*margin: auto;*/
 
 width: 400px;
-background-color: rgba(0,0,0,0.5) !important;
-/* vertical-align: middle; */
+/*background-color: rgba(0,0,0,0.5) !important;*/
+/*text-align: center;*/
+/*vertical-align: middle;*/
+/*margin: auto;
+width: 60%;*/
+border: 3px solid #73AD21;
+/*padding: 10px;*/ 
+
 }
 
 

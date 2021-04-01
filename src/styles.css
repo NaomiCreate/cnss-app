@@ -1,10 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 html, body {
-    height: 100%;
-    margin: 0;
-    /* the link to the font is in: index.html */
+    /* margin:auto;
+    top:0px; 
+    bottom: 0px;
+    padding:0;
+    margin:0; */
+
+    /* background-color: rgb(27, 16, 34); */
+    background-color: rgba(149, 82, 81, 0.411); 
+   
+
     font-family: 'Open Sans' ;
+   
 }
+
+
 
 a {
     text-decoration: none;

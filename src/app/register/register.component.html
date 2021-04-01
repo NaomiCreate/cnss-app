@@ -14,87 +14,85 @@
     <!--Fontawesome CDN-->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
-		<div class="error-msg">
-			<!-- user error -->
-			<p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
-			<!-- firebase error handle -->
-			<p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
-			<!-- the data registered in firebase -->
-			<p *ngIf="message.length > 0" class="text-info">{{message}}</p>
-		</div>					
-		<div class="card">
-			<div class="card-header">
-				<h3>Registration Form</h3>
-				<!-- <div class="d-flex justify-content-end social_icon">
-					<span><i class="fab fa-facebook-square"></i></span>
-					<span><i class="fab fa-google-plus-square"></i></span>
-					<span><i class="fab fa-twitter-square"></i></span>
-				</div> -->
-			</div>
-			<div class="card-body">
-				<div class="form-group">
-					<form (ngSubmit)="register()">
-						<div class="input-group form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fa fa-envelope"></i></span>
-							</div>
-							<input type="email" name="email" class="form-control" [(ngModel)]="email" placeholder="Enter email" required>	
-						</div>
-						<div class="input-group form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-							</div>
-							<input type="password" name="password" class="form-control" [(ngModel)]="password" placeholder="Enter password" required>
-						</div>
-						<div class="input-group form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-							</div>
-							<input type="password" name="password-verify" class="form-control" [(ngModel)]="passwordVerify" placeholder="Verify password" required>
-						</div>
-						<!-- <button (click)="CreateRecordUserInfo()" >Create info</button> -->
 
-						<!-- --- -->
-						<div class="input-group form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-							</div>
-							<input type="name" name="name" class="form-control" [(ngModel)]="name" placeholder="Enter name" required>
-						</div>
-						<div class="input-group form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fas fa-phone"></i></span>
-							</div>
-							<input type="phone" name="phone" class="form-control" [(ngModel)]="phone" placeholder="Enter phone number" required>
-						</div>
-						<div class="input-group form-group" *ngIf="is_device_owner">
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="far fa-id-card"></i></span>
-							</div>
-							<input type="device_id" name="device_id" class="form-control" [(ngModel)]="device_id" placeholder="Enter device id" required>
-						</div>
-						<div class="selectOwnOrNotCNSS">
-							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="is_device_owner" [value]="true" />  
-							<label> I own a security system</label><br>  
-							<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="is_device_owner" [value]="false" />
-							<label> I don't own a security system</label><br>  
-						</div>
+<div class="error-msg">
+	<!-- user error -->
+	<p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
+	<!-- firebase error handle -->
+	<p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
+	<!-- the data registered in firebase -->
+	<p *ngIf="message.length > 0" class="text-info">{{message}}</p>
+</div>	
 
-						<!-- <select [(ngModel)]="is_device_owner" class="form-control" name="selectOwnOrNotCNSS">
-							<option [value]="undefined" disabled hidden>Select...</option>
-							<option [ngValue]="true">I own a security system</option>
-							<option [ngValue]="false">I dont own a security system</option>
-						</select> -->
-						<!-- --- -->
-						<div class="register">
-							<a href="#" routerLink="/login">Back to Login</a>
-						</div>
-						<div class="form-group">
-							<input type="submit" value="Register" class="btn float-right login_btn">
-						</div>
-					</form>
+<div class="card">
+	<div class="card-header">
+		<h3>Registration Form</h3>
+
+	</div>
+	<div class="card-body">
+		<div class="form-group">
+			<form (ngSubmit)="register()">
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-envelope"></i></span>
+					</div>
+					<input type="email" name="email" class="form-control" [(ngModel)]="userInfoRecord.email" placeholder="Enter email" required>	
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-key"></i></span>
+					</div>
+					<input type="password" name="password" class="form-control" [(ngModel)]="password" placeholder="Enter password" required>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-key"></i></span>
+					</div>
+					<input type="password" name="password-verify" class="form-control" [(ngModel)]="passwordVerif" placeholder="Verify password" required>
+				</div>
+				
+
+				<!-- --- -->
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="name" name="first name" class="form-control" [(ngModel)]="userInfoRecord.firstName" placeholder="Enter first name" required>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="name" name="last name" class="form-control" [(ngModel)]="userInfoRecord.lastName" placeholder="Enter last name" required>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-phone"></i></span>
+					</div>
+					<input type="phone" name="phone" class="form-control" [(ngModel)]="userInfoRecord.phone" placeholder="Enter phone number (digits only)" required>
+				</div>
+				<div class="input-group form-group" *ngIf="userInfoRecord.is_device_owner">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="far fa-id-card"></i></span>
+					</div>
+					<input type="device_id" name="device_id" class="form-control" [(ngModel)]="userInfoRecord.device_id" placeholder="Enter device id" required>
+				</div>
+				<div class="selectOwnOrNotCNSS">
+					<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true" />  
+					<label> I own a security system</label><br>  
+					<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="userInfoRecord.is_device_owner" [value]="false" />
+					<label> I don't own a security system</label><br>  
 				</div>
 
-			</div>
+				<div class="register">
+					<a href="#" routerLink="/login">Back to Login</a>
+				</div>
+				<div class="form-group">
+					<input type="submit" value="Register" class="btn float-right login_btn">
+				</div>
+			</form>
 		</div>
+
+	</div>
+</div>
 

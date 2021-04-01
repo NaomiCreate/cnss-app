@@ -13,44 +13,26 @@ import * as firebase from 'firebase';
   providedIn: 'root'
 })
 export class CrudService {
+
+
   constructor(private authservice: AuthService, public fireservices:AngularFirestore,private db: AngularFireDatabase) { }
 //--------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  //For real time data base
+  
+
+//For real time data base
   device_listed(device_id: string,is_device_owner:boolean){
     if(is_device_owner == true)
     {
       const dbPath = `/device-list/` + 'device_id';//beginig of path to realtime database
       const dbData = this.db.list(dbPath).snapshotChanges()
       .subscribe(data => {
-        //console.log("data[0].payload.exists()",data[0].payload.exists());
         if(data[0]==undefined)
           return true;
-          //console.log("not exist");
         else{
           return false;
-          //console.log("exist");
-
-         // if(data[0].payload.exists() == true)
-          //  return true;
-          //else{
-          //  console.log("tont exists",data[0].payload.exists());
-            //this.db.list(dbPath).update("is_in_use", "true");
-          //  return false;
-         // }
         }
       })
     }
-    // const dbPath = `/device-list/` + device_id ;//beginig of path to realtime database
-    // const dbData = this.db.list(dbPath).snapshotChanges()
-    // .subscribe(data => {
-    //   console.log(data[0].payload.exists());
-    //   if(data[0].payload.exists() == true)
-    //     return true;
-    //   else{
-    //     this.db.list(dbPath).update("is_in_use", "true");
-    //     return false;
-    //   }
-    // })
 
   }
  
@@ -67,11 +49,22 @@ export class CrudService {
   /* This function will add to collection emailToUid a record  [email:uid] of current resitration */
   add_EmailToUid(email:string)
   {
-    let record = {}
-    record[email] = this.authservice.currentUserId
+    let record = {
+      email:this.authservice.currentUserId
+    }
 
     return this.fireservices.collection('emailToUid').doc(email).set(record);
   }
+
+    /* This function will add to collection emailToUid a record  [email:uid] of current resitration */
+    add_deviceToUid(deviceID:string)
+    {
+      let record = {
+        deviceID: this.authservice.currentUserId
+      }
+  
+      return this.fireservices.collection('deviceToUid').doc(deviceID).set(record);
+    }
 
   get_uidFromEmail(email:string)
   {
@@ -79,10 +72,32 @@ export class CrudService {
     return this.fireservices.collection('emailToUid').doc(email).get().toPromise()
   }
 
+  // get isOwner():boolean{
+
+  //   let is_device_owner:any;
+  //   let dbData:any;
+
+  //   if(this.authservice.isUserEmailLoggedIn){
+  //     dbData = this.get_userInfo().subscribe(data => {
+  //     is_device_owner = data.map(c => {
+  //       console.log("'is_device_owner'", c.payload.doc.data()['is_device_owner'], typeof(c.payload.doc.data()['is_device_owner']))
+  //       return  c.payload.doc.data()['is_device_owner']; 
+  //     })
+  //   })
+  //   if(is_device_owner == 'true'){
+  //     dbData.unsubscribe();
+  //     return true
+  //   }
+  //   else{
+  //     dbData.unsubscribe();
+  //     return false;
+  //   }
+  //   }
+  //}
+
   get_userInfo()
   {
-    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();
-    
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();  
   }
 
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
@@ -159,6 +174,5 @@ export class CrudService {
     this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + connection_email).delete();
             //this.fireservices.doc('contacts/' + recordId).delete();//-before change
   }
-
 
 }
