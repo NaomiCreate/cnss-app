@@ -1,12 +1,12 @@
 <!-- page-container is parent to the sidebar -->
 
-<div class="page-container" *ngIf = "authservice.currentUser; else elseNotAuthBlock"> 
+<div class="page-container" *ngIf = "authservice.isLoggedIn; else elseNotAuthBlock"> 
     
     <div class="sidebar">
         
         <div class= "list-items">
             
-            <a routerLink="/login" class="list-item" (click)="authservice.signout()">
+            <a routerLink="/login" class="list-item" (click)="authservice.logout()">
                 <i class="material-icons">arrow_right</i>
                 Logout
             </a>
@@ -52,9 +52,9 @@
 <ng-template class="page-container" #elseNotAuthBlock>
     
     <!-- To avoid empty page incase somthing other than /login or /register is entered -->
-    <!-- <div class="page-content-container" *ngIf="!(router.url.includes('/login') || router.url.includes('/register'))">
+    <div class="page-content-container" *ngIf="!(router.url.includes('/login') || router.url.includes('/register'))">
         <app-page-not-found></app-page-not-found>
-    </div> -->
+    </div>
 
     <div class="page-content-container" *ngIf="router.url.includes('/login')">
         <app-login></app-login>

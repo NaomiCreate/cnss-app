@@ -32,11 +32,12 @@ export class LoginComponent implements OnInit {
     this.clearErrorMessage();
     if(this.validateForm())
     {
-      this.authservice.loginWithEmail(this.user.email, this.user.password)
+      this.authservice.login(this.user.email, this.user.password);
+      /* this.authservice.loginWithEmail(this.user.email, this.user.password)
       .then(() => {
         // this.router.navigate(['/home-page'])
         this.router.navigate(['/profile'])
-      }).catch()
+      }).catch()*/
     }  
   }
 

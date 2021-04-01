@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { concat } from 'rxjs';
-//import { error } from 'console';
 import { Subscription } from 'rxjs';
+
+interface Contact{
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
+}
 
 @Component({
   selector: 'app-contact-list',
@@ -14,9 +18,11 @@ import { Subscription } from 'rxjs';
 
 export class ContactListComponent implements OnInit {
   contacts= [] ;//CHANGE FROM CONTACT TO CONTACTS
+
   contactName: string;
   contactEmail: string;
   contactPhone: string;
+
   message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
@@ -26,9 +32,10 @@ export class ContactListComponent implements OnInit {
   constructor(private router: Router, private authservice: AuthService,public crudservice:CrudService) { }
   
   ngOnInit() {
+
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    if(this.authservice.currentUser != null)//We will make sure the user is logged in
+    if(this.authservice.currentUser != null) //make sure the user is logged in
     {      
       this.subscription = this.crudservice.get_AllContacts().subscribe(res => {
         this.contacts = res.map(c=> {
