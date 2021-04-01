@@ -1,31 +1,52 @@
-/* test */
-.page-container{
-    display: flex;
-}
+/* .page-container{
+     display: flex; 
+} */
 
 .sidebar {
-    height: 100%;
+    
     width: 300px;
 
     position: fixed;
     top: 0;
     bottom: 0;
     overflow-x: hidden;
-    background: rgba(0, 0, 0, 0.329);
+    background: rgba(0, 0, 0, 0.329); 
 
     /*Center sidebar content*/
     display: flex;
     flex-wrap: wrap;
     align-content: center;
+
 }
 
 
 .page-content-container{
 
     margin:auto;
+    /* max-height: 100%; */
+
+    position: fixed;
+    top:0;
+    bottom:0;
+    right:0;
+    left: 400px;
+    overflow-y:scroll;
+    overflow-x: hidden; 
+    /* overflow:scroll; */
+
+    /*Center sidebar content??*/
+    display: flex;
+    /* flex-wrap: wrap; */
+    align-content: center;
+
+    
+   
+    
+
+    
 
     /*??*/
-    /*background-color: rgba(149, 82, 81, 0.411); /*nedded for register page unclear why*/
+    /* background-color: rgba(149, 82, 81, 0.411); /*nedded for register page unclear why */
      /*??*/
 }
 

@@ -30,8 +30,8 @@ export class RegisterComponent implements OnInit {
     device_id:''
   }
 
-  password:string;
-  passwordVerif:string;
+  password:string = '';
+  passwordVerif:string = '';
 
   message = '';
   errorMessage = ''; //validation error handle
@@ -121,46 +121,46 @@ export class RegisterComponent implements OnInit {
 
     if(this.userInfoRecord.email.length === 0)
     {
-      this.errorMessage = "please enter email";
+      this.errorMessage = "Please enter email";
       return false
     }
     if(this.password.length === 0)
     {
-      this.errorMessage = "please enter password";
+      this.errorMessage = "Please enter password";
       return false
     }
     if(this.password.length < 5)
     {
-      this.errorMessage = "password should be at least 5 characters";
+      this.errorMessage = "Password should be at least 5 characters";
       return false
     }
     if(!(this.passwordVerif === this.password))
     {
-      this.errorMessage = "password vrifaction does not match input password";
+      this.errorMessage = "Password vrifaction does not match input password";
       return false
     }
     if(this.userInfoRecord.firstName.length === 0)
     {
-      this.errorMessage = "please enter first name";
+      this.errorMessage = "Please enter first name";
       return false
     }
     if(this.userInfoRecord.lastName.length === 0)
     {
-      this.errorMessage = "please enter last name";
+      this.errorMessage = "Please enter last name";
       return false
     }  
     if(this.userInfoRecord.phone.length != 10)
     {
-      this.errorMessage = "cell phone number is not valid";
+      this.errorMessage = "Cell phone number is not valid";
       return false
     }
     if(this.userInfoRecord.is_device_owner===undefined)
     {
-      this.errorMessage = "select option";
+      this.errorMessage = "Select option";
       return false
     }
     if(this.userInfoRecord.is_device_owner==true && this.userInfoRecord.device_id.length==0){
-      this.errorMessage = "please enter device id";
+      this.errorMessage = "Please enter device id";
       return false
     }  
     this.errorMessage = '';

@@ -5,88 +5,80 @@
 .error-msg{
     text-align: center;
 }
-.container{
- /* height: 100%;  */
- align-content: center;
- vertical-align: middle;
-
-} 
 
 .card{
+    width: 400px;
+    border: 3px solid #54722b; 
 
-margin: auto;
-/*display: flex;
-flex-wrap: wrap;
-position: fixed;*/
-/*top: 10px;*/
-/*bottom: 0;*/
-left: 0;
-right: 0;
-/*margin: auto;*/
-
-width: 400px;
-/*background-color: rgba(0,0,0,0.5) !important;*/
-/*text-align: center;*/
-/*vertical-align: middle;*/
-/*margin: auto;
-width: 60%;*/
-border: 3px solid #73AD21;
-/*padding: 10px;*/ 
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: auto;
+    margin-top: 20px;
 
 }
 
 
-
+.card-header{
+    background-color: rgb(221, 211, 123);
+    
+}
 
 .card-header h3{
-color: white;
+     color: white; 
+    
+    
+    
 }
 
 
 
 .input-group-prepend span{
-width: 50px;
-background-color: #ff7c25d8;
-color: black;
-border:0 !important;
+    width: 50px;
+    background-color: #ff7c25d8;
+    color: black;
+    border:0 !important;
 }
 
 input:focus{
-outline: 0 0 0 0  !important;
-box-shadow: 0 0 0 0 !important;
+    outline: 0 0 0 0  !important;
+    box-shadow: 0 0 0 0 !important;
 
 }
 
 .remember{
-color: white;
+    color: white;
 }
 
 .remember input
 {
-width: 20px;
-height: 20px;
-margin-left: 15px;
-margin-right: 5px;
+    width: 20px;
+    height: 20px;
+    margin-left: 15px;
+    margin-right: 5px;
 }
 
 .login_btn{
-color: black;
-background-color: #ff7c25d8;
-width: 100px;
+    color: black;
+    background-color: #ff7c25d8;
+    width: 100px;
 }
 
 .login_btn:hover{
-color: black;
-background-color: white;
+    color: black;
+    background-color: rgb(224, 220, 220);
 }
 
 .links{
-color: white;
+    color: white;
 }
 
 .links a{
-margin-left: 4px;
+    margin-left: 4px;
 }
+
+
 label{
-    color: aliceblue;
+    margin-left: 10px;
+    color:gray;
 }

@@ -15,20 +15,20 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 
-<div class="error-msg">
-	<!-- user error -->
-	<p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
-	<!-- firebase error handle -->
-	<p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
-	<!-- the data registered in firebase -->
-	<p *ngIf="message.length > 0" class="text-info">{{message}}</p>
-</div>	
-
 <div class="card">
 	<div class="card-header">
 		<h3>Registration Form</h3>
-
 	</div>
+
+	<div class="error-msg">
+		<!-- user error -->
+		<p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
+		<!-- firebase error handle -->
+		<p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
+		<!-- the data registered in firebase -->
+		<p *ngIf="message.length > 0" class="text-info">{{message}}</p>
+	</div>
+
 	<div class="card-body">
 		<div class="form-group">
 			<form (ngSubmit)="register()">
@@ -77,10 +77,11 @@
 					</div>
 					<input type="device_id" name="device_id" class="form-control" [(ngModel)]="userInfoRecord.device_id" placeholder="Enter device id" required>
 				</div>
-				<div class="selectOwnOrNotCNSS">
-					<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true" />  
+
+				<div class="ownrship">
+					<input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true" />  
 					<label> I own a security system</label><br>  
-					<input type="radio" name="selectOwnOrNotCNSS" [(ngModel)]="userInfoRecord.is_device_owner" [value]="false" />
+					<input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="false" />
 					<label> I don't own a security system</label><br>  
 				</div>
 
