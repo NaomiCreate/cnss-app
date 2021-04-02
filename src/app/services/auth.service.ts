@@ -73,13 +73,13 @@ export class AuthService {
     });
   }
 
-/*/function in use in login.component.ts
+/*function in use in login.component.ts*/
  loginWithEmail(email: string, password: string){
     return new Promise(resolve => {
       this.firebaseAuth.signInWithEmailAndPassword(email, password)
       .then((credential) => {
         this.authState = credential.user;
-        // AuthService.isLoggedIn = true;
+        this.isAuth=true;//user is logged in
         resolve(credential.user);
       }).catch(error=>{
         console.log(error)
@@ -87,22 +87,9 @@ export class AuthService {
         throw error;
       })
     });
-  }*/
-
-  /**TESTING */
-  //login function
-  login(email: string, password: string) {
-    this.firebaseAuth
-      .signInWithEmailAndPassword(email, password)
-      .then(value => {
-        this.isAuth=true;//user is logged in
-        this.router.navigate(['/profile']);//go to authorized zone 
-      })
-      .catch(err => {
-        alert("Error: The email or password are incorrect, please try again");
-      });
   }
 
+  /**TESTING */
   //logout functions
   logout() {
     this.firebaseAuth.signOut();
@@ -124,8 +111,5 @@ export class AuthService {
   //   this.router.navigate(['/login']);
   // }
 
-// get is_logged_in():boolean{
-//   return AuthService.isLoggedIn;
-// }
   
 }
