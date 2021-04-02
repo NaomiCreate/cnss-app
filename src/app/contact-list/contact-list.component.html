@@ -1,7 +1,8 @@
 <div class="container content-center">
     <!-- The following fields will be filled in by the user and will contain the details of the future contact -->
     <div class="add-contact-section">
-        <h4>Add contact:</h4>
+        <h4>Add Contact:</h4>
+
         <div class="form-group">
             <!-- user error -->
             <p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
@@ -10,17 +11,19 @@
             <!-- the data registered in firebase -->
             <p *ngIf="message.length > 0" class="text-info">{{message}}</p>
         </div>
+
         <div class="from-group">
-            <input type="text" class="from-control" [(ngModel)]="contactName" placeholder="Contact name">
+            <input type="text" class="from-control" [(ngModel)]="new_contact.contactFirstName" placeholder="Contact first name">
         </div>
         <div class="from-group">
-            <input type="email" class="from-control" [(ngModel)]="contactEmail" placeholder="Contact mail">
+            <input type="text" class="from-control" [(ngModel)]="new_contact.contactLastName" placeholder="Contact last name">
         </div>
         <div class="from-group">
-            <input type="text" class="from-control" [(ngModel)]="contactPhone" placeholder="Phone number">
+            <input type="email" class="from-control" [(ngModel)]="new_contact.contactEmail" placeholder="Contact mail">
         </div>
         <div class="from-group" >
-            <button id="add-contact-btn" (click)="CreateRecord()" [disabled]="!contactName || !contactEmail || !contactPhone">Create Contact</button>
+            <!-- <button id="add-contact-btn" (click)="CreateRecord()" [disabled]="!new_contact.contactFirstName || !new_contact.contactLastName || !new_contact.contactEmail">Create Contact</button> -->
+            <button id="add-contact-btn" (click)="CreateRecord()">Create Contact</button>
         </div>
         <!-- <div class="from-group" >
             <h4><b>{{message}}</b></h4>
@@ -32,6 +35,7 @@
     <thead >
         <tr>           
             <th>Name</th>
+            <th></th>  <!--For last name-->
             <th>Email</th>
             <th>Phone</th>
             <th></th>
@@ -40,8 +44,9 @@
     <tbody *ngFor="let item of contacts">
         <!-- <div *ngFor="let item of contact"> -->
             <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
-                <tr *ngIf="!item.isEdit; else elseBlock">         
-                    <td > {{item.name}}</td>
+                <tr *ngIf="!inEdit; else elseBlock">         
+                    <td > {{item.firstName}}</td>
+                    <td > {{item.lastName}}</td>
                     <td > {{item.email}}</td>
                     <td > {{item.phone}}</td>
                     <td>
@@ -56,17 +61,13 @@
 
             <!-- next lines willshow after pressing Edit Contact: -->
             <ng-template #elseBlock>    
-                        <td><input type="text" [(ngModel)]="item.editName" class="edit-from-control"></td>
+                        <td><input type="text" [(ngModel)]="item.editFirstName" class="edit-from-control" placeholder="First name"></td>
+                        <td><input type="text" [(ngModel)]="item.editLastName" class="edit-from-control"  placeholder="Last name"></td>
                         <td > {{item.email}}</td>
                         <td > {{item.phone}}</td>
-                                <!-- We omitted cause it doesnt make sense to edit it: -->
-                                <!-- <td><input type="text" [(ngModel)]="item.editEmail" class="edit-from-control"></td>
-                                <td><input type="text" [(ngModel)]="item.editPhone" class="edit-from-control"></td> -->
                     <td>
-                        <button  (click)="item.isEdit = false">Cancel</button>
+                        <button  (click)="inEdit = false">Cancel</button>
                         <button  (click)="updateRecord(item)">Update Contact</button>
-                        <!-- <a href="/contact-list" (click)="item.isEdit = false">Cancel</a>
-                        <a href="/contact-list" (click)="updateRecord(item)">Update Contact</a>                     -->
                     </td>
             </ng-template>
         <!-- </div> -->

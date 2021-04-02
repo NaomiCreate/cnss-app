@@ -23,7 +23,7 @@ interface UserRecord{
 export class ProfileComponent implements OnInit {
 
   record:any; //will hold users info
-  inEdit:boolean = false; //will hold theediting state 
+  inEdit:boolean = false; //will hold the editing state 
   doc_id:string; //will hold the documents id
   
   
@@ -73,7 +73,6 @@ export class ProfileComponent implements OnInit {
     this.inEdit = true; //Following this determination, we will see on the screen what appears in html under the tag #elseBlock
     item.editFirstName= item.firstName;
     item.editLastName= item.lastName;
-    item.editEmail = item.email;
     item.editPhone = item.phone;
     item.editIsDeviceOwner = item.is_device_owner;
     item.editDeviceID = item.device_id;

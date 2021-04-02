@@ -24,10 +24,11 @@ export class CrudService {
 
 //For real time data base
   device_listed(device_id: string,is_device_owner:boolean){
+
     if(is_device_owner == true)
     {
-      const dbPath = `/device-list/` + 'device_id';//beginig of path to realtime database
-      const dbData = this.db.list(dbPath).snapshotChanges()
+      let dbPath = `/device-list/` + 'device_id';//beginig of path to realtime database
+      let dbData = this.db.list(dbPath).snapshotChanges()
       .subscribe(data => {
         if(data[0]==undefined)
           return true;
@@ -52,26 +53,21 @@ export class CrudService {
   /* This function will add to collection emailToUid a record  [email:uid] of current resitration */
   add_EmailToUid(email:string)
   {
-    let record = {
-      email:this.authservice.currentUserId
-    }
-
+    let record = {}
+    record[email] = this.authservice.currentUserId;
     return this.fireservices.collection('emailToUid').doc(email).set(record);
   }
 
     /* This function will add to collection emailToUid a record  [email:uid] of current resitration */
     add_deviceToUid(deviceID:string)
     {
-      let record = {
-        deviceID: this.authservice.currentUserId
-      }
-  
+      let record = {}
+      record[deviceID] = this.authservice.currentUserId
       return this.fireservices.collection('deviceToUid').doc(deviceID).set(record);
     }
 
   get_uidFromEmail(email:string)
   {
-    //return this.fireservices.collection('emailToUid').doc(email)
     return this.fireservices.collection('emailToUid').doc(email).get().toPromise()
   }
 
@@ -81,7 +77,6 @@ export class CrudService {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();  
   }
 
-  //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
   update_user(recordId, record)
   {
     this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + record.email).update(record);//'contacts' is the collection name
@@ -137,7 +132,6 @@ export class CrudService {
   update_contact(email,  record)
   {
     this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'contacts/' + email).update(record);//'contacts' is the collection name
-            //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
   }
 
   //delete_contact will delete the contact in firebase. (the function gets the record id)
