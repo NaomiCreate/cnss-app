@@ -6,6 +6,7 @@
     <thead >
         <tr>           
             <th>Name</th>
+            <th></th>
             <th>Email</th>
             <th>Phone</th>
             <th></th>
@@ -15,7 +16,8 @@
         <!-- <div *ngFor="let item of contact"> -->
             <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
                 <tr>         
-                    <td > {{item.name}}</td>
+                    <td > {{item.firstName}}</td>
+                    <td > {{item.lastName}}</td>
                     <td > {{item.email}}</td>
                     <td > {{item.phone}}</td>
                     <td>

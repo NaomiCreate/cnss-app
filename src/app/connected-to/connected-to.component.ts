@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class ConnectedToComponent implements OnInit {
   connections = [];
+
   message = '';
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
@@ -30,7 +31,8 @@ export class ConnectedToComponent implements OnInit {
           .then((doc) => { 
            
             connection['phone'] = doc.data()['phone'];
-            connection['name'] = doc.data()['name'];
+            connection['firstName'] = doc.data()['firstName'];
+            connection['lastName'] = doc.data()['lastName'];
             connection['email'] = doc.data()['email'];
             
           }).catch(error => {console.log(error)});
