@@ -79,7 +79,7 @@ export class CrudService {
 
   update_user(recordId, record)
   {
-    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + record.email).update(record);//'contacts' is the collection name
+    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
     //this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
             //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
   }

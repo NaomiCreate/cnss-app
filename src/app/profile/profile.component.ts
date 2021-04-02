@@ -81,13 +81,13 @@ export class ProfileComponent implements OnInit {
   //will fire after the user press "Edit" and than press "Update"
   updateRecord(item:any)
   {
-    if(confirm("Are you sure you want to edit your details?"))
-    {
+    // if(confirm("Are you sure you want to edit your details?"))
+    // {
       //let dbPath = '';//`/devices-list/` + record['device_id'] ;//beginig of path to realtime database
       let new_record:UserRecord = {
         firstName:item.editFirstName,
         lastName: item.editLastName,
-        email: item.editEmail,
+        email: item.email,
         phone: item.editPhone,
         is_device_owner: item.editIsDeviceOwner,
         device_id: item.editDeviceID
@@ -104,14 +104,16 @@ export class ProfileComponent implements OnInit {
             if(new_record['is_device_owner']==false){
               new_record['device_id'] = '';
             }
-            this.crudservice.set_is_owner(new_record['is_device_owner']); //set device ownership for owner guard
-            this.crudservice.update_user(this.record.doc_id, new_record);
-            this.message = "The update was successful";
-            this.inEdit = false;
+            if(confirm("Are you sure you want to edit your details?")){
+              this.crudservice.set_is_owner(new_record['is_device_owner']); //set device ownership for owner guard
+              this.crudservice.update_user(new_record.email, new_record);
+              this.message = "The update was successful";
+              this.inEdit = false;
+            }
           }
         });
       }
-    }
+    //}
   }
 
 
@@ -122,12 +124,6 @@ export class ProfileComponent implements OnInit {
         this.errorMessage = "Please enter device id";
         return false;
      }
-
-    if(record.email.length === 0)
-    {
-      this.errorMessage = "Please enter an email";
-      return false
-    }
     if(record.firstName.length === 0)
     {
       this.errorMessage = "Please enter your first name";
