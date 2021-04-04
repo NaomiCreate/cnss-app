@@ -1,22 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
-html, body {
-   
-    background-color:rgba(149, 82, 81, 0.712);
-   
 
-    font-family: 'Open Sans' ;
-   
+html{
+    height: 100%;
 }
 
+html, body {
+    min-height: 100%;
+    font-family: 'Open Sans' ;
+    /* background-color:rgba(149, 82, 81, 0.712); */
+    background-color: RosyBrown;
+}
 
 
 a {
     text-decoration: none;
 }
+
 /* .btn-danger{
     color: rgb(51, 48, 48);
     background-color:rgba(71, 16, 16, 0.664);
-}
+} */
+
 .btn-primary{
     color: rgb(51, 48, 48);
     background-color:rgba(190, 190, 190, 0.739); 

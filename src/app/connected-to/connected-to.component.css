@@ -1,17 +1,17 @@
 h4{
     /*color: rgba(190, 190, 190, 0.739);*/
     color: aliceblue;
-    position: absolute;
+    /* position: absolute;
     left: 30%;
-    top: 25%;
+    top: 25%; */
 }
 table {
     border: solid 1px rgb(27, 16, 34);
     border-collapse: collapse;
     margin-top: 10px;
-    position: absolute;
+    /* position: absolute;
     top: 40%;
-    left: 30%;
+    left: 30%; */
   }
   
   th, td{
@@ -30,11 +30,11 @@ table {
   }
 
   table thead th {
-        color: aliceblue;
-        font-size:  18px; 
-        font-family:'Open Sans'; 
-        font-weight: bold;
+    color: aliceblue;
+    font-size:  18px; 
+    font-family:'Open Sans'; 
+    font-weight: bold;
   }
 td a{
-margin: 7px;
+  margin: 7px;
 }

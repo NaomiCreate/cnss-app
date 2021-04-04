@@ -2,28 +2,26 @@
 
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
-/* html,body{
- background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg'); 
-background-repeat: no-repeat; 
-height:   100%;
-font-family: 'Numans', sans-serif;
-} */
 
 .card{
    
-    height: 370px;
+    /* margin:auto; */
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
 
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-
-    width: 400px;
+    height:auto;
+    width:400px;
     border: 3px solid #54722b;
-    /* background-color:rgba(0,0,0,0.5) !important; */
+}
+
+.clickable{
+
+    margin-top: 40px;
 
 }
 
