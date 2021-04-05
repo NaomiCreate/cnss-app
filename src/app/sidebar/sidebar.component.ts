@@ -9,13 +9,21 @@ import {CrudService} from '../services/crud.service';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
+  isSidebarOpen:boolean = false; //will hold the sidebar state 
 
   // is_device_owner:any;
   // dbData:any;
 
   constructor(public authservice: AuthService, public router: Router, public crudservice:CrudService) { }
 
+  toggleSideBar()
+  { 
+    if(this.isSidebarOpen==true)   
+      this.isSidebarOpen = false; 
+    else // this.isSidebarOpen==false
+      this.isSidebarOpen = true; 
 
+  }
   ngOnInit(): void {
 
     // this.crudservice.get_userInfo().subscribe(data => {

@@ -1,31 +1,38 @@
-<div class="container content-center">
-<h4>Security systems you are connected to:</h4>
-
-    <!-- the next section will hold the data from firebase -->
-<table>
-    <thead >
-        <tr>           
-            <th>Name</th>
-            <th></th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th></th>
-        </tr>
-    </thead> 
-    <tbody *ngFor="let item of connections">
-        <!-- <div *ngFor="let item of contact"> -->
-            <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
-                <tr>         
-                    <td > {{item.firstName}}</td>
-                    <td > {{item.lastName}}</td>
-                    <td > {{item.email}}</td>
-                    <td > {{item.phone}}</td>
-                    <td>
-                        <span>
-                            <a routerLink="/connected-to"  (click)="DeleteConnection(item.email)" class="btn btn-danger">Delete Connection</a>
-                        </span>
-                    </td>
+<!-- <div class="container-content"> -->
+<div class="container-content">
+    <div *ngIf="connections.length > 0; else noConnections">
+        <h3>Security systems you are connected to:</h3>
+        <!-- the next section will hold the data from firebase -->
+        
+        <table>
+            <thead>
+                <tr>           
+                    <th>First name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th></th>
                 </tr>
-    </tbody>
-</table>
+            </thead> 
+            <tbody *ngFor="let item of connections">
+                <!-- <div *ngFor="let item of contact"> -->
+                    <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
+                        <tr>         
+                            <td > {{item.firstName}}</td>
+                            <td > {{item.lastName}}</td>
+                            <td > {{item.email}}</td>
+                            <td > {{item.phone}}</td>
+                            <td>
+                                <span>
+                                    <a routerLink="/connected-to"  (click)="DeleteConnection(item.email)" class="btn btn-danger">Delete Connection</a>
+                                </span>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template class="container-content" #noConnections>
+        <h3>You are not contact of someone with a security system.</h3>
+    </ng-template>
 </div>

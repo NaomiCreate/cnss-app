@@ -60,3 +60,46 @@
 /* .logout-item i.material-icons{
     margin: 15px
 } */
+/* Style buttons */
+.open-sidebar-toggle{
+    background-color: #25436a57;
+    color: rgba(255, 255, 255, 0.76);
+    display: flex;
+    position: inherit;
+    margin-left: auto;
+    top: 6px;
+    /* bottom: 0; */
+    left: 270px;
+    cursor: pointer;
+}
+.open-sidebar-toggle:hover {
+    color: rgba(255, 255, 255, 0.76);
+    background-color: #f79e6393;
+
+}
+.closed-sidebar-toggle:hover {
+    color: rgba(255, 255, 255, 0.76);
+    background-color: #f79e6393;
+
+}
+.closed-sidebar-toggle{
+    background-color: #25436a57;
+    color: rgba(255, 255, 255, 0.76);
+    display: flex;
+    position: inherit;
+    margin-left: auto;
+    top: 6px;
+    left: 5px;
+    cursor: pointer;
+}
+.closed-sidebar{
+    width: 36px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    background: rgba(0, 0, 0, 0.329); 
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}

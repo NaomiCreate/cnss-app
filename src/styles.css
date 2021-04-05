@@ -40,16 +40,14 @@ a {
 }
 .btn-danger {
     color: #fff;
-    background-color: #b7434e;
-    border-color:  #b7434e;
-    width: 150px; 
-    margin: 3px;
-}
-.btn-danger:hover{
-    background-color: #c5616b;
-    border-color:  #c5616b; 
+    background-color: #fc5b6b86;
+    border-color:  #fc5b6b86;
     width: 150px;
-    margin: 3px;
+    margin: 3px;     
+    margin:3px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 150px;
 }
 
 button{
@@ -68,4 +66,10 @@ button:hover{
     background-color: #747679;
     border-color:  #747679; 
 
+}
+.btn-danger:hover{
+    background-color: #f5949cc2;
+    border-color:  #f5949cc2; 
+    width: 150px;
+    margin: 3px;
 }

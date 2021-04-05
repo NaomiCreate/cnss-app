@@ -1,44 +1,47 @@
 <!-- page-container is parent to the sidebar -->
 
 <div class="page-container" *ngIf = "authservice.isLoggedIn; else elseNotAuthBlock"> 
-    
-    <div class="sidebar">
-        
-        <div class= "list-items">
-            
-            <a routerLink="/login" class="list-item" (click)="authservice.logout()">
-                <i class="material-icons">arrow_right</i>
-                Logout
-            </a>
-            
-            <a routerLink="/profile" routerLinkActive="selected" class="list-item">
-                <i class="material-icons">arrow_right</i>
-                My Profile
-            </a>
-            
-            <a routerLink="/system-control" routerLinkActive="selected" class="list-item">
-                <i class="material-icons">arrow_right</i>
-                System Control
-            </a>
-
-            <a routerLink="/contact-list" routerLinkActive="selected" class="list-item">
-                <i class="material-icons">arrow_right</i>
-                Contact List
-            </a>
-
-            <a routerLink="/connected-to" routerLinkActive="selected" class="list-item">
-                <i class="material-icons">arrow_right</i>
-                Connected To
-            </a>
-
-            <a routerLink="/history" routerLinkActive="selected" class="list-item">
-                <i class="material-icons">arrow_right</i>
-                History
-            </a>
-
+    <div *ngIf="isSidebarOpen; else elseBlock">
+        <div class="sidebar">   
+            <div class="open-sidebar-toggle" (click)="toggleSideBar()">
+                <i class="material-icons">close</i>
+            </div>   
+                                      
+            <div class= "list-items">           
+                <a routerLink="/login" class="list-item" (click)="authservice.logout()">
+                    <i class="material-icons">arrow_right</i>
+                    Logout
+                </a>       
+                <a routerLink="/profile" routerLinkActive="selected" class="list-item">
+                    <i class="material-icons">arrow_right</i>
+                    My Profile
+                </a>
+                <a routerLink="/system-control" routerLinkActive="selected" class="list-item">
+                    <i class="material-icons">arrow_right</i>
+                    System Control
+                </a>
+                <a routerLink="/contact-list" routerLinkActive="selected" class="list-item">
+                    <i class="material-icons">arrow_right</i>
+                    Contact List
+                </a>
+                <a routerLink="/connected-to" routerLinkActive="selected" class="list-item">
+                    <i class="material-icons">arrow_right</i>
+                    Connected To
+                </a>
+                <a routerLink="/history" routerLinkActive="selected" class="list-item">
+                    <i class="material-icons">arrow_right</i>
+                    History
+                </a>
+            </div>
         </div>
-
     </div>
+    <ng-template #elseBlock>
+        <div class="closed-sidebar">
+            <div class="closed-sidebar-toggle" (click)="toggleSideBar()">
+                <i class="material-icons">menu</i>
+            </div>  
+        </div>
+    </ng-template>
 
     <div class="page-content-container">
         <router-outlet></router-outlet>

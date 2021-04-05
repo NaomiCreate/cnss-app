@@ -1,40 +1,52 @@
-h4{
-    /*color: rgba(190, 190, 190, 0.739);*/
-    color: aliceblue;
-    /* position: absolute;
-    left: 30%;
-    top: 25%; */
-}
-table {
-    border: solid 1px rgb(27, 16, 34);
-    border-collapse: collapse;
-    margin-top: 10px;
-    /* position: absolute;
-    top: 40%;
-    left: 30%; */
-  }
-  
-  th, td{
-    border: solid 2px  rgba(0, 0, 0, 0.329);
-    padding: 8px 18px;
-    /*color: rgba(190, 190, 190, 0.739);*/
-    font-family: 'Open Sans' ;/*is this needed??*/
-    color: aliceblue;
-  }
-  
-  th {
-   font-size: 12px;
-   color:  rgba(190, 190, 190, 0.739);
-   text-align: left;
-   background-color:rgba(0, 0, 0, 0.329);
-  }
+.container-content{
+  margin-left: 5%;
 
-  table thead th {
-    color: aliceblue;
-    font-size:  18px; 
-    font-family:'Open Sans'; 
-    font-weight: bold;
-  }
-td a{
-  margin: 7px;
 }
+
+h3{
+  color: aliceblue;
+  font-weight: bold;
+  margin-top: 20%;
+  font-family: URW Chancery L, cursive;
+  margin-bottom: 40px;
+}
+
+th, td{
+  border: solid 3px  rgba(0, 0, 0, 0.527);
+  padding:  20px;
+  background-color: rgba(0, 128, 128, 0.52);
+  /* font-family: 'Snell Roundhand, cursive' ;/*is this needed??*/
+  color: aliceblue; 
+}
+
+th {
+  padding: 8px;
+  color:  rgba(243, 239, 239, 0.918);
+  text-align: left;
+  background-color:rgba(0, 0, 0, 0.329);
+}
+
+tr.noBorder{
+  margin-top:30px;
+}
+
+/* a{
+  color: bisque;
+  background-color: #3e3f41;
+  border-color: #3e3f41; 
+  width: 150px;
+  margin: 3px;     
+  margin:3px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 150px;
+} */
+
+/* a:hover{
+  color: bisque;
+  background-color: #747679;
+  border-color:  #747679; 
+} */
+
+
+
