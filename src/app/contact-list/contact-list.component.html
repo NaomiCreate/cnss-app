@@ -49,7 +49,7 @@
             <tbody *ngFor="let item of contacts">
                 <!-- <div *ngFor="let item of contact"> -->
                     <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
-                        <tr *ngIf="!inEdit; else elseBlock">         
+                        <tr *ngIf="!item.inEdit; else elseBlock">         
                             <td > {{item.firstName}}</td>
                             <td > {{item.lastName}}</td>
                             <td > {{item.email}}</td>
@@ -71,7 +71,7 @@
                                 <td > {{item.email}}</td>
                                 <td > {{item.phone}}</td>
                             <td>
-                                <button  (click)="inEdit = false">Cancel</button>
+                                <button  (click)="item.inEdit = false">Cancel</button>
                                 <button  (click)="updateRecord(item)">Update Contact</button>
                             </td>
                     </ng-template>
@@ -79,7 +79,7 @@
         </table>
     </div>
     <ng-template class="container-content" #noContacts>
-        <h3>You don't have contacts.</h3>
+        <h3>Currently, you do not have any contacts.</h3>
     </ng-template>
 </div>
 

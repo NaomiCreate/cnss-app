@@ -43,6 +43,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(){}
 
+  /**NEED TO ADD A CHECK THAT THE DEVICE IN USE DOESN'T ALREADY HAVE AN OWNER.
+   * A DEVICE CAN HAVE ONE OWNER AND MANY CONTACTS.*/
 
   /*This function is to be called after user was registerd succesfully
    and user account was craeted.*/

@@ -78,6 +78,10 @@ export class ProfileComponent implements OnInit {
     item.editDeviceID = item.device_id;
   }
 
+  /**NEED TO ADD A CHECK THAT THE DEVICE IN USE DOESN'T ALREADY HAVE AN OWNER.
+   * A DEVICE CAN HAVE ONE OWNER AND MANY CONTACTS.*/
+
+  
   //will fire after the user press "Edit" and than press "Update"
   updateRecord(item:any)
   {
@@ -107,6 +111,13 @@ export class ProfileComponent implements OnInit {
             if(confirm("Are you sure you want to edit your details?")){
               this.crudservice.set_is_owner(new_record['is_device_owner']); //set device ownership for owner guard
               this.crudservice.update_user(new_record.email, new_record);
+
+              //add device to collection: deviceToUid
+              if(new_record['is_device_owner']==true){
+                this.crudservice.add_deviceToUid(new_record.device_id).then()
+                  .catch(error => {console.log(error);})
+              }
+
               this.message = "The update was successful";
               this.inEdit = false;
             }

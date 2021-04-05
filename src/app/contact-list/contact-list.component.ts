@@ -8,6 +8,7 @@ interface Contact{
   contactFirstName: string;
   contactLastName: string;
   contactEmail: string;
+  inEdit:boolean;
 }
 
 @Component({
@@ -22,10 +23,9 @@ export class ContactListComponent implements OnInit {
   new_contact: Contact = {
     contactFirstName: '',
     contactLastName: '',
-    contactEmail: ''
+    contactEmail: '',
+    inEdit: false
   }
-
-  inEdit:boolean = false; //will hold the editing state
 
   message = '';
   errorMessage = ''; //validation error handle
@@ -37,8 +37,6 @@ export class ContactListComponent implements OnInit {
   
   ngOnInit() {
 
-    this.inEdit = false;
-
     //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     if(this.authservice.currentUser != null) //make sure the user is logged in
@@ -49,14 +47,16 @@ export class ContactListComponent implements OnInit {
             let contact = {
                       firstName: c.payload.doc.data()['firstName'],
                       lastName: c.payload.doc.data()['lastName'],
-                      email: c.payload.doc.data()['email'],                      
+                      email: c.payload.doc.data()['email'],
+                      inEdit: false                    
             }
 
             this.crudservice.get_contact_details(contact['email'],c.payload.doc.data()['uid'])
             .then((doc) => { 
               contact['phone'] = doc.data()['phone'];
-
+              
             }).catch(error => {console.log(error)});
+          
            return contact;  
         })
       });
@@ -66,6 +66,8 @@ export class ContactListComponent implements OnInit {
   /*CreateRecord() will fire after the user clicks "Create Contact" btn*/
   CreateRecord()
   {
+    this.message = '';
+
     if(this.validateForm())
     {
       // if(confirm("a new contact is going be created"))
@@ -118,7 +120,7 @@ export class ContactListComponent implements OnInit {
   editRecord(Record)
   {
     this.message ='';    
-    this.inEdit = true;
+    Record.inEdit = true;
     Record.editFirstName= Record.firstName;
     Record.editLastName= Record.lastName;
   }
@@ -134,9 +136,8 @@ export class ContactListComponent implements OnInit {
     
 
       this.crudservice.update_contact(recordData['email'],record);
-      this.inEdit = false;
       this.message = "The update was successful"
-      
+      recordData.inEdit = false;
     }
   }
 
@@ -155,10 +156,15 @@ export class ContactListComponent implements OnInit {
           }).catch(error => {console.log(error)});
       }
     }
+
+    this.errorMessage = '';
+    this.message = 'Contact removed succesfully';
   }
 
   validateForm()
   {
+    //this.message = '';//only one message at a time, clear message to allow errorMessage.
+
     if(this.new_contact.contactFirstName.length === 0)
     {
       this.errorMessage = "Please enter contacts first name";
