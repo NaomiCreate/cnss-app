@@ -1,9 +1,8 @@
-<!-- The following fields will be filled in by the user and will contain the details of the future contact -->
 <div class="add-contact-section">
 
-    <h4>Add Contact:</h4>
+    <h3>Add Contact:</h3>
 
-    <div class="form-group">
+    <div class="error-msg">
         <!-- user error -->
         <p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
         <!-- firebase error handle -->
@@ -26,52 +25,63 @@
     
     <div class="from-group" >
         <!-- <button id="add-contact-btn" (click)="CreateRecord()" [disabled]="!new_contact.contactFirstName || !new_contact.contactLastName || !new_contact.contactEmail">Create Contact</button> -->
-        <button id="add-contact-btn" (click)="CreateRecord()">Create Contact</button>
+        <button class="btn btn-primary" (click)="CreateRecord()">Create Contact</button>
     </div>
 </div>
 
-<!-- the next section will hold the data from firebase -->
-<table id="table1">
-    <thead >
-        <tr>           
-            <th>Name</th>
-            <th></th>  <!--For last name-->
-            <th>Email</th>
-            <th>Phone</th>
-            <th></th>
-        </tr>
-    </thead> 
-    <tbody *ngFor="let item of contacts">
-        <!-- <div *ngFor="let item of contact"> -->
-            <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
-                <tr *ngIf="!inEdit; else elseBlock">         
-                    <td > {{item.firstName}}</td>
-                    <td > {{item.lastName}}</td>
-                    <td > {{item.email}}</td>
-                    <td > {{item.phone}}</td>
-                    <td>
-                        <span>
-                            <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>
-                            <a routerLink="/contact-list"  (click)="DeleteContact(item.email)" class="btn btn-danger">Delete Contact</a>
-                        </span>
-                    </td>
-                    
-                </tr>
-            <!-- </div> -->
+<div class="container-content">
+    <!-- The following fields will be filled in by the user and will contain the details of the future contact -->
+    
 
-            <!-- next lines willshow after pressing Edit Contact: -->
-            <ng-template #elseBlock>    
-                        <td><input type="text" [(ngModel)]="item.editFirstName" class="edit-from-control" placeholder="First name"></td>
-                        <td><input type="text" [(ngModel)]="item.editLastName" class="edit-from-control"  placeholder="Last name"></td>
-                        <td > {{item.email}}</td>
-                        <td > {{item.phone}}</td>
-                    <td>
-                        <button  (click)="inEdit = false">Cancel</button>
-                        <button  (click)="updateRecord(item)">Update Contact</button>
-                    </td>
-            </ng-template>
-    </tbody>
-</table>
+    <!-- the next section will hold the data from firebase -->
+    <div *ngIf="contacts.length > 0; else noContacts">
+        <h3>Your contacts:</h3>
+        <table id="table1">
+            <thead >
+                <tr>           
+                    <th>First name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th></th>
+                </tr>
+            </thead> 
+            <tbody *ngFor="let item of contacts">
+                <!-- <div *ngFor="let item of contact"> -->
+                    <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
+                        <tr *ngIf="!inEdit; else elseBlock">         
+                            <td > {{item.firstName}}</td>
+                            <td > {{item.lastName}}</td>
+                            <td > {{item.email}}</td>
+                            <td > {{item.phone}}</td>
+                            <td>
+                                <span>
+                                    <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>
+                                    <a routerLink="/contact-list"  (click)="DeleteContact(item.email)" class="btn btn-danger">Delete Contact</a>
+                                </span>
+                            </td>
+                            
+                        </tr>
+                    <!-- </div> -->
+
+                    <!-- next lines willshow after pressing Edit Contact: -->
+                    <ng-template #elseBlock>    
+                                <td><input type="text" [(ngModel)]="item.editFirstName" class="edit-from-control" placeholder="First name"></td>
+                                <td><input type="text" [(ngModel)]="item.editLastName" class="edit-from-control"  placeholder="Last name"></td>
+                                <td > {{item.email}}</td>
+                                <td > {{item.phone}}</td>
+                            <td>
+                                <button  (click)="inEdit = false">Cancel</button>
+                                <button  (click)="updateRecord(item)">Update Contact</button>
+                            </td>
+                    </ng-template>
+            </tbody>
+        </table>
+    </div>
+    <ng-template class="container-content" #noContacts>
+        <h3>You don't have contacts.</h3>
+    </ng-template>
+</div>
 
 
 

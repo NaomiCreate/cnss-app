@@ -1,9 +1,94 @@
 
-h4{
-    color: aliceblue;
-}
+   .container-content{
+    margin-left: 15%;
+  
+  }
+ .add-contact-section{
+    margin-left: 15%;
+    margin-top: 10%;
+    display: inline-block;
+    margin-bottom: 10px;
 
-input{
+  }
+
+h3{
+    color: aliceblue;
+    font-weight: bold;
+    /* margin-top: 5%; */
+    font-family: URW Chancery L, cursive;
+    margin-bottom: 10px;
+}
+th, td{
+    border: solid 3px  rgba(0, 0, 0, 0.527);
+    padding: 8px 20px;
+    background-color: rgba(0, 128, 128, 0.52);
+    /* font-family: 'Snell Roundhand, cursive' ;/*is this needed??*/
+    color: aliceblue; 
+    margin: 7px;
+  }
+  
+  th {
+    color:  rgba(243, 239, 239, 0.918);
+    text-align: left;
+    background-color:rgba(0, 0, 0, 0.329);
+  }
+  
+  
+  tr.noBorder{
+    margin-top:30px;
+  }
+  
+  
+  a{
+    color: bisque;
+    background-color: #3e3f41;
+    border-color: #3e3f41; 
+    width: 150px;
+    margin: 3px;     
+    margin:3px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 150px;
+  }
+  
+  a:hover{
+    color: bisque;
+    background-color: #747679;
+    border-color:  #747679; 
+  
+  }
+  
+  #cancel{
+    margin-bottom: 40px;
+  }
+
+  input{
+    border-radius: 5px;
+    border-color: #3e3f419a;
+    /* padding-right: 10px; */
+  }
+  
+  .error-msg{
+    background-color: rgb(236, 236, 236);
+  }
+  .btn-danger {
+    color: #fff;
+    background-color: #fc5b6b86;
+    border-color:  #fc5b6b86;
+    width: 150px;
+    margin: 3px;     
+    margin:3px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 150px;
+}
+.btn-danger:hover{
+    background-color: #f5949cc2;
+    border-color:  #f5949cc2; 
+    width: 150px;
+    margin: 3px;
+}
+/* input{
     margin: 3px;
     border-radius: 5px;
     height: 40px;
@@ -17,18 +102,11 @@ input{
 .add-contact-section{
 
     width: 400px;
-    
-    /* color: black; */
-    /* margin:auto; */
-    /* position: absolute; */
-    /* left: 47%;
-    top: 10%; */
-    /* align-items: center; */
+
 }
 
 #add-contact-btn{
     position: relative;
-    /* left: 10%; */
     color: black;
     background-color:rgba(190, 190, 190, 0.739); 
     margin:3px;
@@ -44,18 +122,12 @@ input{
 
 table {
     border: solid 1px rgb(27, 16, 34);
-    /* border-collapse: collapse; */
-    /* margin-top: 10px; */
-    /* position: absolute; */
-    /* top: 50%;
-    left: 30%; */
   }
   
   th, td{
     border: solid 2px  rgba(0, 0, 0, 0.329);
     padding: 8px 18px;
-    /*color: rgba(190, 190, 190, 0.739);*/
-    font-family: 'Open Sans' ;/*is this needed??*/
+    font-family: 'Open Sans' ;
     color: aliceblue;
   }
   
@@ -74,4 +146,4 @@ table {
   }
 td a{
     margin: 7px;
-}
+} */

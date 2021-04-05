@@ -21,22 +21,31 @@ a {
     background-color:rgba(71, 16, 16, 0.664);
 } */
 
-.btn-primary{
-    color: rgb(51, 48, 48);
-    background-color:rgba(190, 190, 190, 0.739); 
-} */
+
 .btn-primary {
-    color: #fff;
+    /* color: #fff;
     background-color: #507eb1;
     border-color: #507eb1; 
     width: 150px;
-    margin: 3px;
+    margin: 3px; */
+    color: bisque;
+  background-color: #3e3f41;
+  border-color: #3e3f41; 
+  width: 150px;
+  margin: 3px;     
+  margin:3px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 150px;
 }
 .btn-primary:hover{
-    background-color: #8aa2bc;
+    /* background-color: #8aa2bc;
     border-color:#8aa2bc;
     width: 150px;
-    margin: 3px;
+    margin: 3px; */
+    color: bisque;
+    background-color: #747679;
+    border-color:  #747679; 
 }
 .btn-danger {
     color: #fff;
@@ -51,6 +60,15 @@ a {
 }
 
 button{
+    /* color: bisque;
+    background-color: #3e3f41;
+    border-color: #3e3f41; 
+    width: 150px;
+    margin: 3px;     
+    margin:3px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 150px; */
     color: bisque;
     background-color: #3e3f41;
     border-color: #3e3f41; 
@@ -62,6 +80,9 @@ button{
     width: 150px;
 }
 button:hover{
+    /* color: bisque;
+    background-color: #747679;
+    border-color:  #747679;  */
     color: bisque;
     background-color: #747679;
     border-color:  #747679; 
