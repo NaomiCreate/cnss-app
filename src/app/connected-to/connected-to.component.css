@@ -29,7 +29,9 @@ th {
 tr.noBorder{
   margin-top:30px;
 }
-
+#table1 {
+  margin-bottom: 30px
+}
 /* a{
   color: bisque;
   background-color: #3e3f41;

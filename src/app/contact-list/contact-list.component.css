@@ -88,6 +88,9 @@ th, td{
     width: 150px;
     margin: 3px;
 }
+#table1 {
+  margin-bottom: 30px
+}
 /* input{
     margin: 3px;
     border-radius: 5px;
@@ -121,7 +124,7 @@ th, td{
     
 
 table {
-    border: solid 1px rgb(27, 16, 34);
+    margin-bottom: 20px
   }
   
   th, td{
