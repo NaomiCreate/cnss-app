@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RealTimeService } from '../services/real-time.service';
 
-
-
 import { AngularFireDatabase } from '@angular/fire/database';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ValueTransformer } from '@angular/compiler/src/util';
@@ -30,8 +28,10 @@ export class HistoryComponent implements OnInit {
   private userInfo:Subscription; // will hold firestore subscription
   private deviceID;
   private isOwner = false;
-
   
+  public isMyHistoyPushed =true;//!
+  connections = [];//!
+
 
   constructor(private crudservice: CrudService, private realtimeservice: RealTimeService, 
               private db: AngularFireDatabase, private sanitizer: DomSanitizer) { }

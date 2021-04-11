@@ -1,15 +1,63 @@
-<p>Welcome to the history page!</p>
+<!-- <table>
+       <tr>
+              <th> <a routerLink="/history" (click)="isMyHistoyPushed = true">My History</a> </th>
+              <th> <a routerLink="/history" (click)="isMyHistoyPushed = false">My Contacts History</a> </th>
+       </tr>
+</table> -->
 
+<div class="card" id="card-top-bar">
+              <button class="button" id="btn-history-top-bar" (click)="isMyHistoyPushed = true">My History</button>
+              <button id="btn-history-top-bar" (click)="isMyHistoyPushed = false">Connections History</button>
+</div>  
+     
+<div class="container-content" *ngIf="isMyHistoyPushed; else connectedToHistoyPushed">
+       <div class="card" id="card-bottom-bar">
+                     <button id="btn-history-bottom-bar" >My Privacy Settings</button>
+                     <button id="btn-history-bottom-bar" >View Settings</button>
+       </div>  
+       
+       <div *ngIf="alerts.length > 0; else noAlerts">
 
+              <h3>My alerts:</h3>
 
- <!--For Alerts-->
- <div *ngFor="let alert of  alerts"> 
-        <br/>
-        <br/>
-        <p>"Alert"</p>
-        <p>{{alert.path}}</p>
-        <!-- <p>{{alert.timestamp}}</p> -->
-        <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
-        <p>{{alert.notes}}</p>
- </div>
-<!--For Files-->
+              <div *ngFor="let alert of  alerts"> 
+                     <br/>
+                     <br/>
+                            <div class="card">
+                            <p>"Alert"</p>
+                            <p>{{alert.path}}</p>
+                            <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+                            <p>{{alert.notes}}</p>
+                     </div>
+              </div>
+       </div>
+
+       <ng-template  #noAlerts>
+              <h3>Currently, you do not have any alerts.</h3>
+       </ng-template>
+</div>
+
+<ng-template  class="container-content" #connectedToHistoyPushed>
+       <div class="card"  id="card-bottom-bar">
+                     <button id="btn-history-bottom-bar">Alerts Receiving Settings</button>
+                     <button id="btn-history-bottom-bar">View Settings</button>
+       </div>  
+       <h3>Connected To Histoy Pushed</h3>
+
+       <div *ngIf="connections.length > 0; else noConnections">
+              <h3>Security systems you are connected to:</h3>
+              
+              <div *ngFor="let item of connections"> 
+                     <br/>
+                     <div class="card">
+                            <p>{{item.firstName}} {{item.lastName}}</p>
+                            <button> Show history</button>
+                     </div>
+              </div>
+
+          </div>
+      
+          <ng-template class="container-content" #noConnections>
+              <h3>Currently you are not connected to any security systems.</h3>
+          </ng-template>
+</ng-template>

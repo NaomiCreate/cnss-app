@@ -1,3 +1,60 @@
-p{
-    color: rgb(251, 242, 242);
+h3{
+    color: aliceblue;
+    font-weight: bold;
+    /* margin-top: 5%; */
+    font-family: URW Chancery L, cursive;
+    margin-bottom: 10px;
 }
+#btn-history-top-bar{
+    color: rgb(59, 57, 53);
+    background-color: rgba(255, 221, 221, 0.644);
+    margin: 3px;
+    padding: 2px;
+    border-radius: 5px;
+    width: 200px;
+    margin-right: 10px;
+    border-color: rgba(255, 221, 221, 0.644);
+    margin-left: 10px;
+    border-style: none;
+}
+#btn-history-top-bar:hover{
+    background-color: #f79e6393;
+    /* border-color:  rgba(117, 117, 117, 0.507); */
+}
+
+#btn-history-bottom-bar{
+    color: rgb(27, 26, 24);
+    background-color: rgba(255, 221, 221, 0.644);
+    margin: 3px;
+    padding: 2px;
+    border-radius: 5px;
+    width: 200px;
+    margin-right: 10px;
+    border-color: rgba(255, 221, 221, 0.644);
+    margin-left: 10px;
+    border-style: none;
+}
+#btn-history-bottom-bar:hover{
+    background-color: #f79e6393;
+    /* border-color:  rgba(117, 117, 117, 0.507); */
+}
+.card{
+    background-color: rgba(255, 255, 255, 0.082);
+}
+
+#card-top-bar {
+    background-color: rgba(255, 255, 255, 0.24);
+    display: table;
+    padding: 2px;
+    margin-top: 25px;
+    margin-bottom: 2px;
+    position: initial;
+} 
+#card-bottom-bar {
+     background-color: rgba(255, 255, 255, 0.24);
+     display: table;
+     padding: 2px;
+     margin-top: 2px;
+     margin-bottom: 25px;
+     position: initial;
+} 
