@@ -23,6 +23,14 @@
         <input type="email" class="from-control" [(ngModel)]="new_contact.contactEmail" placeholder="Contact mail">
     </div>
     
+    <div class="shareHistory" name="shareHistory">
+        <label>Do you want this contact to see your alert history?</label><br> 
+        <input type="radio"  [(ngModel)]="new_contact.shareHistory" [value]="true" />  
+        <label>Yes</label><br>  
+        <input type="radio"  [(ngModel)]="new_contact.shareHistory" [value]="false" />
+        <label>No</label><br>  
+    </div>
+
     <div class="from-group" >
         <!-- <button id="add-contact-btn" (click)="CreateRecord()" [disabled]="!new_contact.contactFirstName || !new_contact.contactLastName || !new_contact.contactEmail">Create Contact</button> -->
         <button class="btn btn-primary" (click)="CreateRecord()">Create Contact</button>
@@ -54,6 +62,7 @@
                             <td > {{item.lastName}}</td>
                             <td > {{item.email}}</td>
                             <td > {{item.phone}}</td>
+
                             <td>
                                 <span>
                                     <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>

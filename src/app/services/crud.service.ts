@@ -85,11 +85,13 @@ export class CrudService {
   }
   //--------
 
-  update_connectedTo(uid:string)
+  update_connectedTo(uid:string,shareHistory:boolean)
   {
      /*Update Record[uid] conected-to*/  
     let record = {}
-    record[this.authservice.currentUserId] = true;
+    //record[this.authservice.currentUserId] = true;
+    record["id"] = this.authservice.currentUserId;
+    record["shareHistory"] = shareHistory;
     return this.fireservices.collection('users').doc(uid).collection('connected-to').doc(this.authservice.currentUserName).set(record);
   }
 
@@ -121,13 +123,25 @@ export class CrudService {
 
   }
 
+  get_contact_details_with_shareHistory(email:string,uid:string){
+    return this.fireservices.collection('users').doc(uid).collection('contacts').doc("email").get().toPromise();
+
+    // return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
+//    return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
+
+  }
 
   get_AllConnections()
   {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('connected-to').snapshotChanges();
-    //return this.fireservices.collection('contacts').snapshotChanges();//-before change
   }
-
+  ///////////
+  get_Connections_shareHistory()
+  {
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('connected-to').ref.where('shareHistory', '==', true).get();
+  }
+  /////////////
+  
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
   update_contact(email,  record)
   {

@@ -8,7 +8,8 @@ interface Contact{
   contactFirstName: string;
   contactLastName: string;
   contactEmail: string;
-  inEdit:boolean;
+  shareHistory: boolean;//describes whether the system owner wants the new contact to see his alert history or not
+  inEdit: boolean;
 }
 
 @Component({
@@ -24,6 +25,7 @@ export class ContactListComponent implements OnInit {
     contactFirstName: '',
     contactLastName: '',
     contactEmail: '',
+    shareHistory: false,
     inEdit: false
   }
 
@@ -48,7 +50,8 @@ export class ContactListComponent implements OnInit {
                       firstName: c.payload.doc.data()['firstName'],
                       lastName: c.payload.doc.data()['lastName'],
                       email: c.payload.doc.data()['email'],
-                      inEdit: false                    
+                      shareHistory: c.payload.doc.data()['shareHistory'],
+                      inEdit: false    
             }
 
             this.crudservice.get_contact_details(contact['email'],c.payload.doc.data()['uid'])
@@ -77,6 +80,7 @@ export class ContactListComponent implements OnInit {
         Record['firstName'] = this.new_contact.contactFirstName;
         Record['lastName'] = this.new_contact.contactLastName;
         Record['email'] = this.new_contact.contactEmail;
+        Record['shareHistory'] = this.new_contact.shareHistory;
         Record['uid'] = "";
 
         this.crudservice.get_uidFromEmail(this.new_contact.contactEmail)
@@ -90,7 +94,7 @@ export class ContactListComponent implements OnInit {
             if(confirm("a new contact is going be created")){
 
                 Record['uid'] = doc.data()[this.new_contact.contactEmail]; //The phone number will come from the user-info by uid
-                this.crudservice.update_connectedTo(Record['uid'])
+                this.crudservice.update_connectedTo(Record['uid'],this.new_contact.shareHistory)
                 .then(() => {
                   this.message = "Contact updated succesfully"
                 }).catch(error=> {
@@ -106,6 +110,8 @@ export class ContactListComponent implements OnInit {
               }).catch(error => {
                 console.log(error);
               })
+              console.log(this.new_contact);
+
             }
           }
           
@@ -123,6 +129,8 @@ export class ContactListComponent implements OnInit {
     Record.inEdit = true;
     Record.editFirstName= Record.firstName;
     Record.editLastName= Record.lastName;
+
+    //add Record['shareHistory']?
   }
 
   //will fire after the user press "Edit Contant" and than press "Update"

@@ -27,12 +27,21 @@ export class ConnectedToComponent implements OnInit {
         this.connections = data.map(c => {
 
           let connection={};
-          this.crudservice.get_contact_details(c.payload.doc.id, Object.keys(c.payload.doc.data())[0])
+          //Test-----------
+          console.log("Object.keys(c.payload.doc.data())"+Object.keys(c.payload.doc.data()));
+          console.log("Object.keys(c.payload.doc.data()[0])"+Object.keys(c.payload.doc.data())[0]);
+          console.log("Object.keys(c.payload.doc.data())[0]"+Object.keys(c.payload.doc.data())[0]);
+          console.log("Object.keys(c.payload.doc.data())[0][0]"+Object.keys(c.payload.doc.data())[0][0]);
+          console.log("Object.keys(c.payload.doc.data())[1]"+Object.keys(c.payload.doc.data())[1]);
+          //Test-----------
+          //this.crudservice.get_contact_details(c.payload.doc.id, Object.keys(c.payload.doc.data())[0])
+          this.crudservice.get_contact_details(c.payload.doc.id, c.payload.doc.data()['id'])
           .then((doc) => { 
            
             connection['phone'] = doc.data()['phone'];
             connection['firstName'] = doc.data()['firstName'];
             connection['lastName'] = doc.data()['lastName'];
+//            connection['shareHistory'] = doc.data()['shareHistory'];
             connection['email'] = doc.data()['email'];
             
           }).catch(error => {console.log(error)});

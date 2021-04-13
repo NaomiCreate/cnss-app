@@ -7,9 +7,9 @@
 
 <div class="card" id="card-top-bar">
               <button class="button" id="btn-history-top-bar" (click)="isMyHistoyPushed = true">My History</button>
-              <button id="btn-history-top-bar" (click)="isMyHistoyPushed = false">Connections History</button>
-</div>  
-     
+              <button id="btn-history-top-bar" (click)="connectionsHistoryPushed()">Connections History</button>
+       </div>  
+
 <div class="container-content" *ngIf="isMyHistoyPushed; else connectedToHistoyPushed">
        <div class="card" id="card-bottom-bar">
                      <button id="btn-history-bottom-bar" >My Privacy Settings</button>
@@ -51,13 +51,14 @@
                      <br/>
                      <div class="card">
                             <p>{{item.firstName}} {{item.lastName}}</p>
+                            <p>{{item.shareHistory}}</p>
                             <button> Show history</button>
                      </div>
               </div>
 
-          </div>
+       </div>
       
-          <ng-template class="container-content" #noConnections>
+       <ng-template class="container-content" #noConnections>
               <h3>Currently you are not connected to any security systems.</h3>
-          </ng-template>
+       </ng-template>
 </ng-template>
