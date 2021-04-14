@@ -32,6 +32,7 @@ export class HistoryComponent implements OnInit {
   private isOwner = false;
   
   public isMyHistoyPushed =true;//!
+  public showOrHide = "Show history";
   connections = [];//!
 
 
@@ -89,7 +90,6 @@ export class HistoryComponent implements OnInit {
 
 
   connectionsHistoryPushed(){
-    //console.log("get_Connections_shareHistory()"+  this.crudservice.get_Connections_shareHistory());
 
     this.isMyHistoyPushed = false;
       this.subscription = this.crudservice.get_AllConnections().subscribe(data => {
@@ -99,23 +99,34 @@ export class HistoryComponent implements OnInit {
           {
             let connection={};
 
-            //this.crudservice.get_contact_details(c.payload.doc.id, Object.keys(c.payload.doc.data())[0])
             this.crudservice.get_contact_details(c.payload.doc.id,  c.payload.doc.data()['id'])
             .then((doc) => { 
-            // if(doc.data()['shareHistory'] == true)
-              //{
               connection['firstName'] = doc.data()['firstName'];
               connection['lastName'] = doc.data()['lastName'];
-              //}
-              //connection['shareHistory'] = doc.data()['shareHistory'];
+              connection['email'] = doc.data()['email'];
 
             }).catch(error => {console.log(error)});
-            console.log(connection);
 
             return connection;
           }
           
         })
       }); 
+  }
+
+  showOrHidePushed(email:string){
+    console.log("email"+email);
+    
+    //toggel btn
+    if(this.showOrHide == "Hide history")
+      this.showOrHide = "Show history";
+    else
+    {
+      this.showOrHide = "Hide history";
+      //get connection uid from email
+      let connectionUid = this.crudservice.get_uidFromEmail(email);
+      //get device id from uid
+      //let connectionDeviceID =
+    }
   }
 }

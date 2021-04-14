@@ -72,6 +72,7 @@ export class CrudService {
   }
 
 
+
   get_userInfo()
   {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();  
@@ -135,12 +136,7 @@ export class CrudService {
   {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('connected-to').snapshotChanges();
   }
-  ///////////
-  get_Connections_shareHistory()
-  {
-    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('connected-to').ref.where('shareHistory', '==', true).get();
-  }
-  /////////////
+
   
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
   update_contact(email,  record)

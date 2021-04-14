@@ -1,10 +1,3 @@
-<!-- <table>
-       <tr>
-              <th> <a routerLink="/history" (click)="isMyHistoyPushed = true">My History</a> </th>
-              <th> <a routerLink="/history" (click)="isMyHistoyPushed = false">My Contacts History</a> </th>
-       </tr>
-</table> -->
-
 <div class="card" id="card-top-bar">
               <button class="button" id="btn-history-top-bar" (click)="isMyHistoyPushed = true">My History</button>
               <button id="btn-history-top-bar" (click)="connectionsHistoryPushed()">Connections History</button>
@@ -15,13 +8,9 @@
                      <button id="btn-history-bottom-bar" >My Privacy Settings</button>
                      <button id="btn-history-bottom-bar" >View Settings</button>
        </div>  
-       
        <div *ngIf="alerts.length > 0; else noAlerts">
-
               <h3>My alerts:</h3>
-
               <div *ngFor="let alert of  alerts"> 
-                     <br/>
                      <br/>
                             <div class="card">
                             <p>"Alert"</p>
@@ -31,7 +20,6 @@
                      </div>
               </div>
        </div>
-
        <ng-template  #noAlerts>
               <h3>Currently, you do not have any alerts.</h3>
        </ng-template>
@@ -42,17 +30,15 @@
                      <button id="btn-history-bottom-bar">Alerts Receiving Settings</button>
                      <button id="btn-history-bottom-bar">View Settings</button>
        </div>  
-       <h3>Connected To Histoy Pushed</h3>
-
        <div *ngIf="connections.length > 0; else noConnections">
               <h3>Security systems you are connected to:</h3>
-              
               <div *ngFor="let item of connections"> 
                      <br/>
-                     <div class="card">
+                     <div *ngIf="item!= null " class="card">
                             <p>{{item.firstName}} {{item.lastName}}</p>
+                            <p>{{item.email}}</p>
                             <p>{{item.shareHistory}}</p>
-                            <button> Show history</button>
+                            <button (click)="showOrHidePushed(item.email)">{{showOrHide}}</button>
                      </div>
               </div>
 
