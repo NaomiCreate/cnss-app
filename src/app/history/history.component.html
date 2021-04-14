@@ -39,6 +39,25 @@
                             <p>{{item.email}}</p>
                             <p>{{item.shareHistory}}</p>
                             <button (click)="showOrHidePushed(item.email)">{{showOrHide}}</button>
+                            <!-- ----------- -->
+                            <div *ngIf="item!= null && isShowContactPushed==true" class="card">
+                                   <div *ngIf="alerts.length > 0; else contactHasNoAlerts">
+                                          <h3>{{item.firstName}} {{item.lastName}}</h3>
+                                          <div *ngFor="let alert of  alerts"> 
+                                                 <br/>
+                                                        <div class="card">
+                                                        <p>"Alert"</p>
+                                                        <p>{{alert.path}}</p>
+                                                        <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+                                                        <p>{{alert.notes}}</p>
+                                                 </div>
+                                          </div>
+                                   </div>
+                                   <ng-template class="container-content" #contactHasNoAlerts>
+                                          <h3>{{item.firstName}} {{item.lastName}} has no alerts.</h3>
+                                   </ng-template>
+                            </div>
+                            <!-- --------------- -->
                      </div>
               </div>
 

@@ -32,7 +32,9 @@ export class HistoryComponent implements OnInit {
   private isOwner = false;
   
   public isMyHistoyPushed =true;//!
+  public isShowContactPushed = false;
   public showOrHide = "Show history";
+
   connections = [];//!
 
 
@@ -57,14 +59,16 @@ export class HistoryComponent implements OnInit {
           this.dbPath += `${this.deviceID[0]}/history`;//add end of path
           console.log("dbPath",this.dbPath);
 
-          this.get_alert_details();
+          this.get_alert_details(this.dbPath);
 
       });
   }
 
-  get_alert_details(){
+  get_alert_details(path){
+    this.alertArray = [];
+    this.dbData = null;
 
-    this.dbData = this.db.list(this.dbPath).valueChanges()
+    this.dbData = this.db.list(path).valueChanges()
     .subscribe(data => {
 
       //inject fata files in to file array
@@ -90,7 +94,6 @@ export class HistoryComponent implements OnInit {
 
 
   connectionsHistoryPushed(){
-
     this.isMyHistoyPushed = false;
       this.subscription = this.crudservice.get_AllConnections().subscribe(data => {
         this.connections = data.map(c => {
@@ -115,18 +118,53 @@ export class HistoryComponent implements OnInit {
   }
 
   showOrHidePushed(email:string){
+    this.dbPath=`/devices/`;
     console.log("email"+email);
-    
+    let connectionUid ="";
     //toggel btn
-    if(this.showOrHide == "Hide history")
-      this.showOrHide = "Show history";
+    if(this.isShowContactPushed == false)
+    {
+      this.isShowContactPushed=true;
+      this.showOrHide = "Hide history";
+    }
     else
     {
-      this.showOrHide = "Hide history";
-      //get connection uid from email
-      let connectionUid = this.crudservice.get_uidFromEmail(email);
+      this.isShowContactPushed=false;
+      this.showOrHide = "Show history";
+      
+      let connectionTemp = this.crudservice.get_uidFromEmail(email).then((doc) => {
+    
+           connectionUid=doc.data()[email];
+           console.log("!!connectionUid"+connectionUid);
+           let connectionDeviceID = this.crudservice.get_userInfoByUid(connectionUid).subscribe(data => {
+            let deviceId = data.map(c => {
+              if (c.payload.doc.data()['is_device_owner'] == true){
+                this.isOwner = true;
+                console.log("device_id", c.payload.doc.data()['device_id']);
+                return c.payload.doc.data()['device_id'];
+              }
+              else{
+                this.isOwner = false;
+                return "";
+              }
+            });
+    
+            this.dbPath += `${this.deviceID[0]}/history`;//add end of path
+            console.log("dbPath",this.dbPath);
+    
+            this.get_alert_details(this.dbPath);
+    
+        });
+
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });  
+
+
+      console.log("!connectionUid"+connectionUid);
+      
       //get device id from uid
-      //let connectionDeviceID =
+
     }
   }
 }

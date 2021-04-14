@@ -78,6 +78,13 @@ export class CrudService {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();  
   }
 
+//-------------------------------------------
+  get_userInfoByUid(uid)
+  {
+    return this.fireservices.collection('users').doc(uid).collection('user-info').snapshotChanges();  
+  }
+//-------------------------------------------
+
   update_user(recordId, record)
   {
     this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
