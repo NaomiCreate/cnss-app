@@ -7,164 +7,269 @@ import { ValueTransformer } from '@angular/compiler/src/util';
 import { CrudService } from '../services/crud.service';
 import { Subscription } from 'rxjs';
 
+
 export interface Alert {
-  path: string; //url :URL
+  image_path: string; //url :URL
   notes: string;
   timestamp: number;
+  inEdit: boolean; // needed for device owner, that is current user 
+  alertID: string; // needed for device owner, that is current user  for edit
 }
+
+enum Status {
+   StandBy,
+   Accept,
+   Deny
+}
+
+export interface Connection {
+  shareHistory: Status;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  hideHistory: boolean;
+  dbPath: string;
+  alerts: Array<Alert>;
+  hasAlerts: Status;
+  index: number;
+}
+
+export interface User {
+  isOwner: Status;
+  dbPath: string;
+  alerts: Array<Alert>;
+  hasAlerts: Status;
+  deviceID: any;
+  hasConnections:Status;
+}
+
 
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css']
 })
+
 export class HistoryComponent implements OnInit {
 
-  private dbPath = `/devices/`;//beginig of path to realtime database
-  private alertArray: Array<Alert> = [];//each file contains name and url
-  
-  subscription: Subscription;//we will use it when: isMyHistoyPushed =true
 
-  public alertURL;//protected imageURL
-  private dbData: Subscription;//will hold object from firebase
-  private userInfo:Subscription; // will hold firestore subscription
-  private deviceID;
-  private isOwner = false;
-  
-  public isMyHistoyPushed =true;//!
-  public isShowContactPushed = false;
-  public showOrHide = "Show history";
+  public user: User = {
+    isOwner: Status.StandBy,
+    dbPath: `/devices/`, //beginig of path to realtime database'
+    alerts: [],
+    hasAlerts: Status.StandBy,
+    deviceID: "",
+    hasConnections:Status.StandBy
+  }
 
-  connections = [];//!
+  public connections: Array<Connection> = []; // will contain all users connections that allow sharing their history with him
+  private data_subscriptions: Array<Subscription> = []; //to release on ngDestroy
 
+  //The next variables are for HTML use
+  public myHistoySelected: boolean = true;
+  public state = Status;
 
   constructor(private crudservice: CrudService, private realtimeservice: RealTimeService, 
-              private db: AngularFireDatabase, private sanitizer: DomSanitizer) { }
+    private db: AngularFireDatabase, private sanitizer: DomSanitizer) { }
 
-  ngOnInit(): void {
-      console.log("this.isMyHistoyPushed == true");
-      this.userInfo = this.crudservice.get_userInfo().subscribe(data => {
-          this.deviceID = data.map(c => {
-            if (c.payload.doc.data()['is_device_owner'] == true){
-              this.isOwner = true;
-              console.log("device_id", c.payload.doc.data()['device_id']);
-              return c.payload.doc.data()['device_id'];
+  ngOnInit(): void{
+
+    //set user info
+    //Set the current user history page:first page to be seen in History
+    this.data_subscriptions.push(
+
+      this.crudservice.get_userInfo().subscribe(data => {
+
+        //if owner ->
+        if(this.isDeviceOwner){
+
+          //set info
+          this.user.isOwner = Status.Accept;
+          this.user.deviceID = data[0].payload.doc.data()['device_id'];
+          this.user.dbPath += `${this.user.deviceID}/history`;
+
+          console.log("Debug::user.dbPath", this.user.dbPath)
+
+          //getAlerts
+          this.data_subscriptions.push(
+            this.db.list(this.user.dbPath).snapshotChanges().subscribe(data => {
+
+                data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
+
+                //sort alerts by date
+                this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+                  
+                //set hasAlerts
+                if(this.user.alerts.length != 0){
+                  this.user.hasAlerts = Status.Accept
+                }
+                else{
+                  this.user.hasAlerts = Status.Deny
+                }
+              }
+            )
+          );
+      
+
+        }
+        else{
+          //for HTML output
+          this.user.isOwner = Status.Deny;
+        }
+
+        //get users connections
+        this.getConnections()
+      
+      })
+      
+    );
+
+  }
+ 
+  //This function is to be called in ngOnInit - to get users cpnnections
+  getConnections(){
+
+    //console.log("in getConnection")
+    
+    this.data_subscriptions.push(
+      this.crudservice.get_AllConnections().subscribe(data => {
+
+        //set users HasConnection for HTML output
+        if(data.length === 0){
+          this.user.hasConnections = Status.Deny
+        }
+        else{
+          this.user.hasConnections = Status.Accept
+        }
+       
+        data.forEach((c,i) => {
+          
+            let new_connection:Connection = {
+              shareHistory: Status.StandBy,
+              firstName: '',
+              lastName: '',
+              email: c.payload.doc.id,
+              phone: '',
+              hideHistory: true,
+              dbPath: `/devices/`, //beginig of path to realtime database';
+              alerts: [],
+              hasAlerts: Status.StandBy,
+              index: i
+            }
+          
+            this.crudservice.get_contact_details(new_connection.email,  c.payload.doc.data()['id'])
+              .then((doc) =>{
+                  new_connection.firstName = doc.data()['firstName'],
+                  new_connection.lastName = doc.data()['lastName'],
+                  new_connection.phone = doc.data()['phone'],
+
+                  this.crudservice.getHistoryPermission(c.payload.doc.data()['id'])
+                  .then((item) => {
+        
+                    //If connection allows sharing his history
+                    if(item.data()['shareHistory'] == true){
+                      new_connection.shareHistory = Status.Accept;
+                      new_connection.dbPath += `${doc.data()['device_id']}/history`
+                    }else{
+                      new_connection.shareHistory = Status.Deny;
+                    }
+
+                    this.connections.push(new_connection);
+
+                    console.log("Debug::connections",this.connections)
+                    console.log("Debug::user",this.user)
+
+                }).catch(error =>console.log(error))
+               }
+              )
+              .catch(error =>console.log(error))
+
+          })
+        })
+    )
+         
+  }
+
+  //used in ngOnInit
+  isDeviceOwner(data:any):boolean{
+    return data[0].payload.doc.data()['is_device_owner'];
+  }
+
+  /*Sets alert and returns it*/
+  getAlert(doc:any):Alert{
+
+    return {
+      image_path:doc.payload.val()["image_path"],
+      notes: doc.payload.val()["notes"],
+      timestamp: doc.payload.val()["timestamp"],
+      inEdit:false,
+      alertID: doc.key
+    };
+  }
+
+  //NEED TO TEST
+  /**This functin is an on click listener, it receives a connection and retreivs all alerts 
+   * index -> should be connections index in array connections
+  */
+  showAlerts(index: number){
+
+    console.log("Debug:: connection email", index)
+    console.log("Debug:: connections[index]", this.connections[index])
+
+
+    if(this.connections[index].shareHistory == Status.Accept){
+
+      //empty array
+      this.connections[index].hasAlerts = Status.StandBy;
+      this.connections[index].hideHistory = false; //show history for HTML
+      this.connections[index].alerts = [];
+    
+      //getAlerts
+      this.data_subscriptions.push(
+
+        this.db.list(this.connections[index].dbPath).snapshotChanges().subscribe(data => {
+
+            data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
+
+            //sort alerts by date
+            this.connections[index].alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+              
+            //set hasAlerts
+            if(this.connections[index].alerts.length != 0){
+              this.connections[index].hasAlerts = Status.Accept
             }
             else{
-              this.isOwner = false;
-              return "";
+              this.connections[index].hasAlerts = Status.Deny
             }
-          });
 
-          this.dbPath += `${this.deviceID[0]}/history`;//add end of path
-          console.log("dbPath",this.dbPath);
-
-          this.get_alert_details(this.dbPath);
-
-      });
-  }
-
-  get_alert_details(path){
-    this.alertArray = [];
-    this.dbData = null;
-
-    this.dbData = this.db.list(path).valueChanges()
-    .subscribe(data => {
-
-      //inject fata files in to file array
-      for (let i = 0; i < data.length; i++)
-        this.alertArray.push({ path: data[i]["image_path"], notes: data[i]["notes"], timestamp: data[i]["timestamp"] });
-      this.alertArray.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-    })
-  }
-
-  get alerts(){
-    return this.alertArray;
-  }
-
-  ngOnDestroy(){
-
-    if(this.dbData != undefined)
-      this.dbData.unsubscribe();
-    
-    if(this.userInfo != undefined)
-      this.userInfo.unsubscribe();
-  }
-
-
-
-  connectionsHistoryPushed(){
-    this.isMyHistoyPushed = false;
-      this.subscription = this.crudservice.get_AllConnections().subscribe(data => {
-        this.connections = data.map(c => {
-
-          if(c.payload.doc.data()['shareHistory']==true)
-          {
-            let connection={};
-
-            this.crudservice.get_contact_details(c.payload.doc.id,  c.payload.doc.data()['id'])
-            .then((doc) => { 
-              connection['firstName'] = doc.data()['firstName'];
-              connection['lastName'] = doc.data()['lastName'];
-              connection['email'] = doc.data()['email'];
-
-            }).catch(error => {console.log(error)});
-
-            return connection;
+            console.log("Debug::connection email", this.connections[index].email)
+            console.log("Debug::connection alerts", this.connections[index].alerts)
+            console.log("Debug::connection has alert", this.connections[index].hasAlerts)
+            console.log("Debug::connection showAlerts", this.connections[index].shareHistory)
           }
-          
-        })
-      }); 
+        )
+      );
+    }
+    else{
+      console.log("Debug::this should not appear here, this user does not allow sharing his history")
+    }
+    
   }
 
-  showOrHidePushed(email:string){
-    this.dbPath=`/devices/`;
-    console.log("email"+email);
-    let connectionUid ="";
-    //toggel btn
-    if(this.isShowContactPushed == false)
-    {
-      this.isShowContactPushed=true;
-      this.showOrHide = "Hide history";
-    }
-    else
-    {
-      this.isShowContactPushed=false;
-      this.showOrHide = "Show history";
-      
-      let connectionTemp = this.crudservice.get_uidFromEmail(email).then((doc) => {
-    
-           connectionUid=doc.data()[email];
-           console.log("!!connectionUid"+connectionUid);
-           let connectionDeviceID = this.crudservice.get_userInfoByUid(connectionUid).subscribe(data => {
-            let deviceId = data.map(c => {
-              if (c.payload.doc.data()['is_device_owner'] == true){
-                this.isOwner = true;
-                console.log("device_id", c.payload.doc.data()['device_id']);
-                return c.payload.doc.data()['device_id'];
-              }
-              else{
-                this.isOwner = false;
-                return "";
-              }
-            });
-    
-            this.dbPath += `${this.deviceID[0]}/history`;//add end of path
-            console.log("dbPath",this.dbPath);
-    
-            this.get_alert_details(this.dbPath);
-    
-        });
+  //NEED TO TEST
+  /**This function is an onclick listener for hideHistory HTML 
+   * index -> should be connections index in array connections
+  */
+  hideHistory(index:number){
 
-      }).catch((error) => {
-        console.log("Error getting document:", error);
-      });  
+    this.connections[index].hideHistory = true; //hide history for HTML
 
-
-      console.log("!connectionUid"+connectionUid);
-      
-      //get device id from uid
-
-    }
   }
+
+  //NEED TO TEST
+  ngOnDestroy(){
+    this.data_subscriptions.forEach(element => element.unsubscribe())
+  }
+
 }

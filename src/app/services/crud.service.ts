@@ -93,13 +93,13 @@ export class CrudService {
   }
   //--------
 
-  update_connectedTo(uid:string,shareHistory:boolean)
+  update_connectedTo(uid:string)
   {
      /*Update Record[uid] conected-to*/  
     let record = {}
     //record[this.authservice.currentUserId] = true;
     record["id"] = this.authservice.currentUserId;
-    record["shareHistory"] = shareHistory;
+  
     return this.fireservices.collection('users').doc(uid).collection('connected-to').doc(this.authservice.currentUserName).set(record);
   }
 
@@ -131,13 +131,13 @@ export class CrudService {
 
   }
 
-  get_contact_details_with_shareHistory(email:string,uid:string){
-    return this.fireservices.collection('users').doc(uid).collection('contacts').doc("email").get().toPromise();
+  //get_contact_details_with_shareHistory(email:string,uid:string){
+  //  return this.fireservices.collection('users').doc(uid).collection('contacts').doc("email").get().toPromise();
 
     // return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
 //    return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
 
-  }
+ // }
 
   get_AllConnections()
   {
@@ -176,6 +176,13 @@ export class CrudService {
   set_is_owner(val){
     CrudService.isOwner = val;
     console.log("setting is Owner", CrudService.isOwner)
+  }
+
+  getHistoryPermission(connection_uid:string){
+
+    let path = `users/${connection_uid}/contacts/${this.authservice.currentUserName}`
+    return this.fireservices.doc(path).get().toPromise()
+    
   }
 
 

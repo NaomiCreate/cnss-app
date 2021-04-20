@@ -1,69 +1,135 @@
 <div class="card" id="card-top-bar">
-              <button class="button" id="btn-history-top-bar" (click)="isMyHistoyPushed = true">My History</button>
-              <button id="btn-history-top-bar" (click)="connectionsHistoryPushed()">Connections History</button>
-       </div>  
+       <button class="button" id="btn-history-top-bar" (click)="myHistoySelected = true">My History</button>
+       <button id="btn-history-top-bar" (click)="myHistoySelected = false">Connections History</button>
+</div>  
 
-<div class="container-content" *ngIf="isMyHistoyPushed; else connectedToHistoyPushed">
-       <div class="card" id="card-bottom-bar">
-                     <button id="btn-history-bottom-bar" >My Privacy Settings</button>
-                     <button id="btn-history-bottom-bar" >View Settings</button>
-       </div>  
-       <div *ngIf="alerts.length > 0; else noAlerts">
-              <h3>My alerts:</h3>
-              <div *ngFor="let alert of  alerts"> 
-                     <br/>
-                            <div class="card">
-                            <p>"Alert"</p>
-                            <p>{{alert.path}}</p>
-                            <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
-                            <p>{{alert.notes}}</p>
-                     </div>
-              </div>
-       </div>
-       <ng-template  #noAlerts>
-              <h3>Currently, you do not have any alerts.</h3>
-       </ng-template>
-</div>
 
-<ng-template  class="container-content" #connectedToHistoyPushed>
-       <div class="card"  id="card-bottom-bar">
-                     <button id="btn-history-bottom-bar">Alerts Receiving Settings</button>
-                     <button id="btn-history-bottom-bar">View Settings</button>
-       </div>  
-       <div *ngIf="connections.length > 0; else noConnections">
-              <h3>Security systems you are connected to:</h3>
-              <div *ngFor="let item of connections"> 
-                     <br/>
-                     <div *ngIf="item!= null " class="card">
-                            <p>{{item.firstName}} {{item.lastName}}</p>
-                            <p>{{item.email}}</p>
-                            <p>{{item.shareHistory}}</p>
-                            <button (click)="showOrHidePushed(item.email)">{{showOrHide}}</button>
-                            <!-- ----------- -->
-                            <div *ngIf="item!= null && isShowContactPushed==true" class="card">
-                                   <div *ngIf="alerts.length > 0; else contactHasNoAlerts">
-                                          <h3>{{item.firstName}} {{item.lastName}}</h3>
-                                          <div *ngFor="let alert of  alerts"> 
-                                                 <br/>
-                                                        <div class="card">
-                                                        <p>"Alert"</p>
-                                                        <p>{{alert.path}}</p>
-                                                        <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
-                                                        <p>{{alert.notes}}</p>
-                                                 </div>
+<div class="container-content" *ngIf="myHistoySelected; else elseBlock">
+
+       <div [ngSwitch]="user.isOwner">
+
+              <!-- the same view can be shown in more than one case -->
+              <div *ngSwitchCase="state.Accept">
+                     
+                     <div [ngSwitch]="user.hasAlerts">
+
+                            <!-- the same view can be shown in more than one case -->
+                            <div *ngSwitchCase="state.Accept"> 
+
+                                   <div *ngFor="let alert of  user.alerts"> 
+                                          <br/>
+                                                 <div class="card">
+                                                 <p>"Alert"</p>
+                                                 <p>{{alert.path}}</p>
+                                                 <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+                                                 <p>{{alert.notes}}</p>
                                           </div>
                                    </div>
-                                   <ng-template class="container-content" #contactHasNoAlerts>
-                                          <h3>{{item.firstName}} {{item.lastName}} has no alerts.</h3>
-                                   </ng-template>
+                                   
                             </div>
-                            <!-- --------------- -->
+                            <div *ngSwitchCase="state.Deny"> 
+                                   Currently, your alert history is empty
+                            </div>
+                            <div *ngSwitchDefault> Loading, please wait... </div> <!--For state.StandBy-->
+              
                      </div>
+
               </div>
 
+              <div *ngSwitchCase="state.Deny"> Currently, you are not a security system owner</div>
+
+              <!--default case when there are no matches -->
+              <div *ngSwitchDefault> Loading, please wait... </div> <!--For state.StandBy-->
+
        </div>
-      
-       <ng-template class="container-content" #noConnections>
-              <h3>Currently you are not connected to any security systems.</h3>
-       </ng-template>
+
+</div>
+
+
+<!-- Connctions history selcted -->
+<ng-template  class="container-content" #elseBlock>
+
+       <div [ngSwitch]="user.hasConnections">
+
+              <!-- the same view can be shown in more than one case -->
+              <div *ngSwitchCase="state.Accept">
+
+                     <div *ngFor="let connection of  connections">
+
+                            <div  [ngSwitch]="connection.shareHistory">
+
+                                   <!-- the same view can be shown in more than one case -->
+                                   <div *ngSwitchCase="state.Accept">
+
+                                          <div class="card">
+                                                 <p>{{connection.firstName}} {{connection.lastName}}</p>
+                                                 <p>{{connection.email}}</p>
+                                                 <p>{{connection.phone}}</p>
+
+                                                 <div *ngIf="connection.hideHistory; else elseBlock">
+                                                        <button (click)="showAlerts(connection.index)">Show history</button>
+                                                 </div>
+
+                                                 <!-- Show history -->
+                                                 <ng-template #elseBlock>
+
+                                                        <div [ngSwitch]="connection.hasAlerts">
+
+                                                               <!-- the same view can be shown in more than one case -->
+                                                               <div *ngSwitchCase="state.Accept"> 
+                                   
+                                                                      <div *ngFor="let alert of  connection.alerts"> 
+                                                                             <br/>
+                                                                             <div class="card">
+                                                                                    <p>"Alert"</p>
+                                                                                    <p>{{alert.path}}</p>
+                                                                                    <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+                                                                                    <p>{{alert.notes}}</p>
+
+                                                                             </div>
+                                                                      </div>
+                                                                      
+                                                               </div>
+                                                               <div *ngSwitchCase="state.Deny"> 
+                                                                      Currently, connections alert history is empty
+                                                               </div>
+                                                               <div *ngSwitchDefault> Loading, please wait... </div> <!--For state.StandBy-->
+                                                 
+                                                        </div>
+                                   
+
+                                                        <button (click)="connection.hideHistory = true">Hide history</button> 
+                                                 </ng-template>
+                                                  
+                                          </div>
+
+                                   </div>
+
+                                   <div *ngSwitchCase="state.Deny">
+
+                                          <div class="card">
+                                                 <p>{{connection.firstName}} {{connection.lastName}}</p>
+                                                 <p>{{connection.email}}</p>
+                                                 <p>{{connection.phone}}</p>
+                                                 <p>History share is denied</p>
+                                                 <button disabled>Show History</button> <!--disabled share history-->
+                                          </div>
+
+                                   </div>
+                                   
+                                   <!--default case when there are no matches -->
+                                   <div  *ngSwitchDefault>Loading, please wait...</div>
+                            </div>
+                           
+                     </div>
+
+              </div>
+
+              <div *ngSwitchCase="state.Deny">Currently, you are not a contact of any security system owner</div>
+
+              <!--default case when there are no matches -->
+              <div *ngSwitchDefault> Loading, please wait... </div> <!--For state.StandBy-->
+       </div>
+
+
 </ng-template>

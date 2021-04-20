@@ -94,7 +94,7 @@ export class ContactListComponent implements OnInit {
             if(confirm("a new contact is going be created")){
 
                 Record['uid'] = doc.data()[this.new_contact.contactEmail]; //The phone number will come from the user-info by uid
-                this.crudservice.update_connectedTo(Record['uid'],this.new_contact.shareHistory)
+                this.crudservice.update_connectedTo(Record['uid'])
                 .then(() => {
                   this.message = "Contact updated succesfully"
                 }).catch(error=> {
