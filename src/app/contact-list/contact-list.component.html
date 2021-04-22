@@ -51,6 +51,7 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>See Your History</th>
                     <th></th>
                 </tr>
             </thead> 
@@ -62,7 +63,12 @@
                             <td > {{item.lastName}}</td>
                             <td > {{item.email}}</td>
                             <td > {{item.phone}}</td>
-
+                            <td *ngIf="item.shareHistory; else cantSeeHistory">
+                                Can see your history alerts
+                            </td>
+                            <ng-template #cantSeeHistory>
+                                <td>Can't see your history alerts</td>
+                            </ng-template >
                             <td>
                                 <span>
                                     <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>
@@ -79,6 +85,16 @@
                                 <td><input type="text" [(ngModel)]="item.editLastName" class="edit-from-control"  placeholder="Last name"></td>
                                 <td > {{item.email}}</td>
                                 <td > {{item.phone}}</td>
+                                <td >
+                                    <div class="shareHistory" name="shareHistory">
+                                        <!-- <label>Do you want this contact to see your alert history?</label><br>  -->
+                                        <input type="radio"  [(ngModel)]="item.editShareHistory" [value]="true" />  
+                                        <label>Yes</label><br>  
+                                        <input type="radio"  [(ngModel)]="item.editShareHistory" [value]="false" />
+                                        <label>No</label><br>  
+                                    </div>
+                                </td>
+
                             <td>
                                 <button  (click)="item.inEdit = false">Cancel</button>
                                 <button  (click)="updateRecord(item)">Update Contact</button>

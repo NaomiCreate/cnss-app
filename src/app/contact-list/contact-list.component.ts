@@ -57,7 +57,6 @@ export class ContactListComponent implements OnInit {
             this.crudservice.get_contact_details(contact['email'],c.payload.doc.data()['uid'])
             .then((doc) => { 
               contact['phone'] = doc.data()['phone'];
-              
             }).catch(error => {console.log(error)});
           
            return contact;  
@@ -129,8 +128,7 @@ export class ContactListComponent implements OnInit {
     Record.inEdit = true;
     Record.editFirstName= Record.firstName;
     Record.editLastName= Record.lastName;
-
-    //add Record['shareHistory']?
+    Record.editShareHistory = Record.shareHistory;
   }
 
   //will fire after the user press "Edit Contant" and than press "Update"
@@ -141,7 +139,8 @@ export class ContactListComponent implements OnInit {
       let record = {};
       record['firstName'] = recordData.editFirstName;
       record['lastName'] = recordData.editLastName;
-    
+      record['shareHistory'] = recordData.editShareHistory;//!//
+
 
       this.crudservice.update_contact(recordData['email'],record);
       this.message = "The update was successful"
