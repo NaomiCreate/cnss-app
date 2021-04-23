@@ -95,6 +95,7 @@ export class HistoryComponent implements OnInit {
           this.data_subscriptions.push(
             this.db.list(this.user.dbPath).snapshotChanges().subscribe(data => {
 
+                console.log("Debug:: getting user alerts")
                 data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
 
                 //sort alerts by date
@@ -208,7 +209,7 @@ export class HistoryComponent implements OnInit {
     };
   }
 
-  //NEED TO TEST
+
   /**This functin is an on click listener, it receives a connection and retreivs all alerts 
    * index -> should be connections index in array connections
   */
