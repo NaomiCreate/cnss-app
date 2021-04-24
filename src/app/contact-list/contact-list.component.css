@@ -18,6 +18,12 @@ h3{
     font-family: URW Chancery L, cursive;
     margin-bottom: 10px;
 }
+label{
+  color: aliceblue;
+  font-weight: bold;
+  font-family: URW Chancery L, cursive;
+  /* margin-bottom: 10px;  */
+} 
 th, td{
     border: solid 3px  rgba(0, 0, 0, 0.527);
     padding: 8px 20px;

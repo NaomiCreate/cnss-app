@@ -105,6 +105,7 @@ export class ContactListComponent implements OnInit {
                 this.new_contact.contactFirstName = "";
                 this.new_contact.contactLastName = "";
                 this.new_contact.contactEmail = "";
+
                 this.message = "New contact added";
               }).catch(error => {
                 console.log(error);
@@ -139,7 +140,7 @@ export class ContactListComponent implements OnInit {
       let record = {};
       record['firstName'] = recordData.editFirstName;
       record['lastName'] = recordData.editLastName;
-      record['shareHistory'] = recordData.editShareHistory;//!//
+      record['shareHistory'] = recordData.editShareHistory;
 
 
       this.crudservice.update_contact(recordData['email'],record);

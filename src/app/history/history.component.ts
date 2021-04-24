@@ -11,7 +11,14 @@ import { Subscription } from 'rxjs';
 export interface Alert {
   image_path: string; //url :URL
   notes: string;
-  timestamp: number;
+  timestamp: any;
+
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minutes: number;
+
   inEdit: boolean; // needed for device owner, that is current user 
   alertID: string; // needed for device owner, that is current user  for edit
 }
@@ -199,11 +206,19 @@ export class HistoryComponent implements OnInit {
 
   /*Sets alert and returns it*/
   getAlert(doc:any):Alert{
+    this.time_stamp_to_date(doc.payload.val()["timestamp"]);//For DEBUG
+
+    var date = new Date(+doc.payload.val()["timestamp"]);
 
     return {
       image_path:doc.payload.val()["image_path"],
       notes: doc.payload.val()["notes"],
       timestamp: doc.payload.val()["timestamp"],
+      year: date.getFullYear(),
+      month:date.getMonth()+1,
+      day: date.getUTCDate(),
+      hour: date.getHours(),
+      minutes: date.getMinutes(),
       inEdit:false,
       alertID: doc.key
     };
@@ -271,6 +286,20 @@ export class HistoryComponent implements OnInit {
   //NEED TO TEST
   ngOnDestroy(){
     this.data_subscriptions.forEach(element => element.unsubscribe())
+  }
+
+//function for debug
+time_stamp_to_date(timestamp){
+  var date = new Date(+timestamp);
+  console.log("date = ",date);
+  console.log("date.toDateString() = ",date.toDateString());
+  console.log("date.getFullYear() =",date.getFullYear());
+  console.log("date.getMonth()+1 =",date.getMonth()+1);
+  console.log("date.getUTCDate() =",date.getUTCDate());
+  console.log("date.getMinutes() = ",date.getMinutes());
+  console.log("date.getSeconds() = ",date.getSeconds());
+  console.log("date.getHours() = ",date.getHours());
+  console.log("date.toLocaleTimeString() = ",date.toLocaleTimeString());
   }
 
 }

@@ -23,7 +23,7 @@
         <input type="email" class="from-control" [(ngModel)]="new_contact.contactEmail" placeholder="Contact mail">
     </div>
     
-    <div class="shareHistory" name="shareHistory">
+    <div class="shareHistory1" name="shareHistory1">
         <label>Do you want this contact to see your alert history?</label><br> 
         <input type="radio"  [(ngModel)]="new_contact.shareHistory" [value]="true" />  
         <label>Yes</label><br>  
@@ -86,7 +86,7 @@
                                 <td > {{item.email}}</td>
                                 <td > {{item.phone}}</td>
                                 <td >
-                                    <div class="shareHistory" name="shareHistory">
+                                    <div class="shareHistory2" name="shareHistory2">
                                         <!-- <label>Do you want this contact to see your alert history?</label><br>  -->
                                         <input type="radio"  [(ngModel)]="item.editShareHistory" [value]="true" />  
                                         <label>Yes</label><br>  
