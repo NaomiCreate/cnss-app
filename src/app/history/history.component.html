@@ -136,6 +136,12 @@
 
 </ng-template>
 
+
 For Testing:
-<button (click)="getNext()">Get Next</button>
-<button (click)="getPrev()">Get Prev</button>
+<div *ngIf="user.nextStartPoint != null">
+       <button (click)="getNext(-1,false)">Get Next</button>
+</div>
+<div *ngIf="user.prevStartPoint != null">
+       <button (click)="getPrev(-1,false)">Get Prev</button>
+</div>
+<!-- <button (click)="getPrev()">Get Prev</button> -->

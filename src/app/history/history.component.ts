@@ -42,6 +42,9 @@ export interface Connection {
   hasAlerts: Status;
   index: number;
 
+  prevStartPoint:number;
+  nextStartPoint:number;
+
   //serchStartPoint: SearchPoints;//---added For search
   //searchEndPint: SearchPoints;//---added For search
 }
@@ -53,6 +56,9 @@ export interface User {
   hasAlerts: Status;
   deviceID: any;
   hasConnections:Status;
+
+  prevStartPoint:number;
+  nextStartPoint:number;
 
   //serchStartPoint: SearchPoints;//---added For search
   //searchEndPint: SearchPoints;//---added For search
@@ -68,7 +74,7 @@ export interface SearchPoints {
   // minutes: number;
 }
 //---added for search
-const ALERT_LIMIT = 2;
+const ALERT_LIMIT = 3;//The value should be: limit+1 
 
 @Component({
   selector: 'app-history',
@@ -86,6 +92,9 @@ export class HistoryComponent implements OnInit {
     hasAlerts: Status.StandBy,
     deviceID: "",
     hasConnections:Status.StandBy,
+
+    prevStartPoint:null,
+    nextStartPoint:null
 
     //serchStartPoint: null,//---added For search
     //searchEndPint: null//---added For search
@@ -120,25 +129,26 @@ export class HistoryComponent implements OnInit {
           console.log("Debug::user.dbPath", this.user.dbPath)
 
           //getAlerts
-          this.data_subscriptions.push(
-            this.db.list(this.user.dbPath).snapshotChanges().subscribe(data => {
+          this.getNext(-1,false);
+          // this.data_subscriptions.push(
+          //   this.db.list(this.user.dbPath).snapshotChanges().subscribe(data => {
 
-                console.log("Debug:: getting user alerts")
-                data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
+          //       console.log("Debug:: getting user alerts")
+          //       data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
 
-                //sort alerts by date
-                this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+          //       //sort alerts by date
+          //       this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
                   
-                //set hasAlerts
-                if(this.user.alerts.length != 0){
-                  this.user.hasAlerts = Status.Accept
-                }
-                else{
-                  this.user.hasAlerts = Status.Deny
-                }
-              }
-            )
-          );
+          //       //set hasAlerts
+          //       if(this.user.alerts.length != 0){
+          //         this.user.hasAlerts = Status.Accept
+          //       }
+          //       else{
+          //         this.user.hasAlerts = Status.Deny
+          //       }
+          //     }
+          //   )
+          // );
       
 
         }
@@ -184,7 +194,9 @@ export class HistoryComponent implements OnInit {
               dbPath: `/devices/`, //beginig of path to realtime database';
               alerts: [],
               hasAlerts: Status.StandBy,
-              index: i
+              index: i,
+              prevStartPoint:null,
+              nextStartPoint:null
             }
           
             this.crudservice.get_contact_details(new_connection.email,  c.payload.doc.data()['id'])
@@ -326,64 +338,187 @@ time_stamp_to_date(timestamp: number){
 
 
 //--------------------------------------------------------------------------27/04/2021
-  TestUserAlerts :Array<Alert> = [];
-  getNext()
+  //TestUserAlerts :Array<Alert> = [];
+  //tempAlerts :Array<Alert> = [];
+
+  getNext(index:number, isConnection:boolean)
   {
     let start: number;
     let code: string;
 
-    if(this.TestUserAlerts.length != 0){
-      start = this.TestUserAlerts[0].timestamp;
-      code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
+    if(!isConnection)//isUser
+    {
+      this.user.hasAlerts = Status.StandBy;
+
+      if(this.user.alerts.length != 0){
+        console.log("Debug:: in this.user.alerts.length != 0 ")
+        start = this.user.nextStartPoint;
+
+        this.user.prevStartPoint = this.user.alerts[this.user.alerts.length-1].timestamp;
+        code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
+      }
+      else{ //The opening group of alerts
+        console.log("Debug:: in else ")
+
+        start = null;
+        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+      }
+  
+      this.user.alerts = [];
+  
+      this.data_subscriptions.push(
+        this.db.list(this.user.dbPath,eval(code))
+          .snapshotChanges()
+          .subscribe(data => {
+            console.log("Debug:: getNext ")
+            data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
+            console.log("Debug::Test user alerts: ",this.user.alerts)
+
+            if(this.user.alerts.length == ALERT_LIMIT)
+            {
+              this.user.nextStartPoint = this.user.alerts.shift().timestamp;
+            }
+            else
+            {
+              this.user.nextStartPoint = null;
+            }
+
+            //sort alerts by date
+            this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+    
+            //this.user.nextStartPoint = this.user.alerts.pop().timestamp;
+
+            console.log("Debug:: this.user.nextStartPoint: ", this.user.nextStartPoint)
+
+            //set hasAlerts
+            if(this.user.alerts.length != 0){
+              this.user.hasAlerts = Status.Accept
+            }
+            else{
+              this.user.hasAlerts = Status.Deny
+            }
+          }
+        )
+  
+      );
     }
-    else{
-      start = null;
-      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+
+    else
+    { 
+      if(this.TestUserAlerts.length != 0){
+        start = this.TestUserAlerts[0].timestamp;
+        code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
+      }
+      else{
+        start = null;
+        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+      }
+
+      this.TestUserAlerts = [];
+
+      this.data_subscriptions.push(
+        this.db.list(this.user.dbPath,eval(code))
+          .snapshotChanges()
+          .subscribe(data => {
+            console.log("Debug:: getNext ")
+            data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
+            console.log("Debug::Test user alerts: ",this.TestUserAlerts)
+          }
+        )
+
+      );
     }
-
-    this.TestUserAlerts = [];
-
-    this.data_subscriptions.push(
-      this.db.list(this.user.dbPath,eval(code))
-        .snapshotChanges()
-        .subscribe(data => {
-          console.log("Debug:: getNext ")
-          data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
-          console.log("Debug::Test user alerts: ",this.TestUserAlerts)
-        }
-      )
-
-    );
   }
 
-  getPrev()
+  getPrev(index:number, isConnection:boolean)
   {
     let start: number;
     let code: string;
 
-    if(this.TestUserAlerts.length != 0){
-      start = this.TestUserAlerts[this.TestUserAlerts.length-1].timestamp;
-      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+    if(!isConnection)//isUser
+    {
+      this.user.hasAlerts = Status.StandBy;
+
+      //if(this.user.prevStartPoint != null){
+        start = this.user.prevStartPoint;
+
+        this.user.nextStartPoint = this.user.alerts[0].timestamp;
+        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+      //}
+      // else{ //The opening group of alerts
+
+      //   console.log("BUG")
+
+      //   start = null;
+      //   code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+      // }
+  
+      this.user.alerts = [];
+  
+      this.data_subscriptions.push(
+        this.db.list(this.user.dbPath,eval(code))
+          .snapshotChanges()
+          .subscribe(data => {
+            console.log("Debug:: getPrev ")
+            data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
+            console.log("Debug::Test user alerts: ",this.user.alerts)
+
+            // if(this.user.alerts.length == ALERT_LIMIT)
+            // {
+            //   this.user.nextStartPoint = this.user.alerts.shift().timestamp;
+            // }
+            // else
+            // {
+            //   this.user.nextStartPoint = null;
+            // }
+
+            //##########prob here##############
+            this.user.prevStartPoint = this.user.alerts.pop().timestamp;
+            //##########prob here##############
+
+            //sort alerts by date
+            this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+    
+            console.log("Debug:: this.user.prevStartPoint: ", this.user.prevStartPoint)
+
+            //set hasAlerts
+            if(this.user.alerts.length != 0){
+              this.user.hasAlerts = Status.Accept
+            }
+            else{
+              this.user.hasAlerts = Status.Deny
+            }
+          }
+        )
+  
+      );
     }
-    else{
-      console.log("BUG: call getNext() first");
-      // start = null;
-      // code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
-    }
+    // let start: number;
+    // let code: string;
 
-    this.TestUserAlerts = [];
+    // if(this.TestUserAlerts.length != 0){
+    //   start = this.TestUserAlerts[this.TestUserAlerts.length-1].timestamp;
+    //   code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+    // }
+    // else{
+    //   console.log("BUG: call getNext() first");
+    //   // start = null;
+    //   // code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+    // }
 
-    this.data_subscriptions.push(
-      this.db.list(this.user.dbPath,eval(code))
-        .snapshotChanges()
-        .subscribe(data => {
-          console.log("Debug:: getPrev ")
-          data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
-          console.log("Debug::Test user alerts: ",this.TestUserAlerts)
-        }
-      )
+    // this.TestUserAlerts = [];
 
-    );
+    // this.data_subscriptions.push(
+    //   this.db.list(this.user.dbPath,eval(code))
+    //     .snapshotChanges()
+    //     .subscribe(data => {
+    //       console.log("Debug:: getPrev ")
+    //       data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
+    //       console.log("Debug::Test user alerts: ",this.TestUserAlerts)
+    //     }
+    //   )
+
+    // );
   }
 
 }
