@@ -19,10 +19,12 @@
                                    <div *ngFor="let alert of  user.alerts"> 
                                           <br/>
                                                  <div class="card">
+                                                 <p>For Testig: {{alert.alertID}}</p>
                                                  <p>"Alert"</p>
                                                  <p>{{alert.image_path}}</p>
                                                  <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
                                                  <p>{{alert.notes}}</p>
+                                                 
                                           </div>
                                    </div>
                                    
@@ -133,3 +135,7 @@
 
 
 </ng-template>
+
+For Testing:
+<button (click)="getNext()">Get Next</button>
+<button (click)="getPrev()">Get Prev</button>

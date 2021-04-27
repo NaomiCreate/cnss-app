@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ValueTransformer } from '@angular/compiler/src/util';
 import { CrudService } from '../services/crud.service';
 import { Subscription } from 'rxjs';
+//import { timeStamp } from 'console';
 
 
 export interface Alert {
@@ -13,11 +14,11 @@ export interface Alert {
   notes: string;
   timestamp: any;
 
-  year: number;
-  month: number;
-  day: number;
-  hour: number;
-  minutes: number;
+  year: number;//---added For search
+  month: number;//---added For search
+  day: number;//---added For search
+  hour: number;//---added For search
+  minutes: number;//---added For search
 
   inEdit: boolean; // needed for device owner, that is current user 
   alertID: string; // needed for device owner, that is current user  for edit
@@ -40,6 +41,9 @@ export interface Connection {
   alerts: Array<Alert>;
   hasAlerts: Status;
   index: number;
+
+  //serchStartPoint: SearchPoints;//---added For search
+  //searchEndPint: SearchPoints;//---added For search
 }
 
 export interface User {
@@ -49,8 +53,22 @@ export interface User {
   hasAlerts: Status;
   deviceID: any;
   hasConnections:Status;
+
+  //serchStartPoint: SearchPoints;//---added For search
+  //searchEndPint: SearchPoints;//---added For search
 }
 
+//---added for search
+export interface SearchPoints {
+  date: String;
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  // minutes: number;
+}
+//---added for search
+const ALERT_LIMIT = 2;
 
 @Component({
   selector: 'app-history',
@@ -67,7 +85,10 @@ export class HistoryComponent implements OnInit {
     alerts: [],
     hasAlerts: Status.StandBy,
     deviceID: "",
-    hasConnections:Status.StandBy
+    hasConnections:Status.StandBy,
+
+    //serchStartPoint: null,//---added For search
+    //searchEndPint: null//---added For search
   }
 
   public connections: Array<Connection> = []; // will contain all users connections that allow sharing their history with him
@@ -206,7 +227,7 @@ export class HistoryComponent implements OnInit {
 
   /*Sets alert and returns it*/
   getAlert(doc:any):Alert{
-    this.time_stamp_to_date(doc.payload.val()["timestamp"]);//For DEBUG
+    //this.time_stamp_to_date(doc.payload.val()["timestamp"]);//For DEBUG
 
     var date = new Date(+doc.payload.val()["timestamp"]);
 
@@ -289,7 +310,7 @@ export class HistoryComponent implements OnInit {
   }
 
 //function for debug
-time_stamp_to_date(timestamp){
+time_stamp_to_date(timestamp: number){
   var date = new Date(+timestamp);
   console.log("date = ",date);
   console.log("date.toDateString() = ",date.toDateString());
@@ -300,6 +321,69 @@ time_stamp_to_date(timestamp){
   console.log("date.getSeconds() = ",date.getSeconds());
   console.log("date.getHours() = ",date.getHours());
   console.log("date.toLocaleTimeString() = ",date.toLocaleTimeString());
+  }
+
+
+
+//--------------------------------------------------------------------------27/04/2021
+  TestUserAlerts :Array<Alert> = [];
+  getNext()
+  {
+    let start: number;
+    let code: string;
+
+    if(this.TestUserAlerts.length != 0){
+      start = this.TestUserAlerts[0].timestamp;
+      code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
+    }
+    else{
+      start = null;
+      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+    }
+
+    this.TestUserAlerts = [];
+
+    this.data_subscriptions.push(
+      this.db.list(this.user.dbPath,eval(code))
+        .snapshotChanges()
+        .subscribe(data => {
+          console.log("Debug:: getNext ")
+          data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
+          console.log("Debug::Test user alerts: ",this.TestUserAlerts)
+        }
+      )
+
+    );
+  }
+
+  getPrev()
+  {
+    let start: number;
+    let code: string;
+
+    if(this.TestUserAlerts.length != 0){
+      start = this.TestUserAlerts[this.TestUserAlerts.length-1].timestamp;
+      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+    }
+    else{
+      console.log("BUG: call getNext() first");
+      // start = null;
+      // code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+    }
+
+    this.TestUserAlerts = [];
+
+    this.data_subscriptions.push(
+      this.db.list(this.user.dbPath,eval(code))
+        .snapshotChanges()
+        .subscribe(data => {
+          console.log("Debug:: getPrev ")
+          data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
+          console.log("Debug::Test user alerts: ",this.TestUserAlerts)
+        }
+      )
+
+    );
   }
 
 }
