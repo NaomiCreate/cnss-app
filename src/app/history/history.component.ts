@@ -442,10 +442,10 @@ time_stamp_to_date(timestamp: number){
 
         start = this.user.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
                                           //unless only the first group was called and then it's null
-
         console.log("Debug:: getPrev start", start)
         this.user.nextStartPoint = this.user.alerts[0].timestamp; //set nextStatingPoint before goint back
         code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
+        // Get ALERT_LIMIT + 1 to know when we reached the beginning.
   
   
       this.user.alerts = [];
