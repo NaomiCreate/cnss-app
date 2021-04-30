@@ -355,6 +355,7 @@ time_stamp_to_date(timestamp: number){
         start = this.user.nextStartPoint;
 
         this.user.prevStartPoint = this.user.alerts[this.user.alerts.length-1].timestamp;
+        console.log("Debug:: this.user.prevStartPoint.id: ",this.user.alerts[this.user.alerts.length-1].alertID)
         code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
       }
       else{ //The opening group of alerts
@@ -402,32 +403,33 @@ time_stamp_to_date(timestamp: number){
   
       );
     }
+    //##########
+    //else
+    //{ 
+    //   if(this.TestUserAlerts.length != 0){
+    //     start = this.TestUserAlerts[0].timestamp;
+    //     code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
+    //   }
+    //   else{
+    //     start = null;
+    //     code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+    //   }
 
-    else
-    { 
-      if(this.TestUserAlerts.length != 0){
-        start = this.TestUserAlerts[0].timestamp;
-        code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
-      }
-      else{
-        start = null;
-        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
-      }
+    //   this.TestUserAlerts = [];
 
-      this.TestUserAlerts = [];
+    //   this.data_subscriptions.push(
+    //     this.db.list(this.user.dbPath,eval(code))
+    //       .snapshotChanges()
+    //       .subscribe(data => {
+    //         console.log("Debug:: getNext ")
+    //         data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
+    //         console.log("Debug::Test user alerts: ",this.TestUserAlerts)
+    //       }
+    //     )
 
-      this.data_subscriptions.push(
-        this.db.list(this.user.dbPath,eval(code))
-          .snapshotChanges()
-          .subscribe(data => {
-            console.log("Debug:: getNext ")
-            data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
-            console.log("Debug::Test user alerts: ",this.TestUserAlerts)
-          }
-        )
-
-      );
-    }
+    //   );
+    // }
+    //##########
   }
 
   getPrev(index:number, isConnection:boolean)
@@ -440,10 +442,11 @@ time_stamp_to_date(timestamp: number){
       this.user.hasAlerts = Status.StandBy;
 
       //if(this.user.prevStartPoint != null){
-        start = this.user.prevStartPoint;
+      //  start = this.user.prevStartPoint;///////////////?
+          start = this.user.alerts[0].timestamp;
 
         this.user.nextStartPoint = this.user.alerts[0].timestamp;
-        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
+        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT+1})` ;
       //}
       // else{ //The opening group of alerts
 
@@ -463,22 +466,25 @@ time_stamp_to_date(timestamp: number){
             data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
             console.log("Debug::Test user alerts: ",this.user.alerts)
 
-            // if(this.user.alerts.length == ALERT_LIMIT)
-            // {
-            //   this.user.nextStartPoint = this.user.alerts.shift().timestamp;
-            // }
-            // else
-            // {
-            //   this.user.nextStartPoint = null;
-            // }
-
-            //##########prob here##############
-            this.user.prevStartPoint = this.user.alerts.pop().timestamp;
-            //##########prob here##############
-
             //sort alerts by date
             this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-    
+
+            if(this.user.alerts.length == ALERT_LIMIT+1)
+            {
+              console.log("Debug:: IN IF ")
+
+              //this.user.prevStartPoint = this.user.alerts.shift().timestamp;
+              this.user.alerts.shift().timestamp;
+              this.user.alerts.shift().timestamp;
+            }
+            else//this.user.alerts.length <= ALERT_LIMIT
+            {
+              this.user.prevStartPoint = null;
+              this.user.alerts.pop().timestamp;
+            }
+            //this.user.alerts.length >= ALERT_LIMIT+1 not possibole because of the real-time firebase limit
+            // this.user.alerts.pop().timestamp;
+
             console.log("Debug:: this.user.prevStartPoint: ", this.user.prevStartPoint)
 
             //set hasAlerts
