@@ -27,6 +27,13 @@
                                                  
                                           </div>
                                    </div>
+
+                                   <div *ngIf="user.nextStartPoint != null">
+                                          <button (click)="getNext(-1,false)">Next</button>
+                                   </div>
+                                   <div *ngIf="user.prevStartPoint != null">
+                                          <button (click)="getPrev(-1,false)">Prev</button>
+                                   </div>
                                    
                             </div>
                             <div *ngSwitchCase="state.Deny"> 
@@ -83,12 +90,20 @@
                                                                       <div *ngFor="let alert of  connection.alerts"> 
                                                                              <br/>
                                                                              <div class="card">
+                                                                                    <p>For Testig: {{alert.alertID}}</p>
                                                                                     <p>"Alert"</p>
                                                                                     <p>{{alert.image_path}}</p>
                                                                                     <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
                                                                                     <p>{{alert.notes}}</p>
 
                                                                              </div>
+                                                                      </div>
+
+                                                                      <div *ngIf="connection.nextStartPoint != null">
+                                                                             <button (click)="getNext(connection.index,true)">Next</button>
+                                                                      </div>
+                                                                      <div *ngIf="connection.prevStartPoint != null">
+                                                                             <button (click)="getPrev(connection.index,true)">Prev</button>
                                                                       </div>
                                                                       
                                                                </div>
@@ -137,11 +152,11 @@
 </ng-template>
 
 
-For Testing:
+<!-- For Testing:
 <div *ngIf="user.nextStartPoint != null">
        <button (click)="getNext(-1,false)">Get Next</button>
 </div>
 <div *ngIf="user.prevStartPoint != null">
        <button (click)="getPrev(-1,false)">Get Prev</button>
-</div>
+</div> -->
 <!-- <button (click)="getPrev()">Get Prev</button> -->

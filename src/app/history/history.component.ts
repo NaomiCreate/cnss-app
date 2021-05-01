@@ -130,27 +130,7 @@ export class HistoryComponent implements OnInit {
 
           //getAlerts
           this.getNext(-1,false);
-          // this.data_subscriptions.push(
-          //   this.db.list(this.user.dbPath).snapshotChanges().subscribe(data => {
-
-          //       console.log("Debug:: getting user alerts")
-          //       data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
-
-          //       //sort alerts by date
-          //       this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-                  
-          //       //set hasAlerts
-          //       if(this.user.alerts.length != 0){
-          //         this.user.hasAlerts = Status.Accept
-          //       }
-          //       else{
-          //         this.user.hasAlerts = Status.Deny
-          //       }
-          //     }
-          //   )
-          // );
-      
-
+        
         }
         else{
           //for HTML output
@@ -269,36 +249,11 @@ export class HistoryComponent implements OnInit {
 
     if(this.connections[index].shareHistory == Status.Accept){
 
-      //empty array
-      this.connections[index].hasAlerts = Status.StandBy;
       this.connections[index].hideHistory = false; //show history for HTML
-      this.connections[index].alerts = [];
-    
-      //getAlerts
-      this.data_subscriptions.push(
-
-        this.db.list(this.connections[index].dbPath).snapshotChanges().subscribe(data => {
-
-            data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
-
-            //sort alerts by date
-            this.connections[index].alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-              
-            //set hasAlerts
-            if(this.connections[index].alerts.length != 0){
-              this.connections[index].hasAlerts = Status.Accept
-            }
-            else{
-              this.connections[index].hasAlerts = Status.Deny
-            }
-
-            console.log("Debug::connection email", this.connections[index].email)
-            console.log("Debug::connection alerts", this.connections[index].alerts)
-            console.log("Debug::connection has alert", this.connections[index].hasAlerts)
-            console.log("Debug::connection showAlerts", this.connections[index].shareHistory)
-          }
-        )
-      );
+      if(this.connections[index].alerts.length == 0){
+        this.getNext(index, true);
+      }
+      
     }
     else{
       console.log("Debug::this should not appear here, this user does not allow sharing his history")
@@ -338,8 +293,7 @@ time_stamp_to_date(timestamp: number){
 
 
 //--------------------------------------------------------------------------27/04/2021
-  //TestUserAlerts :Array<Alert> = [];
-  //tempAlerts :Array<Alert> = [];
+
 
   getNext(index:number, isConnection:boolean)
   {
@@ -401,33 +355,62 @@ time_stamp_to_date(timestamp: number){
   
       );
     }
-    //##########
-    //else
-    //{ 
-    //   if(this.TestUserAlerts.length != 0){
-    //     start = this.TestUserAlerts[0].timestamp;
-    //     code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
-    //   }
-    //   else{
-    //     start = null;
-    //     code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
-    //   }
+    
+    else{ //isConnection nake sure only connection that allows sharing allerts gets here
 
-    //   this.TestUserAlerts = [];
+      this.connections[index].hasAlerts = Status.StandBy;
 
-    //   this.data_subscriptions.push(
-    //     this.db.list(this.user.dbPath,eval(code))
-    //       .snapshotChanges()
-    //       .subscribe(data => {
-    //         console.log("Debug:: getNext ")
-    //         data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
-    //         console.log("Debug::Test user alerts: ",this.TestUserAlerts)
-    //       }
-    //     )
+      if(this.connections[index].alerts.length != 0){
+        start = this.connections[index].nextStartPoint;
+        code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
+      }
+      else{ //The opening group of alerts
+        start = null;
+        this.connections[index].prevStartPoint = null; // as this is the openning group set prev to null
+        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})`;
+      }
+  
+      this.connections[index].alerts = [];
+  
+      this.data_subscriptions.push(
+        this.db.list(this.connections[index].dbPath,eval(code))
+          .snapshotChanges()
+          .subscribe(data => {
+  
+            data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
+            
+            //sort alerts by date
+            this.connections[index].alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
 
-    //   );
-    // }
-    //##########
+            if(this.connections[index].alerts.length == ALERT_LIMIT)
+            {
+              //pop the last item - its time stamp will be usefull when clicking next again next 
+              this.connections[index].nextStartPoint = this.connections[index].alerts.pop().timestamp;
+            }
+            else
+            {
+              this.connections[index].nextStartPoint = null;
+            }
+
+            if(start != null){
+              this.connections[index].prevStartPoint = this.connections[index].alerts[0].timestamp; //as this is not the opening group 
+            }
+            
+
+            //set hasAlerts
+            if(this.connections[index].alerts.length != 0){
+              this.connections[index].hasAlerts = Status.Accept
+            }
+            else{
+              this.connections[index].hasAlerts = Status.Deny
+            }
+          }
+        )
+  
+      );
+
+
+    }
   }
 
   getPrev(index:number, isConnection:boolean)
@@ -440,12 +423,11 @@ time_stamp_to_date(timestamp: number){
       this.user.hasAlerts = Status.StandBy;
 
 
-        start = this.user.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
-                                          //unless only the first group was called and then it's null
-        console.log("Debug:: getPrev start", start)
-        this.user.nextStartPoint = this.user.alerts[0].timestamp; //set nextStatingPoint before goint back
-        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
-        // Get ALERT_LIMIT + 1 to know when we reached the beginning.
+      start = this.user.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
+                                        //unless only the first group was called and then it's null
+      this.user.nextStartPoint = this.user.alerts[0].timestamp; //set nextStatingPoint before goint back
+      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
+      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
   
   
       this.user.alerts = [];
@@ -455,10 +437,8 @@ time_stamp_to_date(timestamp: number){
           .snapshotChanges()
           .subscribe(data => {
 
-            console.log("Debug:: getPrev ")
             data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
-            console.log("Debug::Test user alerts: ",this.user.alerts)
-
+            
             //sort alerts by date
             this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
 
@@ -467,7 +447,6 @@ time_stamp_to_date(timestamp: number){
               // Then we are still able to go beackwoards
               this.user.alerts.shift().timestamp; // need to shift first
               this.user.prevStartPoint = this.user.alerts[0].timestamp; // and then set prevStarting point
-              console.log("Debug:: this.user.prevStartPoint", this.user.prevStartPoint)
             
             }
             else//this.user.alerts.length <= ALERT_LIMIT
@@ -489,32 +468,58 @@ time_stamp_to_date(timestamp: number){
   
       );
     }
-    // let start: number;
-    // let code: string;
+    else{
 
-    // if(this.TestUserAlerts.length != 0){
-    //   start = this.TestUserAlerts[this.TestUserAlerts.length-1].timestamp;
-    //   code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
-    // }
-    // else{
-    //   console.log("BUG: call getNext() first");
-    //   // start = null;
-    //   // code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})` ;
-    // }
+      this.connections[index].hasAlerts = Status.StandBy;
 
-    // this.TestUserAlerts = [];
 
-    // this.data_subscriptions.push(
-    //   this.db.list(this.user.dbPath,eval(code))
-    //     .snapshotChanges()
-    //     .subscribe(data => {
-    //       console.log("Debug:: getPrev ")
-    //       data.forEach(doc => this.TestUserAlerts.push(this.getAlert(doc))) 
-    //       console.log("Debug::Test user alerts: ",this.TestUserAlerts)
-    //     }
-    //   )
+      start = this.connections[index].prevStartPoint; // sould always be equal to this.connections[index].alerts[0].timestamp, 
+                                        //unless only the first group was called and then it's null
+      this.connections[index].nextStartPoint = this.connections[index].alerts[0].timestamp; //set nextStatingPoint before goint back
+      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
+      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
+  
+  
+      this.connections[index].alerts = [];
+  
+      this.data_subscriptions.push(
+        this.db.list(this.connections[index].dbPath,eval(code))
+          .snapshotChanges()
+          .subscribe(data => {
 
-    // );
+            data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
+      
+            //sort alerts by date
+            this.connections[index].alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+
+            if(this.connections[index].alerts.length == (ALERT_LIMIT + 1))
+            {
+              // Then we are still able to go beackwoards
+              this.connections[index].alerts.shift().timestamp; // need to shift first
+              this.connections[index].prevStartPoint = this.connections[index].alerts[0].timestamp; // and then set prevStarting point
+            
+            }
+            else//this.connections[index].alerts.length <= ALERT_LIMIT
+            {
+              this.connections[index].prevStartPoint = null;
+            }
+
+            this.connections[index].alerts.pop() // pop last item as it was already displayed
+
+            //set hasAlerts
+            if(this.connections[index].alerts.length != 0){
+              this.connections[index].hasAlerts = Status.Accept
+            }
+            else{
+              this.connections[index].hasAlerts = Status.Deny
+            }
+          }
+        )
+  
+      );
+
+    }
+   
   }
 
 }
