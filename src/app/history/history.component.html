@@ -20,6 +20,8 @@
                                           <br/>
                                                  <div class="card">
                                                  <p>For Testig: {{alert.alertID}}</p>
+                                                 <p>For Testig: {{alert.timestamp}}</p>
+
                                                  <p>"Alert"</p>
                                                  <p>{{alert.image_path}}</p>
                                                  <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
@@ -28,11 +30,13 @@
                                           </div>
                                    </div>
 
-                                   <div *ngIf="user.nextStartPoint != null">
-                                          <button (click)="getNext(-1,false)">Next</button>
-                                   </div>
-                                   <div *ngIf="user.prevStartPoint != null">
-                                          <button (click)="getPrev(-1,false)">Prev</button>
+                                   <div class="card-btn-controls">
+                                          <div *ngIf="user.prevStartPoint != null">
+                                                 <button class="btn-controls" (click)="getPrev(-1,false)">Prev</button>
+                                          </div>
+                                          <div *ngIf="user.nextStartPoint != null">
+                                                 <button class="btn-controls" (click)="getNext(-1,false)">Next</button>
+                                          </div>
                                    </div>
                                    
                             </div>
@@ -91,6 +95,8 @@
                                                                              <br/>
                                                                              <div class="card">
                                                                                     <p>For Testig: {{alert.alertID}}</p>
+                                                                                    <p>For Testig: {{alert.timestamp}}</p>
+
                                                                                     <p>"Alert"</p>
                                                                                     <p>{{alert.image_path}}</p>
                                                                                     <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
@@ -99,11 +105,13 @@
                                                                              </div>
                                                                       </div>
 
-                                                                      <div *ngIf="connection.nextStartPoint != null">
-                                                                             <button (click)="getNext(connection.index,true)">Next</button>
-                                                                      </div>
-                                                                      <div *ngIf="connection.prevStartPoint != null">
-                                                                             <button (click)="getPrev(connection.index,true)">Prev</button>
+                                                                       <div class="card-btn-controls">
+                                                                             <div *ngIf="connection.prevStartPoint != null">
+                                                                                    <button class="btn-controls" (click)="getPrev(connection.index,true)">Prev</button>
+                                                                             </div>
+                                                                             <div *ngIf="connection.nextStartPoint != null">
+                                                                                    <button class="btn-controls" (click)="getNext(connection.index,true)">Next</button>
+                                                                             </div>
                                                                       </div>
                                                                       
                                                                </div>
@@ -152,11 +160,47 @@
 </ng-template>
 
 
-<!-- For Testing:
-<div *ngIf="user.nextStartPoint != null">
+<!-- *********************For Testing********************* :-->
+<h3>From:</h3>
+<label>Choose a Year:</label>
+<input type="number" [(ngModel)]="user.searchStartPoint.year" class="from-control"><br>
+<label>Choose a month:</label>
+<input type="number" [(ngModel)]="user.searchStartPoint.month" class="from-control"><br>
+<label>Choose a day:</label>
+<input type="number" [(ngModel)]="user.searchStartPoint.day" class="from-control"><br>
+<label>Choose an hour:</label>
+<input type="number" [(ngModel)]="user.searchStartPoint.hour" class="from-control"><br>
+<label>Choose minutes:</label>
+<input type="number" [(ngModel)]="user.searchStartPoint.minutes" class="from-control"><br>
+<label>Choose seconds:</label>
+<input type="number" [(ngModel)]="user.searchStartPoint.seconds" class="from-control"><br>
+
+<h3>To:</h3>
+<label>Choose a Year:</label>
+<input type="number" [(ngModel)]="user.searchEndPoint.year" class="from-control"><br>
+<label>Choose a month:</label>
+<input type="number" [(ngModel)]="user.searchEndPoint.month" class="from-control"><br>
+<label>Choose a day:</label>
+<input type="number" [(ngModel)]="user.searchEndPoint.day" class="from-control"><br>
+<label>Choose an hour:</label>
+<input type="number" [(ngModel)]="user.searchEndPoint.hour" class="from-control"><br>
+<label>Choose minutes:</label>
+<input type="number" [(ngModel)]="user.searchEndPoint.minutes" class="from-control"><br>
+<label>Choose seconds:</label>
+<input type="number" [(ngModel)]="user.searchEndPoint.seconds" class="from-control"><br>
+
+<button (click)="getNextSearch(false,user.searchStartPoint,user.searchEndPoint)">getNextSearch</button>
+<!-- *********************For Testing********************* :-->
+
+<!-- <button (click)="testSearch()">testSearch</button> --> -->
+
+<!--<div *ngIf="user.nextStartPoint != null">
        <button (click)="getNext(-1,false)">Get Next</button>
 </div>
 <div *ngIf="user.prevStartPoint != null">
        <button (click)="getPrev(-1,false)">Get Prev</button>
 </div> -->
 <!-- <button (click)="getPrev()">Get Prev</button> -->
+
+
+

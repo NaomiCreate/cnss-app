@@ -45,8 +45,8 @@ export interface Connection {
   prevStartPoint:number;
   nextStartPoint:number;
 
-  //serchStartPoint: SearchPoints;//---added For search
-  //searchEndPint: SearchPoints;//---added For search
+  //searchStartPoint: SearchPoints;//---added For search
+  //searchEndPoint: SearchPoints;//---added For search
 }
 
 export interface User {
@@ -60,8 +60,8 @@ export interface User {
   prevStartPoint:number;
   nextStartPoint:number;
 
-  //serchStartPoint: SearchPoints;//---added For search
-  //searchEndPint: SearchPoints;//---added For search
+  searchStartPoint: SearchPoints;//---added For search
+  searchEndPoint: SearchPoints;//---added For search
 }
 
 //---added for search
@@ -71,7 +71,9 @@ export interface SearchPoints {
   month: number;
   day: number;
   hour: number;
-  // minutes: number;
+  minutes: number;
+  seconds: number;
+
 }
 //---added for search
 const ALERT_LIMIT = 3;//The value should be: limit+1 
@@ -94,10 +96,23 @@ export class HistoryComponent implements OnInit {
     hasConnections:Status.StandBy,
 
     prevStartPoint:null,
-    nextStartPoint:null
-
-    //serchStartPoint: null,//---added For search
-    //searchEndPint: null//---added For search
+    nextStartPoint:null,
+    searchStartPoint: { date: "",
+                        year: null,
+                        month: null,
+                        day: null,
+                        hour: null,
+                        minutes: null,
+                        seconds: null 
+                      },//---added For search
+    searchEndPoint: { date: "",
+                      year: null,
+                      month: null,
+                      day: null,
+                      hour: null,
+                      minutes: null,
+                      seconds: null
+                    }//---added For search
   }
 
   public connections: Array<Connection> = []; // will contain all users connections that allow sharing their history with him
@@ -222,6 +237,7 @@ export class HistoryComponent implements OnInit {
     //this.time_stamp_to_date(doc.payload.val()["timestamp"]);//For DEBUG
 
     var date = new Date(+doc.payload.val()["timestamp"]);
+    console.log("date from getAlert = ",date);
 
     return {
       image_path:doc.payload.val()["image_path"],
@@ -521,5 +537,44 @@ time_stamp_to_date(timestamp: number){
     }
    
   }
+//----------------------------***Search***----------------------------
 
+  dateToTimestamp(time:SearchPoints)
+  {
+    let date = new Date(time.year, time.month-1, time.day, time.hour, time.minutes, time.seconds);
+    return date.getTime();
+  }
+
+  getNextSearch(isConnection:boolean, searchStartPoint:SearchPoints, searchEndPoint:SearchPoints)
+  {
+    //let start: number;
+    //let code: string;
+
+    if(!isConnection)//isUser
+    {
+      this.user.hasAlerts = Status.StandBy;
+                            
+      let start = this.dateToTimestamp(searchStartPoint);
+      let end = this.dateToTimestamp(searchEndPoint);
+
+      this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(start).endAt(end).once('value').then(function(snapshot) {
+        snapshot.forEach(function(child) {
+
+          let childData = child.val();
+          let timestamps=child.val().timestamp;
+
+          console.log("Search Debug:: childData= ",childData);
+          console.log("Search Debug:: timestamps= ",timestamps);
+        });
+      });
+      
+      //set hasAlerts
+      if(this.user.alerts.length != 0){
+        this.user.hasAlerts = Status.Accept
+      }
+      else{
+        this.user.hasAlerts = Status.Deny
+      }
+    }
+  }
 }
