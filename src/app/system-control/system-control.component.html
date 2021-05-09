@@ -1,8 +1,13 @@
 <div class="toggel-switch">
-    <label>On</label>
+    <label>Off</label>
     <label class="switch">
-    <input type="checkbox" [(ngModel)]="isNewProfile">
+    <input type="checkbox" (change)="switchState()">
+    <!-- [(ngModel)]="isNewProfile"> -->
     <span class="slider round"></span>
     </label>
-    <label>Off</label>
+    <label>On</label>
 </div>
+
+<!-- Testing -->
+<!-- <button (click)="switchState()">On/Off</button>
+<button (click)="checkState()">checkState</button>  -->
