@@ -25,9 +25,9 @@
     
     <div class="shareHistory1" name="shareHistory1">
         <label>Do you want this contact to see your alert history?</label><br> 
-        <input type="radio"  [(ngModel)]="new_contact.shareHistory" [value]="true" />  
+        <input type="radio" id="share" name="shareOrNot" [(ngModel)]="new_contact.shareHistory" [value]="true" />  
         <label>Yes</label><br>  
-        <input type="radio"  [(ngModel)]="new_contact.shareHistory" [value]="false" />
+        <input type="radio" id="notShare" name="shareOrNot" [(ngModel)]="new_contact.shareHistory" [value]="false" />
         <label>No</label><br>  
     </div>
 
@@ -86,11 +86,11 @@
                                 <td > {{item.email}}</td>
                                 <td > {{item.phone}}</td>
                                 <td >
-                                    <div class="shareHistory2" name="shareHistory2">
+                                    <div class="shareHistory2"  name="shareHistory2">
                                         <!-- <label>Do you want this contact to see your alert history?</label><br>  -->
-                                        <input type="radio"  [(ngModel)]="item.editShareHistory" [value]="true" />  
+                                        <input type="radio" id="editShare" name="{{'editShareOrNot' + item.email}}" [(ngModel)]="item.editShareHistory" [value]="true" />  
                                         <label>Yes</label><br>  
-                                        <input type="radio"  [(ngModel)]="item.editShareHistory" [value]="false" />
+                                        <input type="radio" id="editShare" name="{{'editShareOrNot' + item.email}}" [(ngModel)]="item.editShareHistory" [value]="false" />
                                         <label>No</label><br>  
                                     </div>
                                 </td>

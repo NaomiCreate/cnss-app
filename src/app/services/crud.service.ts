@@ -185,6 +185,11 @@ export class CrudService {
     
   }
 
+  get_uidFromDeviceID(device_id:string)
+  {
+    return this.fireservices.collection('deviceToUid').doc(device_id).get().toPromise();
+  }
+  
 
 }
       
