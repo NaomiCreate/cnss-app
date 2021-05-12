@@ -81,7 +81,6 @@ export class ProfileComponent implements OnInit {
   //will fire after the user press "Edit" and than press "Update"
   updateRecord(item:any)
   {
-   
       let new_record:UserRecord = {
         firstName:item.editFirstName,
         lastName: item.editLastName,
@@ -98,28 +97,46 @@ export class ProfileComponent implements OnInit {
         .subscribe(data => {
 
           if((data[0] == undefined || new_record['device_id'].length == 0) && new_record['is_device_owner'] == true){ //The device does not exist in the system Or empty
-            alert("The device does not exist in the system");
+            this.errorMessage = "The device id does not exist in the system";
           }
           else {//The device exist in the system OR record['is_device_owner']==false
             if(new_record['is_device_owner'] == false){
               new_record['device_id'] = '';
             }
-            if(confirm("Are you sure you want to edit your details?")){
-      
-              this.crudservice.update_user(new_record.email, new_record);
+            //if(confirm("Are you sure you want to edit your details?")){
 
-              //add device to collection: deviceToUid
-              if(new_record['is_device_owner'] == true){
-                this.crudservice.add_deviceToUid(new_record.device_id).then()
-                  .catch(error => {console.log(error);})
+              if (new_record['is_device_owner'] == true) {
+
+                this.crudservice.get_uidFromDeviceID(new_record['device_id']).then((doc) => {
+
+                  if (doc.exists && doc.data()[`${new_record['device_id']}`] != this.authservice.currentUserId) {
+                    this.errorMessage = "The device id is not available";
+                  }
+                  else {
+                    
+                    if(confirm("Are you sure you want to edit your details?")){
+
+                      this.crudservice.add_deviceToUid(new_record.device_id).then(()=>{
+
+                        this.crudservice.update_user(new_record.email, new_record);
+                        this.message = "The update saved successfully";
+                        this.inEdit = false;
+
+                      })
+                        .catch(error => { console.log(error); })
+                    }
+
+                  }
+                })
               }
               else {
-                this.crudservice.update_user(new_record.email, new_record);
 
-              this.message = "The update was successful";
-              this.inEdit = false;
+                if(confirm("Are you sure you want to edit your details?")){
+                  this.crudservice.update_user(new_record.email, new_record);
+                  this.message = "The update saved successfully";
+                  this.inEdit = false;
+                }
               }
-            }
           }
         });
       }

@@ -65,12 +65,6 @@
                 <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
             </tr>
 
-            <!-- <tr *ngIf="item.editIsDeviceOwner">
-                <th>Device ID:</th>   
-                <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
-            </tr> -->
-
-            <!-- <tr *ngIf="!item.editIsDeviceOwner"> -->
             <tr>
                 <th>Are you a CNSS Owner?</th>
                 <td class="ownership" name="ownership">
@@ -84,10 +78,6 @@
                 <th>Device ID:</th>   
                 <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
             </tr>
-            <!-- <tr *ngIf="item.editIsDeviceOwner">
-                <th>Device ID:</th>   
-                <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
-            </tr> -->
                 <tr><button (click)="updateRecord(item)">Update</button></tr>
                 <tr><button id="cancel" (click)="inEdit = false">Cancel</button></tr>            
             </ng-template>
