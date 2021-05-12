@@ -14,12 +14,8 @@ import * as firebase from 'firebase';
 })
 export class CrudService {
 
-  static isOwner:any;
-
 
   constructor(private authservice: AuthService, public fireservices:AngularFirestore,private db: AngularFireDatabase) { }
-
-  //--------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   
 
 //For real time data base
@@ -41,13 +37,10 @@ export class CrudService {
   }
  
   
-//--------------------------------------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   //create_userInfo adds to the collection 'user-info', a document in firebase, that including details about the registrant 
   create_userInfo(RecordUserInfo)
   { 
-    //return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').add(RecordUserInfo);
-    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').doc(RecordUserInfo.email).set(RecordUserInfo);//added in 8.3.21
-
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').doc(RecordUserInfo.email).set(RecordUserInfo);
   }
 
   /* This function will add to collection emailToUid a record  [email:uid] of current resitration */
@@ -78,26 +71,26 @@ export class CrudService {
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').snapshotChanges();  
   }
 
-//-------------------------------------------
+  /*This function returns user information as promise */
+  get_userDetails(){
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('user-info').doc(this.authservice.currentUserName).get().toPromise();
+  }
+
   get_userInfoByUid(uid)
   {
     return this.fireservices.collection('users').doc(uid).collection('user-info').snapshotChanges();  
   }
-//-------------------------------------------
 
   update_user(recordId, record)
   {
     this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
-    //this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
-            //this.fireservices.doc('contacts/' + recordId).update(record);//'contacts' is the collection name//-before change
   }
-  //--------
+
 
   update_connectedTo(uid:string)
   {
      /*Update Record[uid] conected-to*/  
     let record = {}
-    //record[this.authservice.currentUserId] = true;
     record["id"] = this.authservice.currentUserId;
   
     return this.fireservices.collection('users').doc(uid).collection('connected-to').doc(this.authservice.currentUserName).set(record);
@@ -117,27 +110,13 @@ export class CrudService {
   {
 
     return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').snapshotChanges();
-    //return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').get().toPromise();
-
-    //return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').get().toPromise();
 
   }
 
   get_contact_details(email:string,uid:string){
     return this.fireservices.collection('users').doc(uid).collection('user-info').doc(email).get().toPromise();
-
-    // return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
-//    return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
-
   }
 
-  //get_contact_details_with_shareHistory(email:string,uid:string){
-  //  return this.fireservices.collection('users').doc(uid).collection('contacts').doc("email").get().toPromise();
-
-    // return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
-//    return this.fireservices.collection('users').doc(uid).collection('user-info').doc('Klo7isEJZimqZNqsuMFm').get().toPromise()  //.get().toPromise();
-
- // }
 
   get_AllConnections()
   {
@@ -156,7 +135,7 @@ export class CrudService {
   {
     this.fireservices.doc('users/' + contact_uid + '/' + 'connected-to/' + this.authservice.currentUserName).delete();
     this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + contact_email).delete();
-            //this.fireservices.doc('contacts/' + recordId).delete();//-before change
+          
   }
 
   delete_connection(connection_uid:string, connection_email:string)
@@ -164,19 +143,9 @@ export class CrudService {
 
     this.fireservices.doc('users/' + connection_uid + '/' + 'contacts/' + this.authservice.currentUserName).delete();
     this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + connection_email).delete();
-            //this.fireservices.doc('contacts/' + recordId).delete();//-before change
+    
   }
 
-
-  get is_owner(){
-    console.log("getting is Owner", CrudService.isOwner)
-    return CrudService.isOwner;
-  }
-
-  set_is_owner(val){
-    CrudService.isOwner = val;
-    console.log("setting is Owner", CrudService.isOwner)
-  }
 
   getHistoryPermission(connection_uid:string){
 

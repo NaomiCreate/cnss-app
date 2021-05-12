@@ -8,33 +8,23 @@ import { CrudService } from '../services/crud.service';
 })
 export class OwnerGuard implements CanActivate {
 
-  constructor(public crudService : CrudService, public router: Router){}
+  constructor(public crudservice : CrudService, public router: Router){}
 
 
   canActivate(
 
     next: ActivatedRouteSnapshot, 
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+
+
+    return this.crudservice.get_userDetails()
+    .then(doc => {
+      if (!doc.data()['is_device_owner']){
+        alert("This page is accessible to device owners only");
+      }
+      return doc.data()['is_device_owner'];
+    });
     
-    // alert("ownrship guard")
-    // this.crudService.get_ownership()
-    // .then(()=>{alert("is owner")})
-    // .catch(()=>{
-    //   alert("this page are acceble to device owners only");
-    //   this.router.navigate(['/profile']);
-    // });
-    // return true;
-
-
-
-    
-
-    if(!this.crudService.is_owner){
-        alert("this page are acceble to device owners only");
-        this.router.navigate(['/profile']);
-    }
-
-    return true;
   }
   
 }

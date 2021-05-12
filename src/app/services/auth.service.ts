@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
-import { Observable } from 'rxjs';
 
 export interface User {
   email: string;
@@ -14,23 +13,24 @@ export interface User {
 
 export class AuthService {
 
-  //user: Observable<firebase.User>;
-  private isAuth=false;//set to true id user is authenticated
-  user: Observable<any>;
 
   authState: any = null;
-  // static isLoggedIn:boolean;
 
   constructor(private firebaseAuth: AngularFireAuth, private router: Router) {
 
-    /**TESTING */
-    this.user = firebaseAuth.authState;
-    /**TESTING */
-
-    
     this.firebaseAuth.authState.subscribe((auth =>{
+      console.log("Debug:: IN auth.service authState")
       this.authState = auth;
     }))
+
+  } 
+
+  set_user(val:any){
+    this.authState = val;
+  }
+  
+  get auth(){
+    return this.firebaseAuth;
   }
 
   //get fanctions, to get data from firebase
@@ -47,6 +47,7 @@ export class AuthService {
   }
 
   get currentUser(): any{
+    console.log("Debug:: auth.service currentUser ", this.authState)
     return (this.authState !== null) ? this.authState : null;
   } 
 
@@ -64,7 +65,7 @@ export class AuthService {
       this.firebaseAuth.createUserWithEmailAndPassword(email, password)
       .then((credential) => {
         this.authState = credential.user;
-        this.isAuth=true;//user is logged in
+        //this.isAuth=true;//user is logged in
         resolve(credential.user);
       }).catch(error=>{
         console.log(error)
@@ -79,7 +80,7 @@ export class AuthService {
       this.firebaseAuth.signInWithEmailAndPassword(email, password)
       .then((credential) => {
         this.authState = credential.user;
-        this.isAuth=true;//user is logged in
+        //this.isAuth=true;//user is logged in
         resolve(credential.user);
       }).catch(error=>{
         console.log(error)
@@ -89,27 +90,13 @@ export class AuthService {
     });
   }
 
-  /**TESTING */
   //logout functions
   logout() {
+    console.log("Debug:: auth.service logout()")
     this.firebaseAuth.signOut();
-    this.isAuth=false;////user is logged out
     this.router.navigate(['/login']);//navigate to login page
   }
 
-   //returns true of user is logged in
-   get isLoggedIn(): boolean {
-    return this.isAuth;
-  }
   /**TESTING */
 
-
-  // signout(): void
-  // {
-  //   this.firebaseAuth.signOut();
-  //   // AuthService.isLoggedIn = false;
-  //   this.router.navigate(['/login']);
-  // }
-
-  
 }

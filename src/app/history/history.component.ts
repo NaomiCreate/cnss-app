@@ -141,7 +141,7 @@ export class HistoryComponent implements OnInit {
           this.user.deviceID = data[0].payload.doc.data()['device_id'];
           this.user.dbPath += `${this.user.deviceID}/history`;
 
-          console.log("Debug::user.dbPath", this.user.dbPath)
+          //console.log("Debug::user.dbPath", this.user.dbPath)
 
           //getAlerts
           this.getNext(-1,false);
@@ -177,6 +177,7 @@ export class HistoryComponent implements OnInit {
           this.user.hasConnections = Status.Accept
         }
        
+        this.connections = [] // empty connections
         data.forEach((c,i) => {
           
             let new_connection:Connection = {
@@ -213,8 +214,8 @@ export class HistoryComponent implements OnInit {
 
                     this.connections.push(new_connection);
 
-                    console.log("Debug::connections",this.connections)
-                    console.log("Debug::user",this.user)
+                    //console.log("Debug::connections",this.connections)
+                    //console.log("Debug::user",this.user)
 
                 }).catch(error =>console.log(error))
                }
@@ -237,7 +238,7 @@ export class HistoryComponent implements OnInit {
     //this.time_stamp_to_date(doc.payload.val()["timestamp"]);//For DEBUG
 
     var date = new Date(+doc.payload.val()["timestamp"]);
-    console.log("date from getAlert = ",date);
+    //console.log("Debug:: date from getAlert = ",date);
 
     return {
       image_path:doc.payload.val()["image_path"],
@@ -259,8 +260,8 @@ export class HistoryComponent implements OnInit {
   */
   showAlerts(index: number){
 
-    console.log("Debug:: connection email", index)
-    console.log("Debug:: connections[index]", this.connections[index])
+    //console.log("Debug:: connection email", index)
+    //console.log("Debug:: connections[index]", this.connections[index])
 
 
     if(this.connections[index].shareHistory == Status.Accept){
@@ -331,14 +332,19 @@ time_stamp_to_date(timestamp: number){
         code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})`;
       }
   
-      this.user.alerts = [];
-  
+      console.log("Debug: outer layer getNext")
+      console.log("Debug:: start:",start)
       this.data_subscriptions.push(
         this.db.list(this.user.dbPath,eval(code))
           .snapshotChanges()
           .subscribe(data => {
-            console.log("Debug:: getNext ")
-            data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
+            console.log("Debug: inner layer getNext")
+            console.log("Debug:: start:",start)
+
+            //this.user.alerts = []; //empty alerts, incase - snapshotChanges
+            //data.forEach(doc => this.user.alerts.push(this.getAlert(doc)))
+            
+            this.user.alerts = data.map(doc => {return this.getAlert(doc)}) //empty alerts, incase - snapshotChanges
             console.log("Debug::Test user alerts: ",this.user.alerts)
 
             //sort alerts by date
@@ -386,13 +392,12 @@ time_stamp_to_date(timestamp: number){
         code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})`;
       }
   
-      this.connections[index].alerts = [];
-  
       this.data_subscriptions.push(
         this.db.list(this.connections[index].dbPath,eval(code))
           .snapshotChanges()
           .subscribe(data => {
   
+            this.connections[index].alerts = []; //empty alerts - snapshotChanges
             data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
             
             //sort alerts by date
@@ -445,14 +450,16 @@ time_stamp_to_date(timestamp: number){
       code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
       // Get ALERT_LIMIT + 1 to know when we reached the beginning.
   
-  
-      this.user.alerts = [];
-  
+      console.log("Debug:: outer layer getPrev")
+      console.log("Debug:: start:",start)
       this.data_subscriptions.push(
         this.db.list(this.user.dbPath,eval(code))
           .snapshotChanges()
           .subscribe(data => {
+            console.log("Debug:: inner layer getPrev")
+            console.log("Debug:: start:",start)
 
+            this.user.alerts = []; //empty alerts - snapshot changes
             data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
             
             //sort alerts by date
@@ -495,14 +502,13 @@ time_stamp_to_date(timestamp: number){
       code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
       // Get ALERT_LIMIT + 1 to know when we reached the beginning.
   
-  
-      this.connections[index].alerts = [];
-  
+
       this.data_subscriptions.push(
         this.db.list(this.connections[index].dbPath,eval(code))
           .snapshotChanges()
           .subscribe(data => {
 
+            this.connections[index].alerts = []; // empty alerts - snapshotChanges
             data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
       
             //sort alerts by date

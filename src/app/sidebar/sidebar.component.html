@@ -1,6 +1,5 @@
 <!-- page-container is parent to the sidebar -->
-
-<div class="page-container" *ngIf = "authservice.isLoggedIn; else elseNotAuthBlock"> 
+<div class="page-container" *ngIf = "(router.url != '/login') && router.url != '/register';  else elseNotAuthBlock">
     <div *ngIf="isSidebarOpen; else elseBlock">
         <div class="sidebar">   
             <div class="open-sidebar-toggle" (click)="toggleSideBar()">
@@ -52,19 +51,10 @@
 
 
 <!-- if the user is not logged-in: -->
-<ng-template class="page-container" #elseNotAuthBlock>
-    
-    <!-- To avoid empty page incase somthing other than /login or /register is entered -->
-    <div *ngIf="!(router.url.includes('/login') || router.url.includes('/register'))">
-        <app-page-not-found></app-page-not-found>
-    </div>
+<ng-template class="page-container" #elseNotAuthBlock> 
 
-    <div *ngIf="router.url.includes('/login')">
-        <app-login></app-login>
-    </div>
-
-    <div *ngIf="router.url.includes('/register')">
-        <app-register></app-register>
+    <div class="page-content-container">
+        <router-outlet></router-outlet>
     </div>
     
-</ng-template>
+</ng-template> 

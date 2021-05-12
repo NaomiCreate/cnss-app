@@ -13,17 +13,18 @@ import { SystemControlComponent } from './system-control/system-control.componen
 
 import {OwnerGuard} from './guards/owner.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { ManagerGuard } from './guards/manager.guard';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/login', pathMatch: 'full' },//empty string because we will see this page at the path: http://localhost:4200/
+  {path: '', redirectTo: 'login', pathMatch: 'full' },//empty string because we will see this page at the path: http://localhost:4200/
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'home-page', component: HomePageComponent, canActivate: [AuthGuard] },
-  {path: 'contact-list', component: ContactListComponent, canActivate: [AuthGuard, OwnerGuard]},
+  {path: 'contact-list', component: ContactListComponent, canActivate: [ManagerGuard]},
   {path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   {path: 'connected-to', component: ConnectedToComponent, canActivate: [AuthGuard] },
-  {path: 'system-control', component: SystemControlComponent, canActivate: [AuthGuard,OwnerGuard]},
+  {path: 'system-control', component: SystemControlComponent, canActivate: [ManagerGuard]},
   {path: "**", component: PageNotFoundComponent}
 
 ];

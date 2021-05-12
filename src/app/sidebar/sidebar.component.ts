@@ -26,18 +26,9 @@ export class SidebarComponent implements OnInit {
   }
   ngOnInit(): void {
 
-    // this.crudservice.get_userInfo().subscribe(data => {
-    //   this.is_device_owner = data.map(c => {
-    //     console.log("c.payload.doc.data()['is_device_owner'];", c.payload.doc.data()['is_device_owner'], typeof(c.payload.doc.data()['is_device_owner']))
-    //     return  c.payload.doc.data()['is_device_owner']; 
-    //   })
-    // })
   }
 
   ngOnDestroy(){
-
-    // if(this.dbData != undefined)
-    //   this.dbData.unsubscribe();
 
   }
 

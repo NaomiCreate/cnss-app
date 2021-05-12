@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { AngularFireAuth} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,21 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    // alert("in auth guard")
-    // alert(this.authService.isLoggedIn)
 
-    if(!this.authService.isLoggedIn){ //if user is not logged in
-      this.router.navigate(['/login']); 
-    }
-    return true;
+    return new Promise((resolve)=>{
+      this.authService.auth.onAuthStateChanged((user) => {
+        if (user) {
+          this.authService.set_user(user);
+          console.log("Debug:: auth.gaurd - user IS logged in")
+          resolve(true);
+        } else {
+          console.log("Debug:: auth.gaurd - user IS NOT logged in")
+          resolve(false);
+        }
+      })
+    });
+
+   
   }
   
 }
