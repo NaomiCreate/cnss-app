@@ -31,7 +31,7 @@ export class ConnectedToComponent implements OnInit {
           console.log("Object.keys(c.payload.doc.data())"+Object.keys(c.payload.doc.data()));
           console.log("Object.keys(c.payload.doc.data()[0])"+Object.keys(c.payload.doc.data())[0]);
           console.log("Object.keys(c.payload.doc.data())[0]"+Object.keys(c.payload.doc.data())[0]);
-          console.log("Object.keys(c.payload.doc.data())[0][0]"+Object.keys(c.payload.doc.data())[0][0]);
+          //console.log("Object.keys(c.payload.doc.data())[0][0]"+Object.keys(c.payload.doc.data())[0][0]);
           console.log("Object.keys(c.payload.doc.data())[1]"+Object.keys(c.payload.doc.data())[1]);
           //Test-----------
           //this.crudservice.get_contact_details(c.payload.doc.id, Object.keys(c.payload.doc.data())[0])

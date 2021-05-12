@@ -85,7 +85,7 @@ export class RegisterComponent implements OnInit {
             else {
               this.crudservice.get_uidFromDeviceID(this.userInfoRecord.device_id).then((doc) => {
                 if (doc.exists) {
-                  this.errorMessage = "The device id is already in use";
+                  this.errorMessage = "The device id is not available";
                 }
                 else {
                   this.authservice.registerWithEmail(this.userInfoRecord.email, this.password)

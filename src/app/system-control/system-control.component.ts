@@ -4,9 +4,11 @@ import { AuthService } from '../services/auth.service';
 import { CrudService } from '../services/crud.service';
 
 
-export interface State {
-  On:boolean,
-  Off:boolean
+
+
+enum Status {
+  StandBy,
+  Loaded
 }
 
 @Component({
@@ -15,29 +17,34 @@ export interface State {
   styleUrls: ['./system-control.component.css']
 })
 export class SystemControlComponent implements OnInit {
-  isNewProfile;
+  // public loadingStatus = Status;
+
+
 
   public state: boolean;//The current state of the switch
-
+  visualSwitchState: boolean;
   public deviceId: string;
-  public dbPath=`/devices/`;
+  public dbPath:string;//=`/devices/`;
 
   constructor(public authservice: AuthService, public crudservice:CrudService, private db: AngularFireDatabase) { }
+  
 
   ngOnInit(): void {
     //Get user device id;
-    if(this.authservice.currentUser != null)//make sure the user is logged in
-    {
+    // if(this.authservice.currentUser != null)//make sure the user is logged in
+    // {
       this.crudservice.get_userInfo().subscribe(data => {
           this.deviceId = data[0].payload.doc.data()['device_id'];
           console.log("Debug::user.deviceId", this.deviceId)
           //the path to the State attribute in the real-time database:
-          // this.dbPath += `${this.deviceId}/control`;
-          this.dbPath += `${this.deviceId}`;
+          this.dbPath = `/devices/${this.deviceId}`;
           console.log("Debug::this.dbPath", this.dbPath)
-          this.state = this.checkState()
+         // this.state = this.checkState()
+          this.visualSwitchState=this.checkState();
+          // this.visualSwitchState=this.state;
+          //this.state1=Status.Lodded;
       })
-    }
+    //}
 
   }
 
@@ -81,5 +88,7 @@ export class SystemControlComponent implements OnInit {
     {
       this.db.list(this.dbPath).update('control', {state: 'on' });
     }
+    this.visualSwitchState =  this.state;
+
   }
 }

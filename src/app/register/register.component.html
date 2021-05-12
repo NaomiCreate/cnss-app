@@ -72,20 +72,25 @@
 					</div>
 					<input type="phone" name="phone" class="form-control" [(ngModel)]="userInfoRecord.phone" placeholder="Enter phone number (digits only)" required>
 				</div>
+				<!-- <div class="input-group form-group" *ngIf="userInfoRecord.is_device_owner">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="far fa-id-card"></i></span>
+					</div>
+					<input type="device_id" name="device_id" class="form-control" [(ngModel)]="userInfoRecord.device_id" placeholder="Enter device id" required>
+				</div> -->
+
+				<div class="ownrship">
+					<input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true" />  
+					<label> I own a CNSS security system</label><br>  
+					<input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="false" />
+					<label> I don't own a CNSS security system</label><br>  
+				</div>
 				<div class="input-group form-group" *ngIf="userInfoRecord.is_device_owner">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="far fa-id-card"></i></span>
 					</div>
 					<input type="device_id" name="device_id" class="form-control" [(ngModel)]="userInfoRecord.device_id" placeholder="Enter device id" required>
 				</div>
-
-				<div class="ownrship">
-					<input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true" />  
-					<label> I own a security system</label><br>  
-					<input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="false" />
-					<label> I don't own a security system</label><br>  
-				</div>
-
 				<div class="register">
 					<a href="#" routerLink="/login">Back to Login</a>
 				</div>

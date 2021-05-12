@@ -1,4 +1,4 @@
-<h3 *ngFor="let item of record">Welcome {{item.firstName}},</h3>
+<h3 *ngFor="let item of record">Welcome {{item.firstName}}, <br> You are logged in. </h3>
 
 <!-- <h4>Your Details:</h4> -->
 
@@ -31,11 +31,11 @@
                 <td>{{item.phone}}</td>
             </tr>
             <tr *ngIf="item.is_device_owner; else elseNotOwningCNSSBlock">
-                <th>System Owner?</th>  
+                <th>Are you a CNSS Owner?</th>  
                 <td>Yes</td>
             </tr>
             <ng-template #elseNotOwningCNSSBlock>
-                <th>System Owner?</th>     
+                <th>CNSS Owner?</th>     
                 <td>No</td>
             </ng-template>
             <tr class="noBorder">
@@ -65,21 +65,29 @@
                 <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
             </tr>
 
+            <!-- <tr *ngIf="item.editIsDeviceOwner">
+                <th>Device ID:</th>   
+                <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
+            </tr> -->
+
+            <!-- <tr *ngIf="!item.editIsDeviceOwner"> -->
+            <tr>
+                <th>Are you a CNSS Owner?</th>
+                <td class="ownership" name="ownership">
+                    <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="true" />  
+                    <label>Yes</label><br>  
+                    <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="false" />
+                    <label>No</label><br>  
+                </td>
+            </tr>
             <tr *ngIf="item.editIsDeviceOwner">
                 <th>Device ID:</th>   
                 <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
             </tr>
-
-            <!-- <tr *ngIf="!item.editIsDeviceOwner"> -->
-            <tr>
-                <div class="ownership" name="ownership">
-                    <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="true" />  
-                    <label>I own a security system</label><br>  
-                    <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="false" />
-                    <label>I dont own a security system</label><br>  
-                </div>
-        
-            </tr>
+            <!-- <tr *ngIf="item.editIsDeviceOwner">
+                <th>Device ID:</th>   
+                <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
+            </tr> -->
                 <tr><button (click)="updateRecord(item)">Update</button></tr>
                 <tr><button id="cancel" (click)="inEdit = false">Cancel</button></tr>            
             </ng-template>

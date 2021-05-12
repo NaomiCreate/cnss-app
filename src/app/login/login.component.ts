@@ -51,17 +51,17 @@ export class LoginComponent implements OnInit {
   {
     if(this.user.email.length === 0)
     {
-      this.errorMessage = "please enter email";
+      this.errorMessage = "Please enter your email address in format:"+"<div>"+"yourname@example.com";
       return false
     }
     if(this.user.password.length === 0)
     {
-      this.errorMessage = "please enter password";
+      this.errorMessage = "Please enter a password";
       return false
     }
-    if(this.user.password.length < 5)
+    if(this.user.password.length < 6)
     {
-      this.errorMessage = "password should be at least 5 characters";
+      this.errorMessage = "The password should be at least 6 characters";
       return false
     }
 
