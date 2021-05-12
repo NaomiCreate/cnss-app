@@ -4,8 +4,6 @@ import { AuthService } from '../services/auth.service';
 import { CrudService } from '../services/crud.service';
 
 
-
-
 enum Status {
   StandBy,
   Loaded
