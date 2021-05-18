@@ -32,10 +32,12 @@
 
                                    <div class="card-btn-controls">
                                           <div *ngIf="user.prevStartPoint != null">
-                                                 <button class="btn-controls" (click)="getPrev(-1,false)">Prev</button>
+                                                 <!-- <button class="btn-controls" (click)="getPrev(-1,false)">Prev</button> -->
+                                                 <button class="btn-controls" (click)="getNext(user, true)">Prev</button>
                                           </div>
                                           <div *ngIf="user.nextStartPoint != null">
-                                                 <button class="btn-controls" (click)="getNext(-1,false)">Next</button>
+                                                 <!-- <button class="btn-controls" (click)="getNext(-1,false)">Next</button> -->
+                                                 <button class="btn-controls" (click)="getNext(user, false)">Next</button>
                                           </div>
                                    </div>
                                    
@@ -107,10 +109,12 @@
 
                                                                        <div class="card-btn-controls">
                                                                              <div *ngIf="connection.prevStartPoint != null">
-                                                                                    <button class="btn-controls" (click)="getPrev(connection.index,true)">Prev</button>
+                                                                                    <!-- <button class="btn-controls" (click)="getPrev(connection.index,true)">Prev</button> -->
+                                                                                    <button class="btn-controls" (click)="getNext(connection,true)">Prev</button>
                                                                              </div>
                                                                              <div *ngIf="connection.nextStartPoint != null">
-                                                                                    <button class="btn-controls" (click)="getNext(connection.index,true)">Next</button>
+                                                                                    <!-- <button class="btn-controls" (click)="getNext(connection.index,true)">Next</button> -->
+                                                                                    <button class="btn-controls" (click)="getNext(connection,false)">Next</button>
                                                                              </div>
                                                                       </div>
                                                                       

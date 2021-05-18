@@ -146,7 +146,8 @@ export class HistoryComponent implements OnInit {
           //console.log("Debug::user.dbPath", this.user.dbPath)
 
           //getAlerts
-          this.getNext(-1,false);
+          //this.getNext(-1,false);
+          this.getNext(this.user, false);
         
         }
         else{
@@ -270,7 +271,8 @@ export class HistoryComponent implements OnInit {
 
       this.connections[index].hideHistory = false; //show history for HTML
       if(this.connections[index].alerts.length == 0){
-        this.getNext(index, true);
+        //this.getNext(index, true);
+        this.getNext(this.connections[index], false);
       }
       
     }
@@ -314,237 +316,128 @@ time_stamp_to_date(timestamp: number){
 //--------------------------------------------------------------------------27/04/2021
 
 
-  getNext(index:number, isConnection:boolean)
-  {
+  /**This function sets the next batch of alerts, 
+   * it relies on the fact that person is an object and is there for passed by reference.
+   * Inorder to get previous batch of alerts ser prev as true, otherwise set it as false*/
+  getNext(person:Connection | User, prev:boolean){
+
+    person.hasAlerts = Status.StandBy;
+
+    let isStart:boolean = true;
+    if( person.alerts.length != 0){ // This is not the first batch
+      isStart = false;
+    }
+
+    this.data_subscriptions.push(
+      this.db.list(person.dbPath,eval(this.get_code(person,prev)))
+        .snapshotChanges()
+        .subscribe(data => {
+
+          console.log("Debug:: isStart:",isStart)
+          if(isStart && person.alerts.length != 0){
+            console.log("Debug:: NEW ALERT - THIS WILL BE OUR FLAG TO MAKE FIRST ALERT IN SPECIAL COLOR")
+          }
+         
+          person.alerts = data.map(doc => {return this.getAlert(doc)}) //empty alerts, incase - snapshotChanges
+          console.log("Debug::Test user alerts: ",person.alerts)
+
+          //sort alerts by date
+          person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+
+          if(!prev){ // case :: next
+
+            if(person.alerts.length == ALERT_LIMIT){
+              //pop the last item - its time stamp will be usefull when clicking next again next 
+              person.nextStartPoint = person.alerts.pop().timestamp;
+            }
+            else{
+              person.nextStartPoint = null;
+            }
+
+            // snapChanges remembers enitial local variables 
+            //- there for isStart == true when new alert arrives 
+            if(!isStart){
+              person.prevStartPoint = person.alerts[0].timestamp; //as this is not the opening group 
+            }
+            else{
+              person.prevStartPoint = null; // reset the previous point
+            }
+
+          }
+
+          else{ // case :: prev
+            
+            if(person.alerts.length == (ALERT_LIMIT + 1)){
+              // Then we are still able to go beackwoards
+              person.alerts.shift().timestamp; // need to shift first
+              person.prevStartPoint = person.alerts[0].timestamp; // and then set prevStarting point
+            
+            }
+            else{//this.user.alerts.length <= ALERT_LIMIT
+              person.prevStartPoint = null;
+            }
+
+            person.alerts.pop() // pop last item as it was already displayed
+
+          }
+          
+
+          //set hasAlerts
+          if(person.alerts.length != 0){
+            person.hasAlerts = Status.Accept
+          }
+          else{
+            person.hasAlerts = Status.Deny
+          }
+        }
+      )
+
+    );
+
+  }
+
+
+  /**This function returns string of code gor use in  getNext realtime query.
+   * This function is not called when snapChanges accurs
+  */
+  get_code(person:Connection | User, prev:boolean){
+
     let start: number;
     let code: string;
 
-    if(!isConnection)//isUser
-    {
-      this.user.hasAlerts = Status.StandBy;
 
-      if(this.user.alerts.length != 0){
-        console.log("Debug:: in this.user.alerts.length != 0 ")
-        start = this.user.nextStartPoint;
-        code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
+    if(!prev){ // get next batch of alerts
+
+      console.log("Debug:: get Next")
+
+      if(person.alerts.length != 0){
+        start = person.nextStartPoint;
+        code = `ref=>ref.orderByChild('timestamp').endAt(${start}).limitToLast(${ALERT_LIMIT})` ;
       }
       else{ //The opening group of alerts
         start = null;
-        this.user.prevStartPoint = null; // as this is the openning group set prev to null
-        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})`;
+        person.prevStartPoint = null; // as this is the openning group set prev to null
+        code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToLast(${ALERT_LIMIT})`;
       }
-  
-      console.log("Debug: outer layer getNext")
-      console.log("Debug:: start:",start)
-      this.data_subscriptions.push(
-        this.db.list(this.user.dbPath,eval(code))
-          .snapshotChanges()
-          .subscribe(data => {
-            console.log("Debug: inner layer getNext")
-            console.log("Debug:: start:",start)
 
-            //this.user.alerts = []; //empty alerts, incase - snapshotChanges
-            //data.forEach(doc => this.user.alerts.push(this.getAlert(doc)))
-            
-            this.user.alerts = data.map(doc => {return this.getAlert(doc)}) //empty alerts, incase - snapshotChanges
-            console.log("Debug::Test user alerts: ",this.user.alerts)
-
-            //sort alerts by date
-            this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-
-            if(this.user.alerts.length == ALERT_LIMIT)
-            {
-              //pop the last item - its time stamp will be usefull when clicking next again next 
-              this.user.nextStartPoint = this.user.alerts.pop().timestamp;
-            }
-            else
-            {
-              this.user.nextStartPoint = null;
-            }
-
-            if(start != null){
-              this.user.prevStartPoint = this.user.alerts[0].timestamp; //as this is not the opening group 
-            }
-            
-
-            //set hasAlerts
-            if(this.user.alerts.length != 0){
-              this.user.hasAlerts = Status.Accept
-            }
-            else{
-              this.user.hasAlerts = Status.Deny
-            }
-          }
-        )
-  
-      );
     }
+    else{ // get previous batch of alerts
+
+      console.log("Debug:: get Prev")
+
+      start = person.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
+                                        //unless only the first group was called and then it's null
+      person.nextStartPoint = person.alerts[0].timestamp; //set nextStatingPoint before goint back
+      code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToFirst(${ALERT_LIMIT + 1})` ;
+      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
+  
+    }
+
+    console.log("Debug:: start ",start)
+    return code;
     
-    else{ //isConnection nake sure only connection that allows sharing allerts gets here
-
-      this.connections[index].hasAlerts = Status.StandBy;
-
-      if(this.connections[index].alerts.length != 0){
-        start = this.connections[index].nextStartPoint;
-        code = `ref=>ref.orderByChild('timestamp').endAt(start).limitToLast(${ALERT_LIMIT})` ;
-      }
-      else{ //The opening group of alerts
-        start = null;
-        this.connections[index].prevStartPoint = null; // as this is the openning group set prev to null
-        code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToLast(${ALERT_LIMIT})`;
-      }
-  
-      this.data_subscriptions.push(
-        this.db.list(this.connections[index].dbPath,eval(code))
-          .snapshotChanges()
-          .subscribe(data => {
-  
-            this.connections[index].alerts = []; //empty alerts - snapshotChanges
-            data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
-            
-            //sort alerts by date
-            this.connections[index].alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-
-            if(this.connections[index].alerts.length == ALERT_LIMIT)
-            {
-              //pop the last item - its time stamp will be usefull when clicking next again next 
-              this.connections[index].nextStartPoint = this.connections[index].alerts.pop().timestamp;
-            }
-            else
-            {
-              this.connections[index].nextStartPoint = null;
-            }
-
-            if(start != null){
-              this.connections[index].prevStartPoint = this.connections[index].alerts[0].timestamp; //as this is not the opening group 
-            }
-            
-
-            //set hasAlerts
-            if(this.connections[index].alerts.length != 0){
-              this.connections[index].hasAlerts = Status.Accept
-            }
-            else{
-              this.connections[index].hasAlerts = Status.Deny
-            }
-          }
-        )
-  
-      );
-
-
-    }
   }
 
-  getPrev(index:number, isConnection:boolean)
-  {
-    let start: number;
-    let code: string;
-
-    if(!isConnection)//isUser
-    {
-      this.user.hasAlerts = Status.StandBy;
-
-
-      start = this.user.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
-                                        //unless only the first group was called and then it's null
-      this.user.nextStartPoint = this.user.alerts[0].timestamp; //set nextStatingPoint before goint back
-      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
-      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
-  
-      console.log("Debug:: outer layer getPrev")
-      console.log("Debug:: start:",start)
-      this.data_subscriptions.push(
-        this.db.list(this.user.dbPath,eval(code))
-          .snapshotChanges()
-          .subscribe(data => {
-            console.log("Debug:: inner layer getPrev")
-            console.log("Debug:: start:",start)
-
-            this.user.alerts = []; //empty alerts - snapshot changes
-            data.forEach(doc => this.user.alerts.push(this.getAlert(doc))) 
-            
-            //sort alerts by date
-            this.user.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-
-            if(this.user.alerts.length == (ALERT_LIMIT + 1))
-            {
-              // Then we are still able to go beackwoards
-              this.user.alerts.shift().timestamp; // need to shift first
-              this.user.prevStartPoint = this.user.alerts[0].timestamp; // and then set prevStarting point
-            
-            }
-            else//this.user.alerts.length <= ALERT_LIMIT
-            {
-              this.user.prevStartPoint = null;
-            }
-
-            this.user.alerts.pop() // pop last item as it was already displayed
-
-            //set hasAlerts
-            if(this.user.alerts.length != 0){
-              this.user.hasAlerts = Status.Accept
-            }
-            else{
-              this.user.hasAlerts = Status.Deny
-            }
-          }
-        )
-  
-      );
-    }
-    else{
-
-      this.connections[index].hasAlerts = Status.StandBy;
-
-
-      start = this.connections[index].prevStartPoint; // sould always be equal to this.connections[index].alerts[0].timestamp, 
-                                        //unless only the first group was called and then it's null
-      this.connections[index].nextStartPoint = this.connections[index].alerts[0].timestamp; //set nextStatingPoint before goint back
-      code = `ref=>ref.orderByChild('timestamp').startAt(start).limitToFirst(${ALERT_LIMIT + 1})` ;
-      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
-  
-
-      this.data_subscriptions.push(
-        this.db.list(this.connections[index].dbPath,eval(code))
-          .snapshotChanges()
-          .subscribe(data => {
-
-            this.connections[index].alerts = []; // empty alerts - snapshotChanges
-            data.forEach(doc => this.connections[index].alerts.push(this.getAlert(doc))) 
-      
-            //sort alerts by date
-            this.connections[index].alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-
-            if(this.connections[index].alerts.length == (ALERT_LIMIT + 1))
-            {
-              // Then we are still able to go beackwoards
-              this.connections[index].alerts.shift().timestamp; // need to shift first
-              this.connections[index].prevStartPoint = this.connections[index].alerts[0].timestamp; // and then set prevStarting point
-            
-            }
-            else//this.connections[index].alerts.length <= ALERT_LIMIT
-            {
-              this.connections[index].prevStartPoint = null;
-            }
-
-            this.connections[index].alerts.pop() // pop last item as it was already displayed
-
-            //set hasAlerts
-            if(this.connections[index].alerts.length != 0){
-              this.connections[index].hasAlerts = Status.Accept
-            }
-            else{
-              this.connections[index].hasAlerts = Status.Deny
-            }
-          }
-        )
-  
-      );
-
-    }
-   
-  }
 //----------------------------***Search***----------------------------
 
   dateToTimestamp(time:SearchPoints)
