@@ -1,38 +1,80 @@
-<!-- <div class="container-content"> -->
-<div class="container-content">
-    <div *ngIf="connections.length > 0; else noConnections">
-        <h3>Security systems you are connected to:</h3>
-        <!-- the next section will hold the data from firebase -->
-        
-        <table id="table1">
-            <thead>
-                <tr>           
-                    <th>First name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th></th>
-                </tr>
-            </thead> 
-            <tbody *ngFor="let item of connections">
-                <!-- <div *ngFor="let item of contact"> -->
-                    <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
-                        <tr>         
-                            <td > {{item.firstName}}</td>
-                            <td > {{item.lastName}}</td>
-                            <td > {{item.email}}</td>
-                            <td > {{item.phone}}</td>
-                            <td>
-                                <span>
-                                    <a routerLink="/connected-to"  (click)="DeleteConnection(item.email)" class="btn btn-danger">Delete Connection</a>
-                                </span>
-                            </td>
+<div [ngSwitch]="state">
+    <div *ngSwitchCase="Status.StandBy">Loading, please wait... </div>
+    <div *ngSwitchDefault>
+        <div class="container-content">
+            
+            <!-- connections -->
+            <div *ngIf="connections.length > 0; else noConnections">
+                <h3>Security systems you are connected to:</h3>
+                <!-- the next section will hold the data from firebase -->
+                
+                <table id="table1">
+                    <thead>
+                        <tr>           
+                            <th>First name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th></th>
                         </tr>
-            </tbody>
-        </table>
-    </div>
+                    </thead> 
+                    <tbody *ngFor="let item of connections">
+                        <!-- <div *ngFor="let item of contact"> -->
+                            <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
+                                <tr>         
+                                    <td > {{item.firstName}}</td>
+                                    <td > {{item.lastName}}</td>
+                                    <td > {{item.email}}</td>
+                                    <td > {{item.phone}}</td>
+                                    <td>
+                                        <span>
+                                            <a routerLink="/connected-to"  (click)="DeleteConnection(item.email)" class="btn btn-danger">Delete Connection</a>
+                                        </span>
+                                    </td>
+                                </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ng-template class="container-content" #noConnections>
+                <h3>Currently you are not connected to any security systems.</h3>
+            </ng-template>
 
-    <ng-template class="container-content" #noConnections>
-        <h3>Currently you are not connected to any security systems.</h3>
-    </ng-template>
+            <!-- Requests -->
+            <div *ngIf="requests.length > 0; else noRequests">
+                <h3>Security systems you are connected to:</h3>
+                    <table id="table2">
+                        <thead>
+                            <tr>           
+                                <th>First name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th></th>
+                            </tr>
+                        </thead> 
+                        <tbody *ngFor="let item of requests">
+                            <tr>         
+                                <td > {{item.firstName}}</td>
+                                <td > {{item.lastName}}</td>
+                                <td > {{item.email}}</td>
+                                <td > {{item.phone}}</td>
+                                <td>
+                                    <!-- <span>
+                                        <a routerLink="/connected-to"  (click)="DeleteConnection(item.email)" class="btn btn-danger">confirm request</a>
+                                    </span> -->
+                                    <span>
+                                        <a routerLink="/connected-to"  (click)="rejectRequest(item.email)" class="btn btn-danger">Reject request</a>
+
+                                        <a routerLink="/connected-to"  (click)="confirmRequest(item.email)" class="btn btn-danger">Confirm request</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template class="container-content" #noRequests>
+                    <h3>Currently you don't have requests.</h3>
+                </ng-template>
+        </div>
+    </div>
 </div>

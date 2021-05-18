@@ -1,9 +1,12 @@
 /* for toggel switch: */
 .toggel-switch{
-    position: absolute;
-    left: 53%;
-    top: 15%;
-    align-items: center;
+  display: flex;
+  align-items: center;
+
+    /* position: absolute; */
+    /* left: 53%;
+    top: 15%; */
+    /* align-items: center; */
 }
 label{
     color: rgba(255, 255, 255, 0.616);

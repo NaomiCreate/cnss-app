@@ -6,6 +6,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ValueTransformer } from '@angular/compiler/src/util';
 import { CrudService } from '../services/crud.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../services/auth.service';
+
 //import { timeStamp } from 'console';
 
 
@@ -122,7 +124,7 @@ export class HistoryComponent implements OnInit {
   public myHistoySelected: boolean = true;
   public state = Status;
 
-  constructor(private crudservice: CrudService, private realtimeservice: RealTimeService, 
+  constructor(private authservice: AuthService, private crudservice: CrudService, private realtimeservice: RealTimeService, 
     private db: AngularFireDatabase, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void{
@@ -167,7 +169,7 @@ export class HistoryComponent implements OnInit {
     //console.log("in getConnection")
     
     this.data_subscriptions.push(
-      this.crudservice.get_AllConnections().subscribe(data => {
+      this.crudservice.get_AllConnections(this.authservice.currentUserId).snapshotChanges().subscribe(data => {
 
         //set users HasConnection for HTML output
         if(data.length === 0){

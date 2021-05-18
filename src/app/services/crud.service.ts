@@ -86,16 +86,28 @@ export class CrudService {
     this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
   }
 
+  update_request_to_confirmed(uid,email)
+  {
+    console.log("update_contact_confirmed",'users/'+uid + '/' + 'contacts/' + email);
+    this.fireservices.doc('users/'+uid + '/' + 'contacts/' + email).update({"confirmed": true});//'contacts' is the collection name
+  }
+  update_connectedTo(uid:string,emailToAdd:string,uidToAdd:string)
+  {
+     /*Update Record[uid] conected-to*/  
+    let record = {}
+    record["id"] = uidToAdd;
+  
+    return this.fireservices.collection('users').doc(uid).collection('connected-to').doc(emailToAdd).set(record);
+  }
 
-  update_connectedTo(uid:string)
+  update_requests(uid:string)
   {
      /*Update Record[uid] conected-to*/  
     let record = {}
     record["id"] = this.authservice.currentUserId;
   
-    return this.fireservices.collection('users').doc(uid).collection('connected-to').doc(this.authservice.currentUserName).set(record);
+    return this.fireservices.collection('users').doc(uid).collection('requests').doc(this.authservice.currentUserName).set(record);
   }
-
 
   //create_NewContact adds to the 'contacts' collection in firebase, the contact that the user entered as input
   create_NewContact(Record)
@@ -117,10 +129,14 @@ export class CrudService {
     return this.fireservices.collection('users').doc(uid).collection('user-info').doc(email).get().toPromise();
   }
 
-
-  get_AllConnections()
+  get_AllConnections(uid:string)
   {
-    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('connected-to').snapshotChanges();
+    //uid=this.authservice.currentUserId
+    return this.fireservices.collection('users').doc(uid).collection('connected-to');//.snapshotChanges();
+  }
+  get_AllRequests(uid:string)
+  {
+    return this.fireservices.collection('users').doc(uid).collection('requests');//.snapshotChanges();
   }
 
   
@@ -131,20 +147,32 @@ export class CrudService {
   }
 
   //delete_contact will delete the contact in firebase. (the function gets the record id)
-  delete_contact(contact_uid:string, contact_email:string)
+  // delete_contact(contact_uid:string, contact_email:string)
+  // {
+  //   this.fireservices.doc('users/' + contact_uid + '/' + 'connected-to/' + this.authservice.currentUserName).delete();
+  //   this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + contact_email).delete();    
+  // }
+  delete_contact(uid:string, contact_email:string)
   {
-    this.fireservices.doc('users/' + contact_uid + '/' + 'connected-to/' + this.authservice.currentUserName).delete();
-    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + contact_email).delete();
+    console.log("delete_contact: ",'users/' + uid + '/' + 'contacts/' + contact_email);
+    this.fireservices.doc('users/' + uid + '/' + 'contacts/' + contact_email).delete();
           
   }
-
-  delete_connection(connection_uid:string, connection_email:string)
+  delete_connection(uid:string, connection_email:string)
   {
-
-    this.fireservices.doc('users/' + connection_uid + '/' + 'contacts/' + this.authservice.currentUserName).delete();
-    this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + connection_email).delete();
-    
+    this.fireservices.doc('users/' + uid + '/' + 'connected-to/' + connection_email).delete();    
   }
+  delete_request(uid:string, request_email:string)
+  {
+    console.log("delete_request: ",'users/' + uid + '/' + 'requests/' +request_email);
+    this.fireservices.doc('users/' + uid + '/' + 'requests/' +request_email).delete();
+  }
+
+  // delete_connection(connection_uid:string, connection_email:string)
+  // {
+  //   this.fireservices.doc('users/' + connection_uid + '/' + 'contacts/' + this.authservice.currentUserName).delete();
+  //   this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + connection_email).delete();
+  // }
 
 
   getHistoryPermission(connection_uid:string){

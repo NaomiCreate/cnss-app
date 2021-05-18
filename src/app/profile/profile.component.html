@@ -34,10 +34,16 @@
                 <th>Are you a CNSS Owner?</th>  
                 <td>Yes</td>
             </tr>
+            <tr *ngIf="item.is_device_owner">
+                <label>In order to edit your device id, click on "Edit"</label> 
+            </tr>
             <ng-template #elseNotOwningCNSSBlock>
                 <th>CNSS Owner?</th>     
                 <td>No</td>
             </ng-template>
+            <!-- <tr *ngIf="item.editIsDeviceOwner">
+                <label>In order to edit your device id, click on "Edit"</label>            
+            </tr> -->
             <tr class="noBorder">
                 <p></p>
                 <p></p>
@@ -84,6 +90,7 @@
     </tbody> 
 </table>
 
+<app-system-control></app-system-control>
 
 
 
