@@ -1,197 +1,117 @@
+<!-- https://getbootstrap.com/docs/4.0/components/card/ -->
+    <form class="card text-center">
 
-    <div class="add-contact-section">
+        <h5 class="card-title">
+            Add new contact
+        </h5>
 
-        <h3>Add Contact:</h3>
+        <div>
+            <!-- user error -->
+            <p *ngIf="errorMessageNewContact.length > 0" class="text-danger" name="error_message">
+                {{errorMessageNewContact}}
+            </p>
+            <!-- firebase error handle -->
+            <p *ngIf="error.message.length > 0" class="text-danger" name="error_message">{{error.message}}</p>
+            <!-- the data registered in firebase -->
+            <p *ngIf="messageNewContact.length > 0" class="text-info" name="message">{{messageNewContact}}</p>
+        </div>
+        <div class="card-body">
+            <input type="text" class="from-control" name="input" [(ngModel)]="new_contact.firstName" placeholder="First name" required>
+            <br/>
+            <input type="text" class="from-control" name="input" [(ngModel)]="new_contact.lastName" placeholder="Last name" required>
+            <br/>
+            <input type="email" class="from-control" name="input" [(ngModel)]="new_contact.email" placeholder="Email" required>
+            <br/>
+            
+            
+            <p>Share your history with this contact?</p>
+            <input type="radio" id="share" name="shareOrNot" [(ngModel)]="new_contact.shareHistory" [value]="true" />  
+            <label>Yes</label>
+            <input type="radio" id="notShare" name="shareOrNot" [(ngModel)]="new_contact.shareHistory" [value]="false" />
+            <label>No </label>
+            <br/>
+             
+            
+            <button class="btn btn-primary" type="submit" (click)="addContact(new_contact.email)">Send request</button>
+        </div>
+    </form>
 
+
+    <div class="container-content">
         <div class="error-msg">
             <!-- user error -->
-            <p *ngIf="errorMessageNewContact.length > 0" class="text-danger">{{errorMessageNewContact}}</p>
+            <p *ngIf="errorMessageEditContact.length > 0" class="text-danger">{{errorMessageEditContact}}</p>
             <!-- firebase error handle -->
             <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
             <!-- the data registered in firebase -->
-            <p *ngIf="messageNewContact.length > 0" class="text-info">{{messageNewContact}}</p>
+            <p *ngIf="messageEditContact.length > 0" class="text-info">{{messageEditContact}}</p>
         </div>
 
-        <div class="from-group">
-            <input type="text" class="from-control" [(ngModel)]="new_contact.firstName" placeholder="First name">
-        </div>
+        <div [ngSwitch]="contacts_state">
+            <div *ngSwitchCase="state.Accept">
 
-        <div class="from-group">
-            <input type="text" class="from-control" [(ngModel)]="new_contact.lastName" placeholder="Last name">
-        </div>
-
-        <div class="from-group">
-            <input type="email" class="from-control" [(ngModel)]="new_contact.email" placeholder="Email">
-        </div>
-        
-        <div class="shareHistory1" name="shareHistory1">
-            <label>Do you want this contact to see your alert history?</label><br> 
-            <input type="radio" id="share" name="shareOrNot" [(ngModel)]="new_contact.shareHistory" [value]="true" />  
-            <label>Yes</label><br>  
-            <input type="radio" id="notShare" name="shareOrNot" [(ngModel)]="new_contact.shareHistory" [value]="false" />
-            <label>No</label><br>  
-        </div>
-
-        <div class="from-group" >
-            <button class="btn btn-primary" (click)="addContact(new_contact.email)">Create Contact</button>
-        </div>
-    </div>
-
-<!-- -------------- -->
-
-        <div class="container-content">
-            <div class="error-msg">
-                <!-- user error -->
-                <p *ngIf="errorMessageEditContact.length > 0" class="text-danger">{{errorMessageEditContact}}</p>
-                <!-- firebase error handle -->
-                <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
-                <!-- the data registered in firebase -->
-                <p *ngIf="messageEditContact.length > 0" class="text-info">{{messageEditContact}}</p>
-            </div>
-
-            <div [ngSwitch]="contacts_state">
-                <div *ngSwitchCase="state.Accept">
-
-                    <div *ngFor="let contact of contacts">
-                        <div *ngIf="!contact.inEdit; else elseBlock">
-                            <div class="card">
-                                <label for="first_name">First name</label>
-                                {{contact.firstName}}
-                                <label for="last_name">Last name</label>
-                                {{contact.lastName}}
-                                <label for="email">Email</label>
-                                {{contact.email}}
-                                <label for="phone">Phone</label>
-                                {{contact.phone}}
-                                <label for="share_history">Share history</label>
-                                {{contact.shareHistory}}
-                                <label for="confirmed">Confirmed</label>
-                                {{contact.confirmed}}
-                                <span>
-                                    <a routerLink="/contact-list" (click)="editRecord(contact)" class="btn btn-primary">Edit Card</a>
-                                    <div *ngIf="contact.confirmed; else notConfirmed">
-                                        <a routerLink="/contact-list"  (click)="DeleteContact(contact.email)" class="btn btn-danger">Delete Contact</a>
-                                    </div>
-                                    <ng-template #notConfirmed>
-                                        <a routerLink="/contact-list"  (click)="DeleteRequest(contact.email)" class="btn btn-danger">Delete Request</a>
-                                    </ng-template>
-                                </span>
-                            </div>
-                        </div>
-                        <ng-template #elseBlock>
-                            <div class="card">
-                                <label for="first_name">First name</label>
-                                <input type="text" id="first_name" [(ngModel)]="contact.editFirstName" class="edit-from-control" placeholder="First name">
-                                <label for="last_name">Last name</label>
-                                <input type="text" id="last_name" [(ngModel)]="contact.editLastName" class="edit-from-control"  placeholder="Last name">
-                                <label for="email">Email</label>
-                                {{contact.email}}
-                                <label for="phone">Phone</label>
-                                {{contact.phone}}
-                                <label for="share_history">Share history</label>
-                                <div>
-                                    <input type="radio" id="editShare" name="{{'editShare' + contact.email}}" [(ngModel)]="contact.editShareHistory" [value]="true" />  
-                                    <label>Yes</label><br>  
-                                    <input type="radio" id="editShare" name="{{'editShare' + contact.email}}" [(ngModel)]="contact.editShareHistory" [value]="false" />
-                                    <label>No</label><br>  
+                <div *ngFor="let contact of contacts">
+                    <div *ngIf="!contact.inEdit; else elseBlock">
+                        <div class="card">
+                            <label for="first_name">First name</label>
+                            {{contact.firstName}}
+                            <label for="last_name">Last name</label>
+                            {{contact.lastName}}
+                            <label for="email">Email</label>
+                            {{contact.email}}
+                            <label for="phone">Phone</label>
+                            {{contact.phone}}
+                            <label for="share_history">Share history</label>
+                            {{contact.shareHistory}}
+                            <label for="confirmed">Confirmed</label>
+                            {{contact.confirmed}}
+                            <span>
+                                <a routerLink="/contact-list" (click)="editRecord(contact)" class="btn btn-primary">Edit</a>
+                                <div *ngIf="contact.confirmed; else notConfirmed">
+                                    <a routerLink="/contact-list"  (click)="DeleteContact(contact.email)" class="btn btn-danger">Delete contact</a>
                                 </div>
-                                <label for="confirmed">Confirmed</label>
-                                {{contact.confirmed}}
-                                <span>
-                                    <button  (click)="contact.inEdit = false">Cancel</button>
-                                    <button  (click)="updateRecord(contact)">Update Card</button>
-                                </span>
-                            </div>
-                        </ng-template>
+                                <ng-template #notConfirmed>
+                                    <a routerLink="/contact-list"  (click)="DeleteRequest(contact.email)" class="btn btn-danger">Delete request</a>
+                                </ng-template>
+                            </span>
+                        </div>
                     </div>
-
-                    <br/>
-                    <br/>
-                    <br/>
-
+                    <ng-template #elseBlock>
+                        <div class="card">
+                            <label for="first_name">First name</label>
+                            <input type="text" id="first_name" [(ngModel)]="contact.editFirstName" class="edit-from-control" placeholder="First name">
+                            <label for="last_name">Last name</label>
+                            <input type="text" id="last_name" [(ngModel)]="contact.editLastName" class="edit-from-control"  placeholder="Last name">
+                            <label for="email">Email</label>
+                            {{contact.email}}
+                            <label for="phone">Phone</label>
+                            {{contact.phone}}
+                            <label for="share_history">Share history</label>
+                            <div>
+                                <input type="radio" id="editShare" name="{{'editShare' + contact.email}}" [(ngModel)]="contact.editShareHistory" [value]="true" />  
+                                <label>Yes</label><br>  
+                                <input type="radio" id="editShare" name="{{'editShare' + contact.email}}" [(ngModel)]="contact.editShareHistory" [value]="false" />
+                                <label>No</label><br>  
+                            </div>
+                            <label for="confirmed">Confirmed</label>
+                            {{contact.confirmed}}
+                            <span>
+                                <button  (click)="contact.inEdit = false; cleanMessages();">Cancel</button>
+                                <button  (click)="updateRecord(contact)">Update Card</button>
+                            </span>
+                        </div>
+                    </ng-template>
                 </div>
-                <div *ngSwitchCase="state.Deny">Currently, you have no contacts in your contact list</div>
-                <div *ngSwitchDefault>Loading, please wait...</div>
+
+                <br/>
+                <br/>
+                <br/>
+
             </div>
+            <div *ngSwitchCase="state.Deny">Currently, you have no contacts in your contact list</div>
+            <div *ngSwitchDefault>Loading, please wait...</div>
+        </div>
 
-
-            <!-- the next section will hold the data from firebase -->
-            <!-- <div *ngIf="contacts.length > 0; else noContacts">
-                <h3>Your contacts:</h3>
-                <table id="table1">
-                    <thead >
-                        <tr>           
-                            <th>First name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Share History</th>
-                            <th>Confirmed</th>
-                            <th></th>
-                            
-                        </tr>
-                    </thead> 
-                    <tbody *ngFor="let item of contacts">
-                                <tr *ngIf="!item.inEdit; else elseBlock">         
-                                    <td > {{item.firstName}}</td>
-                                    <td > {{item.lastName}}</td>
-                                    <td > {{item.email}}</td>
-                                    <td > {{item.phone}}</td>
-                                    <td *ngIf="item.shareHistory; else cantSeeHistory">
-                                        This contact can see your history alerts
-                                    </td>
-                                    <ng-template #cantSeeHistory>
-                                        <td>This contact can't see your history alerts</td>
-                                    </ng-template >
-                                    <div *ngIf="item.confirmed; else notConfirmed">
-                                        <td>{{item.firstName}} confirmed the request</td>
-                                        <td>
-                                            <span>
-                                                <a routerLink="/contact-list" (click)="editRecord(item)" class="btn btn-primary">Edit Contact</a>
-                                                <a routerLink="/contact-list"  (click)="DeleteContact(item.email)" class="btn btn-danger">Delete Contact</a>
-                                            </span>
-                                        </td>
-                                    </div>
-                                    <ng-template #notConfirmed>
-                                        <td>{{item.firstName}} still didn't confirmed the request</td>
-                                        <td>
-                                            <span>
-                                                <a routerLink="/contact-list"  (click)="DeleteRequest(item.email)" class="btn btn-danger">Cancel Request</a>
-                                            </span>
-                                        </td>
-                                    </ng-template >                                    
-                                    
-                                </tr> -->
-
-                            <!-- next lines willshow after pressing Edit Contact: -->
-                            <!-- <ng-template #elseBlock>    
-                                        <td><input type="text" [(ngModel)]="item.editFirstName" class="edit-from-control" placeholder="First name"></td>
-                                        <td><input type="text" [(ngModel)]="item.editLastName" class="edit-from-control"  placeholder="Last name"></td>
-                                        <td > {{item.email}}</td>
-                                        <td > {{item.phone}}</td>
-                                        <td >
-                                            <div class="shareHistory2"  name="shareHistory2">
-                                                <input type="radio" id="editShare" name="{{'editShareOrNot' + item.email}}" [(ngModel)]="item.editShareHistory" [value]="true" />  
-                                                <label>Yes</label><br>  
-                                                <input type="radio" id="editShare" name="{{'editShareOrNot' + item.email}}" [(ngModel)]="item.editShareHistory" [value]="false" />
-                                                <label>No</label><br>  
-                                            </div>
-                                        </td>
-                                        <td>Confirmed/Not Confirmed</td>
-
-                                    <td>
-                                        <button  (click)="item.inEdit = false">Cancel</button>
-                                        <button  (click)="updateRecord(item)">Update Contact</button>
-                                    </td>
-                            </ng-template>
-                    </tbody>
-                </table>
-            </div>
-            <ng-template class="container-content" #noContacts>
-                <h3>Currently, you do not have any contacts.</h3>
-            </ng-template> -->
-        <!-- </div> -->
-    <!-- </div> -->
 </div> 
 
 

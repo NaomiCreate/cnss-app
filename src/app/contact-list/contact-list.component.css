@@ -1,5 +1,5 @@
 
-   .container-content{
+   /* .container-content{
     margin-left: 15%;
   
   }
@@ -14,35 +14,28 @@
 h3{
     color: aliceblue;
     font-weight: bold;
-    /* margin-top: 5%; */
     font-family: URW Chancery L, cursive;
     margin-bottom: 10px;
-}
+} */
+
+.card { 
+
+  margin-top:50px;
+  margin-bottom: 20px;
+  /* display: flex */
+ } 
 label{
   color: rgb(39, 95, 144);
   font-weight: bold;
   font-family: URW Chancery L, cursive;
   /* margin-bottom: 10px;  */
 } 
-/* th, td{
-    border: solid 3px  rgba(0, 0, 0, 0.527);
-    padding: 8px 20px;
-    background-color: rgba(0, 128, 128, 0.52);
-    /* font-family: 'Snell Roundhand, cursive' ;/*is this needed??*/
-    /* color: aliceblue; 
-    margin: 7px;
-  } */
-  
-  /*th {
-    color:  rgba(243, 239, 239, 0.918);
-    text-align: left;
-    background-color:rgba(0, 0, 0, 0.329);
-  }
-  
-  
-  tr.noBorder{
-    margin-top:30px;
-  } */
+
+input[type="radio"]{
+    
+    margin: 0 10px 0 10px;
+}
+
   
   
   a{
@@ -126,33 +119,5 @@ label{
     #add-contact-btn:hover{
     color: black;
     background-color: #ff7c25d8;
-    }
+    }*/
     
-
-table {
-    margin-bottom: 20px
-  }
-  
-  th, td{
-    border: solid 2px  rgba(0, 0, 0, 0.329);
-    padding: 8px 18px;
-    font-family: 'Open Sans' ;
-    color: aliceblue;
-  }
-  
-  th {
-   font-size: 12px;
-   color:  rgba(190, 190, 190, 0.739);
-   text-align: left;
-   background-color:rgba(0, 0, 0, 0.329);
-  }
-
-  table thead th {
-        color: aliceblue;
-        font-size:  18px; 
-        font-family:'Open Sans'; 
-        font-weight: bold;
-  }
-td a{
-    margin: 7px;
-} */

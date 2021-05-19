@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { concat, Subscription } from 'rxjs';
-import { promise } from 'selenium-webdriver';
-import { PathLocationStrategy } from '@angular/common';
+import {Subscription } from 'rxjs';
+
 
 enum Status {
   StandBy,
@@ -59,6 +58,7 @@ export class ContactListComponent implements OnInit {
   
   ngOnInit() {
 
+    this.cleanMessages();
     this.set_contacts(); // need to call this function any time contact list is updated
     
   }
@@ -117,26 +117,29 @@ export class ContactListComponent implements OnInit {
   //X want to add Y
   addContact(futureContactEmail:string){
 
-    //this.contacts_state = Status.StandBy;
+    this.cleanMessages();
 
-    //f((Number of contacts of X<20) && (Number of (contacted to of Y + requests of Y)<20))
-    this.checkPossibilityToAddContact()
-      .then((res)=>{
-        if(res){
-          this.checkPossibilityToAddRequest(futureContactEmail)
-            .then((res)=>{
-              if(res){
-                this.createContactRequest()
-                .then(res =>{
-                   this.set_contacts(); // reset contacts
-                }) 
-              }
-            });
-        }
-        else{
-          this.errorMessageNewContact ="You reached the maximum amount of contacts/requests";
-        }
-      })
+    if(this.validateForm()){
+
+      //if((Number of contacts of X<20) && (Number of (contacted to of Y + requests of Y)<20))
+      this.checkPossibilityToAddContact()
+        .then((res)=>{
+          if(res){
+            this.checkPossibilityToAddRequest(futureContactEmail)
+              .then((res)=>{
+                if(res){
+                  this.createContactRequest()
+                  .then(res =>{
+                    this.set_contacts(); // reset contacts
+                  }) 
+                }
+              });
+          }
+          else{
+            this.errorMessageNewContact ="You reached the maximum amount of contacts/requests";
+          }
+        })
+    }
 
   }
 
@@ -232,6 +235,7 @@ export class ContactListComponent implements OnInit {
   //will fire after the user press "Edit Contant"
   editRecord(Record)
   {
+    this.cleanMessages();
     this.messageEditContact ='';    
     Record.inEdit = true;
     Record.editFirstName = Record.firstName;
@@ -243,19 +247,18 @@ export class ContactListComponent implements OnInit {
   updateRecord(recordData)
   {
 
+    this.cleanMessages();
     let record = {};
     record['firstName'] = recordData.editFirstName;
     record['lastName'] = recordData.editLastName;
     record['shareHistory'] = recordData.editShareHistory;
     if(recordData.editFirstName.length === 0)
     {
-      this.cleanMessages();
       this.errorMessageEditContact = "Please enter the edited first name of the contact";
       return;
     }
     else if(recordData.editLastName.length === 0)
     {
-      this.cleanMessages();
       this.errorMessageEditContact = "Please enter the edited last name of the contact";
       return;
     }
@@ -269,6 +272,7 @@ export class ContactListComponent implements OnInit {
 
 //will fire after the user press "Delete Contact"
   DeleteContact(email:string){
+    this.cleanMessages();
     if(confirm("Are you sure you want to delete this contact?"))
     {
       if(this.authservice.currentUser != null)//We will make sure the user is logged in
@@ -283,12 +287,11 @@ export class ContactListComponent implements OnInit {
       }
     
     }
-    this.cleanMessages();
     this.messageEditContact = 'Contact deleted successfully';
   }
 
   DeleteRequest(email:string){
-
+    this.cleanMessages();
     if(confirm("Are you sure you want to cancle this Request?"))
     {
         this.crudservice.get_uidFromEmail(email)
@@ -302,15 +305,12 @@ export class ContactListComponent implements OnInit {
             }
           }).catch(error => {console.log(error)});
     }
-    
-    this.cleanMessages();
     this.messageEditContact = 'The request deleted successfully';
   }
 
   validateForm()
   {
-    //this.message = '';//only one message at a time, clear message to allow errorMessage.
-
+    this.cleanMessages();
     if(this.new_contact.firstName.length === 0)
     {
       this.errorMessageNewContact = "Please enter the first name of the person you would like to add";
