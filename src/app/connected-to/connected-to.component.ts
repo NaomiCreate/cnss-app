@@ -37,21 +37,14 @@ export class ConnectedToComponent implements OnInit {
       this.subscription = this.crudservice.get_AllConnections(this.authservice.currentUserId).snapshotChanges().subscribe(data => {
         this.connections = data.map(c => {
           let connection={};
-          //Test-----------
-          console.log("Object.keys(c.payload.doc.data())"+Object.keys(c.payload.doc.data()));
-          console.log("Object.keys(c.payload.doc.data()[0])"+Object.keys(c.payload.doc.data())[0]);
-          console.log("Object.keys(c.payload.doc.data())[0]"+Object.keys(c.payload.doc.data())[0]);
-          console.log("Object.keys(c.payload.doc.data())[1]"+Object.keys(c.payload.doc.data())[1]);
-          //Test-----------
           this.crudservice.get_contact_details(c.payload.doc.id, c.payload.doc.data()['id'])
           .then((doc) => { 
             connection['phone'] = doc.data()['phone'];
             connection['firstName'] = doc.data()['firstName'];
             connection['lastName'] = doc.data()['lastName'];
-//            connection['shareHistory'] = doc.data()['shareHistory'];
+            //connection['shareHistory'] = doc.data()['shareHistory'];
             connection['email'] = doc.data()['email'];
-            // this.state=Status.Accept;
-          
+            //this.state=Status.Accept;
           }).catch(error => {console.log(error)});
           return connection;
         })
@@ -85,16 +78,18 @@ export class ConnectedToComponent implements OnInit {
   //will fire after the user press "Delete Contact"
   DeleteConnection(email:string){
     if(confirm("Are you sure you want to delete this connection?")){
-        if(this.authservice.currentUser != null)//We will make sure the user is logged in
-        {
-          this.crudservice.get_uidFromEmail(email)
-              .then((doc) => {
-                if(doc.exists){
-                  this.crudservice.delete_contact(doc.data()[email], this.authservice.currentUserName)
-                  this.crudservice.delete_connection(this.authservice.currentUserId, email);
-                }
-            }).catch(error => {console.log(error)});
-        }
+      this.state=Status.StandBy;
+      if(this.authservice.currentUser != null)//We will make sure the user is logged in
+      {
+        this.crudservice.get_uidFromEmail(email)
+            .then((doc) => {
+              if(doc.exists){
+                this.crudservice.delete_contact(doc.data()[email], this.authservice.currentUserName)
+                this.crudservice.delete_connection(this.authservice.currentUserId, email);
+              }
+              this.state=Status.Accept;
+          }).catch(error => {console.log(error)});
+      }
     }
   }
 
@@ -102,22 +97,23 @@ export class ConnectedToComponent implements OnInit {
     //Delete Request from Users->[Y's uid]->requestes
     //Delete Contact from Users->[X's uid]->contacts
     if(confirm("Are you sure you want to reject this request?")){
+      this.state=Status.StandBy;
       //Delete Request
       this.crudservice.delete_request(this.authservice.currentUserId, emailRequestToReject);
       //Delete Contact
       this.crudservice.get_uidFromEmail(emailRequestToReject)
         .then((doc) => {
           if(doc.exists){
-            console.log("emailRequestToReject",emailRequestToReject);
-            console.log("doc.data()[emailRequestToReject]",doc.data()[emailRequestToReject]);
             this.crudservice.delete_contact(doc.data()[emailRequestToReject], this.authservice.currentUserName);
           }
+          this.state=Status.Accept;
       }).catch(error => {console.log(error)});
     }
   }
   
   confirmRequest(emailToConfirm:string){
     if(confirm("Are you sure you want to confirm this request?")){
+      this.state=Status.StandBy;
       this.crudservice.get_uidFromEmail(emailToConfirm)
         .then((doc) => {
           if(doc.exists){
@@ -128,15 +124,14 @@ export class ConnectedToComponent implements OnInit {
             //udate contacts to be: confirmed: true
             this.crudservice.update_request_to_confirmed(doc.data()[emailToConfirm],this.authservice.currentUserName);
           }
+          this.state=Status.Accept;
       }).catch(error => {console.log(error)});
     }
   }
-  ngOnDestroy(){
 
+  ngOnDestroy(){
     if(this.subscription != undefined)
         this.subscription.unsubscribe();
   }
 
-
-  
 }
