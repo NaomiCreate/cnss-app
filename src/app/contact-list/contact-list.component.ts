@@ -54,7 +54,6 @@ export class ContactListComponent implements OnInit {
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
 
   subscription: Subscription;
-
   constructor(private router: Router, private authservice: AuthService,public crudservice:CrudService) { }
 
   
@@ -161,6 +160,7 @@ export class ContactListComponent implements OnInit {
       this.crudservice.get_uidFromEmail(futureContactEmail)
       .then((doc) => {
         if (!doc.exists) {
+          this.cleanMessages();
           this.errorMessageNewContact ="The requested email address does not exist in the system";
           resolve(false);
         }
@@ -179,7 +179,6 @@ export class ContactListComponent implements OnInit {
             });
         } 
       }).catch((error) => {
-        console.log("Error getting document:", error);
         resolve(false);
       }); 
     })
@@ -243,28 +242,28 @@ export class ContactListComponent implements OnInit {
   //will fire after the user press "Edit Contant" and than press "Update"
   updateRecord(recordData)
   {
+
     let record = {};
     record['firstName'] = recordData.editFirstName;
     record['lastName'] = recordData.editLastName;
     record['shareHistory'] = recordData.editShareHistory;
     if(recordData.editFirstName.length === 0)
     {
+      this.cleanMessages();
       this.errorMessageEditContact = "Please enter the edited first name of the contact";
       return;
     }
     else if(recordData.editLastName.length === 0)
     {
+      this.cleanMessages();
       this.errorMessageEditContact = "Please enter the edited last name of the contact";
       return;
     }
     else{
-      if(confirm("Are you sure you want to edit this contact details?"))
-      {
         this.errorMessageEditContact="";
         this.crudservice.update_contact(recordData['email'],record).then(()=> this.set_contacts()); // reset contacts
         this.messageEditContact = "Contact’s details updated successfully"
         recordData.inEdit = false;
-      }
     }
   }
 
@@ -282,9 +281,9 @@ export class ContactListComponent implements OnInit {
             }
           }).catch(error => {console.log(error)});
       }
+    
     }
-
-    this.errorMessageEditContact = '';
+    this.cleanMessages();
     this.messageEditContact = 'Contact deleted successfully';
   }
 
@@ -292,8 +291,6 @@ export class ContactListComponent implements OnInit {
 
     if(confirm("Are you sure you want to cancle this Request?"))
     {
-      if(this.authservice.currentUser != null)//We will make sure the user is logged in
-      {
         this.crudservice.get_uidFromEmail(email)
           .then((doc) => {
             if(doc.exists){
@@ -304,10 +301,9 @@ export class ContactListComponent implements OnInit {
         
             }
           }).catch(error => {console.log(error)});
-      }
     }
-
-    this.errorMessageEditContact = '';
+    
+    this.cleanMessages();
     this.messageEditContact = 'The request deleted successfully';
   }
 
@@ -330,13 +326,24 @@ export class ContactListComponent implements OnInit {
       this.errorMessageNewContact = "Please enter the email address of the person you would like to add";
       return false
     }
-  
+    if(this.new_contact.email == this.authservice.currentUserName)
+    {
+      console.log("same email");
+      this.errorMessageNewContact = "Your email cannot be added to your contacts email list";
+      return false
+    }
     this.errorMessageNewContact = '';
     return true;
   }
 
+  cleanMessages(){
+    this.messageNewContact="";
+    this.messageEditContact="";
+    this.errorMessageEditContact="";
+    this.errorMessageNewContact ="";
+  }
+  
   ngOnDestroy(){
-
     if(this.subscription != undefined)
         this.subscription.unsubscribe();
   }
