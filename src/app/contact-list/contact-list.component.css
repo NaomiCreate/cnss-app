@@ -19,21 +19,21 @@ h3{
     margin-bottom: 10px;
 }
 label{
-  color: aliceblue;
+  color: rgb(39, 95, 144);
   font-weight: bold;
   font-family: URW Chancery L, cursive;
   /* margin-bottom: 10px;  */
 } 
-th, td{
+/* th, td{
     border: solid 3px  rgba(0, 0, 0, 0.527);
     padding: 8px 20px;
     background-color: rgba(0, 128, 128, 0.52);
     /* font-family: 'Snell Roundhand, cursive' ;/*is this needed??*/
-    color: aliceblue; 
+    /* color: aliceblue; 
     margin: 7px;
-  }
+  } */
   
-  th {
+  /*th {
     color:  rgba(243, 239, 239, 0.918);
     text-align: left;
     background-color:rgba(0, 0, 0, 0.329);
@@ -42,7 +42,7 @@ th, td{
   
   tr.noBorder{
     margin-top:30px;
-  }
+  } */
   
   
   a{

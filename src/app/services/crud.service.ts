@@ -86,11 +86,12 @@ export class CrudService {
     this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
   }
 
-  update_request_to_confirmed(uid,email)
+  update_request_to_confirmed(uid:string,email:string)
   {
     console.log("update_contact_confirmed",'users/'+uid + '/' + 'contacts/' + email);
     this.fireservices.doc('users/'+uid + '/' + 'contacts/' + email).update({"confirmed": true});//'contacts' is the collection name
   }
+
   update_connectedTo(uid:string,emailToAdd:string,uidToAdd:string)
   {
      /*Update Record[uid] conected-to*/  
@@ -121,7 +122,7 @@ export class CrudService {
   get_AllContacts()
   {
 
-    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').snapshotChanges();
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts');
 
   }
 
@@ -143,19 +144,14 @@ export class CrudService {
   //update_contact will update the contact detailes in firebase. (the function gets the record id and the new data)
   update_contact(email,  record)
   {
-    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'contacts/' + email).update(record);//'contacts' is the collection name
+    return this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'contacts/' + email).update(record);//'contacts' is the collection name
   }
 
-  //delete_contact will delete the contact in firebase. (the function gets the record id)
-  // delete_contact(contact_uid:string, contact_email:string)
-  // {
-  //   this.fireservices.doc('users/' + contact_uid + '/' + 'connected-to/' + this.authservice.currentUserName).delete();
-  //   this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'contacts/' + contact_email).delete();    
-  // }
+
   delete_contact(uid:string, contact_email:string)
   {
-    console.log("delete_contact: ",'users/' + uid + '/' + 'contacts/' + contact_email);
-    this.fireservices.doc('users/' + uid + '/' + 'contacts/' + contact_email).delete();
+    //console.log("delete_contact: ",'users/' + uid + '/' + 'contacts/' + contact_email);
+    return this.fireservices.doc('users/' + uid + '/' + 'contacts/' + contact_email).delete();
           
   }
   delete_connection(uid:string, connection_email:string)
@@ -167,13 +163,6 @@ export class CrudService {
     console.log("delete_request: ",'users/' + uid + '/' + 'requests/' +request_email);
     this.fireservices.doc('users/' + uid + '/' + 'requests/' +request_email).delete();
   }
-
-  // delete_connection(connection_uid:string, connection_email:string)
-  // {
-  //   this.fireservices.doc('users/' + connection_uid + '/' + 'contacts/' + this.authservice.currentUserName).delete();
-  //   this.fireservices.doc('users/' + this.authservice.currentUserId + '/' + 'connected-to/' + connection_email).delete();
-  // }
-
 
   getHistoryPermission(connection_uid:string){
 

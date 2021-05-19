@@ -122,7 +122,7 @@ export class HistoryComponent implements OnInit {
 
   //The next variables are for HTML use
   public myHistoySelected: boolean = true;
-  public state = Status;
+  public state = Status; 
 
   constructor(private authservice: AuthService, private crudservice: CrudService, private realtimeservice: RealTimeService, 
     private db: AngularFireDatabase, private sanitizer: DomSanitizer) { }
