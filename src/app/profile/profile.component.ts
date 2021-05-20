@@ -14,6 +14,12 @@ interface UserRecord {
   device_id: string;
 }
 
+enum Status {
+  StandBy,
+  Accept,
+  ChangePassword
+  // Deny
+}
 
 @Component({
   selector: 'app-profile',
@@ -26,6 +32,8 @@ export class ProfileComponent implements OnInit {
   inEdit: boolean = false; //will hold the editing state 
   doc_id: string; //will hold the documents id
 
+  Status = Status;
+  state:Status = Status.StandBy
 
   message = '';
   errorMessage = ''; //validation error handle
@@ -58,6 +66,7 @@ export class ProfileComponent implements OnInit {
               doc_id: c.payload.doc.id
             };
           })
+          this.state=Status.Accept;
         })
       );
     }

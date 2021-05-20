@@ -27,7 +27,7 @@ tr.noBorder{
 }
 
 
-a{
+.btn:btn-primary{
   color: bisque;
   background-color: #3e3f41;
   border-color: #3e3f41; 
@@ -39,7 +39,7 @@ a{
   width: 150px;
 }
 
-a:hover{
+.btn:btn-primary:hover{
   color: bisque;
   background-color: #747679;
   border-color:  #747679; 

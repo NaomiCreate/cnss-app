@@ -24,6 +24,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProfileComponent } from './profile/profile.component';
 import { ConnectedToComponent } from './connected-to/connected-to.component';
 import { SystemControlComponent } from './system-control/system-control.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { SystemControlComponent } from './system-control/system-control.componen
     PageNotFoundComponent,
     ProfileComponent,
     ConnectedToComponent,
-    SystemControlComponent
+    SystemControlComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
