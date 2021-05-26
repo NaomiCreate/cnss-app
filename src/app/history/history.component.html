@@ -1,3 +1,6 @@
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="card" id="card-top-bar">
        <button class="button" id="btn-history-top-bar" (click)="myHistoySelected = true">My History</button>
        <button id="btn-history-top-bar" (click)="myHistoySelected = false">Connections History</button>
@@ -26,7 +29,7 @@
                                                  <p>{{alert.image_path}}</p>
                                                  <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
                                                  <p>{{alert.notes}}</p>
-                                                 
+                                                 <button class="btn" (click)="deleteAlert(alert.alertID)"><i class="fa fa-trash"></i></button>
                                           </div>
                                    </div>
 
@@ -165,35 +168,47 @@
 
 
 <!-- *********************For Testing********************* :-->
-<!-- <h3>From:</h3>
-<label>Choose a Year:</label>
-<input type="number" [(ngModel)]="user.searchStartPoint.year" class="from-control"><br>
-<label>Choose a month:</label>
-<input type="number" [(ngModel)]="user.searchStartPoint.month" class="from-control"><br>
-<label>Choose a day:</label>
-<input type="number" [(ngModel)]="user.searchStartPoint.day" class="from-control"><br>
-<label>Choose an hour:</label>
-<input type="number" [(ngModel)]="user.searchStartPoint.hour" class="from-control"><br>
-<label>Choose minutes:</label>
-<input type="number" [(ngModel)]="user.searchStartPoint.minutes" class="from-control"><br>
-<label>Choose seconds:</label>
-<input type="number" [(ngModel)]="user.searchStartPoint.seconds" class="from-control"><br>
+<h3>Use Search:</h3>
+<td class="ownership" name="ownership">
+       <input type="radio"  [(ngModel)]="user.useSearch" [value]="true" />  
+       <label>Yes</label><br>  
+       <input type="radio"  [(ngModel)]="user.useSearch" [value]="false" />
+       <label>No</label><br>  
+   </td>
 
-<h3>To:</h3>
-<label>Choose a Year:</label>
-<input type="number" [(ngModel)]="user.searchEndPoint.year" class="from-control"><br>
-<label>Choose a month:</label>
-<input type="number" [(ngModel)]="user.searchEndPoint.month" class="from-control"><br>
-<label>Choose a day:</label>
-<input type="number" [(ngModel)]="user.searchEndPoint.day" class="from-control"><br>
-<label>Choose an hour:</label>
-<input type="number" [(ngModel)]="user.searchEndPoint.hour" class="from-control"><br>
-<label>Choose minutes:</label>
-<input type="number" [(ngModel)]="user.searchEndPoint.minutes" class="from-control"><br>
-<label>Choose seconds:</label>
-<input type="number" [(ngModel)]="user.searchEndPoint.seconds" class="from-control"><br>
+<div *ngIf="user.useSearch">
+       <h3>From:</h3>
+       <label>Choose a Year:</label>
+       <input type="number" [(ngModel)]="user.searchStartPoint.year" class="from-control"><br>
+       <label>Choose a month:</label>
+       <input type="number" [(ngModel)]="user.searchStartPoint.month" class="from-control"><br>
+       <label>Choose a day:</label>
+       <input type="number" [(ngModel)]="user.searchStartPoint.day" class="from-control"><br>
+       <label>Choose an hour:</label>
+       <input type="number" [(ngModel)]="user.searchStartPoint.hour" class="from-control"><br>
+       <label>Choose minutes:</label>
+       <input type="number" [(ngModel)]="user.searchStartPoint.minutes" class="from-control"><br>
+       <!-- <label>Choose seconds:</label>
+       <input type="number" [(ngModel)]="user.searchStartPoint.seconds" class="from-control"><br>
+        -->
+       <h3>To:</h3>
+       <label>Choose a Year:</label>
+       <input type="number" [(ngModel)]="user.searchEndPoint.year" class="from-control"><br>
+       <label>Choose a month:</label>
+       <input type="number" [(ngModel)]="user.searchEndPoint.month" class="from-control"><br>
+       <label>Choose a day:</label>
+       <input type="number" [(ngModel)]="user.searchEndPoint.day" class="from-control"><br>
+       <label>Choose an hour:</label>
+       <input type="number" [(ngModel)]="user.searchEndPoint.hour" class="from-control"><br>
+       <label>Choose minutes:</label>
+       <input type="number" [(ngModel)]="user.searchEndPoint.minutes" class="from-control"><br>
+       <!-- <label>Choose seconds:</label>
+       <input type="number" [(ngModel)]="user.searchEndPoint.seconds" class="from-control"><br>
+        -->
+       <button (click)="getNextSearch(false,user.searchStartPoint,user.searchEndPoint)">getNextSearch</button>
+</div>
 
-<button (click)="getNextSearch(false,user.searchStartPoint,user.searchEndPoint)">getNextSearch</button> -->
+
 <!-- *********************For Testing********************* :-->
 
 <!-- <button (click)="testSearch()">testSearch</button> --> 

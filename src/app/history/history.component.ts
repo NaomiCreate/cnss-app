@@ -62,8 +62,12 @@ export interface User {
   prevStartPoint:number;
   nextStartPoint:number;
 
-  searchStartPoint: SearchPoints;//---added For search
-  searchEndPoint: SearchPoints;//---added For search
+  useSearch:boolean;//change to showAll checkBox
+  searchStartPoint?: SearchPoints;//---added For search
+  searchEndPoint?: SearchPoints;//---added For search
+
+  //startPoint:number;
+  //endPoint:number;
 }
 
 //---added for search
@@ -97,24 +101,12 @@ export class HistoryComponent implements OnInit {
     deviceID: "",
     hasConnections:Status.StandBy,
 
+    useSearch:false,
     prevStartPoint:null,
     nextStartPoint:null,
-    searchStartPoint: { date: "",
-                        year: null,
-                        month: null,
-                        day: null,
-                        hour: null,
-                        minutes: null,
-                        seconds: null 
-                      },//---added For search
-    searchEndPoint: { date: "",
-                      year: null,
-                      month: null,
-                      day: null,
-                      hour: null,
-                      minutes: null,
-                      seconds: null
-                    }//---added For search
+
+    //startPoint:null,
+    //endPoint:null
   }
 
   public connections: Array<Connection> = []; // will contain all users connections that allow sharing their history with him
@@ -146,7 +138,6 @@ export class HistoryComponent implements OnInit {
           //console.log("Debug::user.dbPath", this.user.dbPath)
 
           //getAlerts
-          //this.getNext(-1,false);
           this.getNext(this.user, false);
         
         }
@@ -271,7 +262,6 @@ export class HistoryComponent implements OnInit {
 
       this.connections[index].hideHistory = false; //show history for HTML
       if(this.connections[index].alerts.length == 0){
-        //this.getNext(index, true);
         this.getNext(this.connections[index], false);
       }
       
@@ -397,7 +387,7 @@ time_stamp_to_date(timestamp: number){
   }
 
 
-  /**This function returns string of code gor use in  getNext realtime query.
+  /**This function returns string of code for use in  getNext realtime query.
    * This function is not called when snapChanges accurs
   */
   get_code(person:Connection | User, prev:boolean){
@@ -438,6 +428,55 @@ time_stamp_to_date(timestamp: number){
     
   }
 
+  /**This function deletes alert from the devices collection in realtime firebase, 
+    *Parm: the alert's ID*/
+  deleteAlert(alertID:string){
+    this.db.database.ref(`/devices/${this.user.deviceID}/history/${alertID}`).remove();
+  }
+
+  get_code_testing(person:Connection | User, prev:boolean){
+
+    let start: number;
+    let end: number;
+
+    let code: string;
+
+
+    if(!prev){ // get next batch of alerts
+
+      console.log("Debug:: get Next")
+
+      if(person.alerts.length != 0){
+        start = person.nextStartPoint;
+        code = `ref=>ref.orderByChild('timestamp').endAt(${start}).limitToLast(${ALERT_LIMIT})` ;
+      }
+      else{ //The opening group of alerts
+        start = null; //If search: start="to point"
+        person.prevStartPoint = null; // as this is the openning group set prev to null
+        code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToLast(${ALERT_LIMIT})`;
+      }
+
+    }
+    else{ // get previous batch of alerts
+
+      console.log("Debug:: get Prev")
+
+      start = person.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
+                                        //unless only the first group was called and then it's null
+      person.nextStartPoint = person.alerts[0].timestamp; //set nextStatingPoint before goint back
+      code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToFirst(${ALERT_LIMIT + 1})` ;
+      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
+  
+    }
+
+    console.log("Debug:: start ",start)
+    return code;
+    
+  }
+
+
+
+
 //----------------------------***Search***----------------------------
 
   dateToTimestamp(time:SearchPoints)
@@ -448,15 +487,16 @@ time_stamp_to_date(timestamp: number){
 
   getNextSearch(isConnection:boolean, searchStartPoint:SearchPoints, searchEndPoint:SearchPoints)
   {
-    //let start: number;
-    //let code: string;
-
+    console.log("Search Debug:: In getNextSearch");
     if(!isConnection)//isUser
     {
-      this.user.hasAlerts = Status.StandBy;
-                            
+      //this.user.hasAlerts = Status.StandBy;
+      console.log("Search Debug:: searchStartPoint=",searchStartPoint);
+      console.log("Search Debug:: searchEndPoint=",searchEndPoint); 
       let start = this.dateToTimestamp(searchStartPoint);
       let end = this.dateToTimestamp(searchEndPoint);
+      console.log("Search Debug:: start=",start);
+      console.log("Search Debug:: end=",end);
 
       this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(start).endAt(end).once('value').then(function(snapshot) {
         snapshot.forEach(function(child) {
@@ -478,4 +518,9 @@ time_stamp_to_date(timestamp: number){
       }
     }
   }
+
+
+  
+
+
 }
