@@ -178,7 +178,35 @@
 
 <div *ngIf="user.useSearch">
        <h3>From:</h3>
-       <label>Choose a Year:</label>
+       <form (ngSubmit)="search()">
+              <div class="form-group">
+                     <label>Date start point:</label>
+                     <input name="dateStart"  type="Date" [(ngModel)]="user.searchDateStartPoint" class="form-control">
+                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
+              </div>
+              <div class="form-group">
+                     <label>Time start point:</label>
+                     <input name="time-start"  type="time"  [(ngModel)]="user.searchTimeStartPoint" class="form-control">
+                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
+              </div>
+              <div class="form-group">
+                     <label>Date end point:</label>
+                     <input name="date-end"  type="date" [(ngModel)]="user.searchDateEndPoint" class="form-control">
+                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
+              </div>
+              <div class="form-group">
+                     <label>Time end point:</label>
+                     <input name="time-end"  type="time" [(ngModel)]="user.searchTimeEndPoint" class="form-control">
+                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
+              </div>
+              <div class="clickable">
+                     <div class="form-group">
+                            <input type="submit" value="Search" class="btn float-right search_btn">
+                     </div>
+              </div>
+       </form>
+
+       <!-- <label>Choose a Year:</label>
        <input type="number" [(ngModel)]="user.searchStartPoint.year" class="from-control"><br>
        <label>Choose a month:</label>
        <input type="number" [(ngModel)]="user.searchStartPoint.month" class="from-control"><br>
@@ -188,9 +216,9 @@
        <input type="number" [(ngModel)]="user.searchStartPoint.hour" class="from-control"><br>
        <label>Choose minutes:</label>
        <input type="number" [(ngModel)]="user.searchStartPoint.minutes" class="from-control"><br>
-       <!-- <label>Choose seconds:</label>
+       <label>Choose seconds:</label>
        <input type="number" [(ngModel)]="user.searchStartPoint.seconds" class="from-control"><br>
-        -->
+       
        <h3>To:</h3>
        <label>Choose a Year:</label>
        <input type="number" [(ngModel)]="user.searchEndPoint.year" class="from-control"><br>
@@ -202,10 +230,10 @@
        <input type="number" [(ngModel)]="user.searchEndPoint.hour" class="from-control"><br>
        <label>Choose minutes:</label>
        <input type="number" [(ngModel)]="user.searchEndPoint.minutes" class="from-control"><br>
-       <!-- <label>Choose seconds:</label>
+       <label>Choose seconds:</label>
        <input type="number" [(ngModel)]="user.searchEndPoint.seconds" class="from-control"><br>
         -->
-       <button (click)="getNextSearch(false,user.searchStartPoint,user.searchEndPoint)">getNextSearch</button>
+       <!-- <button (click)="getNextSearch(false,user.searchStartPoint,user.searchEndPoint)">getNextSearch</button> -->
 </div>
 
 

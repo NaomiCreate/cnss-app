@@ -63,24 +63,32 @@ export interface User {
   nextStartPoint:number;
 
   useSearch:boolean;//change to showAll checkBox
-  searchStartPoint?: SearchPoints;//---added For search
-  searchEndPoint?: SearchPoints;//---added For search
+  // searchStartPoint: SearchPoints;//---added For search
+  // searchEndPoint: SearchPoints;//---added For search
+
+  searchDateStartPoint?: Date;//---added For search
+  searchDateEndPoint?: Date;//---added For search
+  searchTimeStartPoint?: Date;//---added For search
+  searchTimeEndPoint?: Date;//---added For search
 
   //startPoint:number;
   //endPoint:number;
 }
 
 //---added for search
-export interface SearchPoints {
-  date: String;
-  year: number;
-  month: number;
-  day: number;
-  hour: number;
-  minutes: number;
-  seconds: number;
+// export interface SearchPoints {
+//   // date: String;
+//   // year: number;
+//   // month: number;
+//   // day: number;
+//   // hour: number;
+//   // minutes: number;
+//   // seconds: number;
+//   date: Date;//---added For search
+//   time: Date;//---added For search
 
-}
+// }
+
 //---added for search
 const ALERT_LIMIT = 3;//The value should be: limit+1 
 
@@ -105,6 +113,14 @@ export class HistoryComponent implements OnInit {
     prevStartPoint:null,
     nextStartPoint:null,
 
+
+    //searchStartPoint: null,//---added For search
+    //searchEndPoint: null,//---added For search
+
+    searchDateStartPoint: null,//---added For search
+    searchDateEndPoint: null,//---added For search
+    searchTimeStartPoint: null,//---added For search
+    searchTimeEndPoint: null,//---added For search
     //startPoint:null,
     //endPoint:null
   }
@@ -135,6 +151,7 @@ export class HistoryComponent implements OnInit {
           this.user.deviceID = data[0].payload.doc.data()['device_id'];
           this.user.dbPath += `${this.user.deviceID}/history`;
 
+          
           //console.log("Debug::user.dbPath", this.user.dbPath)
 
           //getAlerts
@@ -479,26 +496,65 @@ time_stamp_to_date(timestamp: number){
 
 //----------------------------***Search***----------------------------
 
-  dateToTimestamp(time:SearchPoints)
+  // dateToTimestamp(time:SearchPoints)
+  dateToTimestamp(timePoint:Date,datePoint:Date)
   {
-    let date = new Date(time.year, time.month-1, time.day, time.hour, time.minutes, time.seconds);
+    var date = new Date(datePoint + ' ' + timePoint); 
+    console.log("Search Debug:: timePoint=",timePoint);
+    console.log("Search Debug:: datePoint=",datePoint);
+    console.log("Search Debug:: date=",date);
+
+    //let date = new Date(time.year, time.month-1, time.day, time.hour, time.minutes, time.seconds);
+    //let date = new Date(time.date.getFullYear(), time.date.getMonth()-1, time.date.getDay(), time.time.getHours(), time.time.getMinutes());
+
     return date.getTime();
   }
 
-  getNextSearch(isConnection:boolean, searchStartPoint:SearchPoints, searchEndPoint:SearchPoints)
-  {
-    console.log("Search Debug:: In getNextSearch");
-    if(!isConnection)//isUser
-    {
-      //this.user.hasAlerts = Status.StandBy;
-      console.log("Search Debug:: searchStartPoint=",searchStartPoint);
-      console.log("Search Debug:: searchEndPoint=",searchEndPoint); 
-      let start = this.dateToTimestamp(searchStartPoint);
-      let end = this.dateToTimestamp(searchEndPoint);
-      console.log("Search Debug:: start=",start);
-      console.log("Search Debug:: end=",end);
+  // getNextSearch(isConnection:boolean, searchStartPoint:SearchPoints, searchEndPoint:SearchPoints)
+  // {
+  //   console.log("Search Debug:: In getNextSearch");
+  //   if(!isConnection)//isUser
+  //   {
+  //     //this.user.hasAlerts = Status.StandBy;
+  //     console.log("Search Debug:: searchStartPoint=",searchStartPoint);
+  //     console.log("Search Debug:: searchEndPoint=",searchEndPoint); 
+  //     let start = this.dateToTimestamp(searchStartPoint);
+  //     let end = this.dateToTimestamp(searchEndPoint);
+  //     console.log("Search Debug:: start=",start);
+  //     console.log("Search Debug:: end=",end);
 
-      this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(start).endAt(end).once('value').then(function(snapshot) {
+  //     this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(start).endAt(end).once('value').then(function(snapshot) {
+  //       snapshot.forEach(function(child) {
+
+  //         let childData = child.val();
+  //         let timestamps=child.val().timestamp;
+
+  //         console.log("Search Debug:: childData= ",childData);
+  //         console.log("Search Debug:: timestamps= ",timestamps);
+  //       });
+  //     });
+      
+  //     //set hasAlerts
+  //     if(this.user.alerts.length != 0){
+  //       this.user.hasAlerts = Status.Accept
+  //     }
+  //     else{
+  //       this.user.hasAlerts = Status.Deny
+  //     }
+  //   }
+  // }
+
+  search()
+  {
+      console.log("Search Debug:: searchStartPoint.date=",this.user.searchDateStartPoint);
+      console.log("Search Debug:: searchStartPoint.time=",this.user.searchTimeStartPoint);
+      console.log("Search Debug:: searchEndPoint.date=",this.user.searchDateEndPoint);
+      console.log("Search Debug:: searchEndPoint.time=",this.user.searchTimeEndPoint);
+
+      let startPoint= this.dateToTimestamp(this.user.searchDateStartPoint,this.user.searchTimeStartPoint);
+      let endPoint= this.dateToTimestamp(this.user.searchDateEndPoint,this.user.searchTimeEndPoint);
+
+      this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(startPoint).endAt(endPoint).once('value').then(function(snapshot) {
         snapshot.forEach(function(child) {
 
           let childData = child.val();
@@ -508,17 +564,11 @@ time_stamp_to_date(timestamp: number){
           console.log("Search Debug:: timestamps= ",timestamps);
         });
       });
-      
-      //set hasAlerts
-      if(this.user.alerts.length != 0){
-        this.user.hasAlerts = Status.Accept
-      }
-      else{
-        this.user.hasAlerts = Status.Deny
-      }
-    }
-  }
 
+      // let start = this.dateToTimestamp(searchStartPoint);
+      // let end = this.dateToTimestamp(searchEndPoint);
+    
+  }
 
   
 
