@@ -1,37 +1,15 @@
-.container-content{
-  margin-left: 5%;
-
-}
-
-h3{
-  color: aliceblue;
+.card { 
+  margin-top:50px;
+  margin-bottom: 20px;
+  width: 340px;
+ } 
+label{
+  color: rgb(39, 95, 144);
   font-weight: bold;
-  margin-top: 20%;
   font-family: URW Chancery L, cursive;
-  margin-bottom: 40px;
 }
 
-th, td{
-  border: solid 3px  rgba(0, 0, 0, 0.527);
-  padding:  20px;
-  background-color: rgba(0, 128, 128, 0.52);
-  /* font-family: 'Snell Roundhand, cursive' ;/*is this needed??*/
-  color: aliceblue; 
-}
 
-th {
-  padding: 8px;
-  color:  rgba(243, 239, 239, 0.918);
-  text-align: left;
-  background-color:rgba(0, 0, 0, 0.329);
-}
-
-tr.noBorder{
-  margin-top:30px;
-}
-#table1 {
-  margin-bottom: 30px
-}
 /* a{
   color: bisque;
   background-color: #3e3f41;
@@ -44,11 +22,11 @@ tr.noBorder{
   width: 150px;
 } */
 
-/* a:hover{
+a:hover{
   color: bisque;
   background-color: #747679;
   border-color:  #747679; 
-} */
+}
 
 
 

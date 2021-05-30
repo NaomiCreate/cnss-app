@@ -1,12 +1,71 @@
-<div [ngSwitch]="state">
+<div [ngSwitch]="connections_state">
+    <div *ngSwitchCase="state.Accept">
+
+        <!-- requests:Array<Connection>;
+             connections:Array<Connection>; -->
+
+                <!-- interface Connection{
+                    firstName: string;
+                    lastName: string;
+                    email: string;
+                    phone:number; 
+                  } -->
+
+            <div *ngFor="let request of  requests">
+                <div class="card">
+                    <label for="first_name">First name</label>
+                    {{request.firstName}}
+                    <label for="last_name">Last name</label>
+                    {{request.lastName}}
+                    <label for="email">Email</label>
+                    {{request.email}}
+                    <label for="phone">Phone</label>
+                    {{request.phone}}
+                    <span>
+                        <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger">Reject request</a>
+                        <a style="float: right;" routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn btn-danger">Confirm request</a>
+                    </span>
+                </div>
+            </div>
+
+            <div *ngFor="let connection of  connections">
+                <div class="card">
+                    <label for="first_name">First name</label>
+                    {{connection.firstName}}
+                    <label for="last_name">Last name</label>
+                    {{connection.lastName}}
+                    <label for="email">Email</label>
+                    {{connection.email}}
+                    <label for="phone">Phone</label>
+                    {{connection.phone}}
+                    <span>
+                        <a style="float: right;" routerLink="/connected-to"  (click)="DeleteConnection(connection.email)" class="btn btn-danger">Delete Connection</a>
+                    </span>
+                </div>
+            </div>
+       
+
+        <br/>
+        <br/>
+        <br/>
+
+    </div>
+    <div *ngSwitchCase="state.Deny">Currently, you are have no connections or request</div>
+    <div *ngSwitchDefault>Loading, please wait...</div>
+</div>
+
+
+
+
+<!-- <div [ngSwitch]="state">
     <div *ngSwitchCase="Status.StandBy">Loading, please wait... </div>
     <div *ngSwitchDefault>
         <div class="container-content">
             
-            <!-- connections -->
+            connections
             <div *ngIf="connections.length > 0; else noConnections">
                 <h3>Security systems you are connected to:</h3>
-                <!-- the next section will hold the data from firebase -->
+                the next section will hold the data from firebase
                 
                 <table id="table1">
                     <thead>
@@ -19,8 +78,6 @@
                         </tr>
                     </thead> 
                     <tbody *ngFor="let item of connections">
-                        <!-- <div *ngFor="let item of contact"> -->
-                            <!-- <div *ngIf="!item.isEdit; else elseBlock">   -->
                                 <tr>         
                                     <td > {{item.firstName}}</td>
                                     <td > {{item.lastName}}</td>
@@ -39,7 +96,7 @@
                 <h3>Currently you are not connected to any security systems.</h3>
             </ng-template>
 
-            <!-- Requests -->
+            Requests
             <div *ngIf="requests.length > 0; else noRequests">
                 <h3>Security systems you are connected to:</h3>
                     <table id="table2">
@@ -59,9 +116,9 @@
                                 <td > {{item.email}}</td>
                                 <td > {{item.phone}}</td>
                                 <td>
-                                    <!-- <span>
+                                    
                                         <a routerLink="/connected-to"  (click)="DeleteConnection(item.email)" class="btn btn-danger">confirm request</a>
-                                    </span> -->
+                                    
                                     <span>
                                         <a routerLink="/connected-to"  (click)="rejectRequest(item.email)" class="btn btn-danger">Reject request</a>
 
@@ -77,4 +134,4 @@
                 </ng-template>
         </div>
     </div>
-</div>
+</div> -->

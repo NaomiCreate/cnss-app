@@ -69,10 +69,10 @@
                             <span>
                                 <a routerLink="/contact-list" (click)="editRecord(contact)" class="btn btn-primary">Edit</a>
                                 <div style="display: inline-block" *ngIf="contact.confirmed; else notConfirmed">
-                                    <a routerLink="/contact-list"  (click)="DeleteContact(contact.email)" class="btn btn-danger">Delete contact</a>
+                                    <a style="float: right;" routerLink="/contact-list"  (click)="DeleteContact(contact.email)" class="btn btn-danger">Delete contact</a>
                                 </div>
                                 <ng-template #notConfirmed>
-                                    <a routerLink="/contact-list"  (click)="DeleteRequest(contact.email)" class="btn btn-danger">Delete request</a>
+                                    <a style="float: right;" routerLink="/contact-list"  (click)="DeleteRequest(contact.email)" class="btn btn-danger">Delete request</a>
                                 </ng-template>
                             </span>
                         </div>
@@ -98,7 +98,7 @@
                             {{contact.confirmed}}
                             <span>
                                 <button  (click)="contact.inEdit = false; cleanMessages();">Cancel</button>
-                                <button  (click)="updateRecord(contact)">Update Card</button>
+                                <button style="float: right;" (click)="updateRecord(contact)">Update Card</button>
                             </span>
                         </div>
                     </ng-template>

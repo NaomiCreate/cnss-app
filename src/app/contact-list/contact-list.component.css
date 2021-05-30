@@ -19,10 +19,10 @@ h3{
 } */
 
 .card { 
-
   margin-top:50px;
   margin-bottom: 20px;
-  /* display: flex */
+  width: 340px;
+  
  } 
 label{
   color: rgb(39, 95, 144);
@@ -37,7 +37,7 @@ input[type="radio"]{
 
   
   
-  a{
+  /* a{
     color: bisque;
     background-color: #3e3f41;
     border-color: #3e3f41; 
@@ -47,7 +47,7 @@ input[type="radio"]{
     padding: 5px;
     border-radius: 5px;
     width: 150px;
-  }
+  } */
   
   a:hover{
     color: bisque;
