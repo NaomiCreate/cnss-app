@@ -68,7 +68,7 @@
                             {{contact.confirmed}}
                             <span>
                                 <a routerLink="/contact-list" (click)="editRecord(contact)" class="btn btn-primary">Edit</a>
-                                <div *ngIf="contact.confirmed; else notConfirmed">
+                                <div style="display: inline-block" *ngIf="contact.confirmed; else notConfirmed">
                                     <a routerLink="/contact-list"  (click)="DeleteContact(contact.email)" class="btn btn-danger">Delete contact</a>
                                 </div>
                                 <ng-template #notConfirmed>

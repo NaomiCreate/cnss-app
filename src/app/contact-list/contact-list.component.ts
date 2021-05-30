@@ -74,44 +74,48 @@ export class ContactListComponent implements OnInit {
 
   }
 
+
+
   set_contacts(){
 
-    this.crudservice.get_AllContacts().get().toPromise()
-    .then(res => {
+    this.subscription = this.crudservice.get_AllContacts().valueChanges()
+      .subscribe(res => {
 
       this.contacts_state = Status.StandBy; // stand by while loading connections
 
       console.log("get_AllContacts");
 
-      if(res.size == 0){
+      if(res.length == 0){
         this.contacts_state = Status.Deny;
         this.contacts = [];
         return;
       }
 
-      this.contacts = [];
-      res.forEach(c =>{
+      this.contacts = res.map(c => {
 
-        this.get_phone(c.data()['email'], c.data()['uid'])
-            .then(phone_num => {
-              this.contacts.push(
-                {
-                  firstName: c.data()['firstName'],
-                  lastName: c.data()['lastName'],
-                  email: c.data()['email'],
-                  shareHistory: c.data()['shareHistory'], 
-                  inEdit: false,
-                  confirmed: c.data()['confirmed'],
-                  phone: phone_num
-                })
-            })
+        let contact:Contact = {
+            firstName: c['firstName'],
+            lastName: c['lastName'],
+            email: c['email'],
+            shareHistory: c['shareHistory'], 
+            inEdit: false,
+            confirmed: c['confirmed'],
+            // phone is loaded later
+        }
+        
+        this.get_phone(c['email'], c['uid']).then(phone_num => {contact['phone'] = phone_num});
+        return contact;
       })
+    
       this.contacts_state = Status.Accept
       
     
     })
+    
 
   }
+
+
 
 
   //X want to add Y
@@ -129,9 +133,6 @@ export class ContactListComponent implements OnInit {
               .then((res)=>{
                 if(res){
                   this.createContactRequest()
-                  .then(res =>{
-                    this.set_contacts(); // reset contacts
-                  }) 
                 }
               });
           }
@@ -264,7 +265,7 @@ export class ContactListComponent implements OnInit {
     }
     else{
         this.errorMessageEditContact="";
-        this.crudservice.update_contact(recordData['email'],record).then(()=> this.set_contacts()); // reset contacts
+        this.crudservice.update_contact(recordData['email'],record);
         this.messageEditContact = "Contact’s details updated successfully"
         recordData.inEdit = false;
     }
@@ -280,7 +281,7 @@ export class ContactListComponent implements OnInit {
         this.crudservice.get_uidFromEmail(email)
           .then((doc) => {
             if(doc.exists){
-                this.crudservice.delete_contact(this.authservice.currentUserId, email).then(()=> this.set_contacts());
+                this.crudservice.delete_contact(this.authservice.currentUserId, email);
                 this.crudservice.delete_connection(doc.data()[email],this.authservice.currentUserName);
             }
           }).catch(error => {console.log(error)});
@@ -300,7 +301,7 @@ export class ContactListComponent implements OnInit {
               //delete the request from the list of requests on Y
               this.crudservice.delete_request(doc.data()[email],this.authservice.currentUserName);
               //delete Y from the contacts on X
-              this.crudservice.delete_contact(this.authservice.currentUserId,email).then(()=> this.set_contacts());
+              this.crudservice.delete_contact(this.authservice.currentUserId,email)//.then(()=> this.set_contacts());
         
             }
           }).catch(error => {console.log(error)});
