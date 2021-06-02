@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CrudService} from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import {Subscription } from 'rxjs';
+import {concat, Subscription } from 'rxjs';
 
 
 enum Status {
@@ -21,6 +21,12 @@ interface Contact{
   phone?:number; // when entering new contact details a phone number is not required
 }
 
+interface AddContactSection{
+  showAddContact: boolean;
+  showAddContactBtnTitle: string;
+  icon: string;
+}
+
 const MAX_CONTACTS_AND_CONNECTIONS = 3; //20;
 
 @Component({
@@ -32,9 +38,16 @@ const MAX_CONTACTS_AND_CONNECTIONS = 3; //20;
 
 export class ContactListComponent implements OnInit {
 
+  addSection: AddContactSection = {
+    showAddContact: false,
+    showAddContactBtnTitle: "To add contact",
+    icon: "keyboard_arrow_down"
+  }
+
   public state = Status; 
   public contacts_state:Status = Status.StandBy; // contacts state
-  contacts: Array<Contact> = []
+  contacts: Array<Contact> = []//array of people who confirmed the user request
+  requests: Array<Contact> = []//array of people who have not yet confirmed the user request
 
   new_contact: Contact = {
     firstName: '',
@@ -55,12 +68,10 @@ export class ContactListComponent implements OnInit {
   subscription: Subscription;
   constructor(private router: Router, private authservice: AuthService,public crudservice:CrudService) { }
 
-  
   ngOnInit() {
-
     this.cleanMessages();
     this.set_contacts(); // need to call this function any time contact list is updated
-    
+ 
   }
 
   get_phone(email:string, uid:string):Promise<number>{
@@ -88,10 +99,31 @@ export class ContactListComponent implements OnInit {
       if(res.length == 0){
         this.contacts_state = Status.Deny;
         this.contacts = [];
+        this.requests = [];
         return;
       }
 
-      this.contacts = res.map(c => {
+      let resA=res.filter(c=>{return c['confirmed']});
+      let resB=res.filter(c=>{return !c['confirmed']});
+
+      this.contacts = resA.map(c => {
+        let contact:Contact = {
+            firstName: c['firstName'],
+            lastName: c['lastName'],
+            email: c['email'],
+            shareHistory: c['shareHistory'], 
+            inEdit: false,
+            confirmed: c['confirmed'],
+            // phone is loaded later
+        }
+        
+        this.get_phone(c['email'], c['uid']).then(phone_num => {contact['phone'] = phone_num});
+        return contact;
+
+      })
+
+
+      this.requests = resB.map(c => {
 
         let contact:Contact = {
             firstName: c['firstName'],
@@ -105,8 +137,9 @@ export class ContactListComponent implements OnInit {
         
         this.get_phone(c['email'], c['uid']).then(phone_num => {contact['phone'] = phone_num});
         return contact;
+ 
       })
-    
+
       this.contacts_state = Status.Accept
       
     
@@ -348,5 +381,21 @@ export class ContactListComponent implements OnInit {
     if(this.subscription != undefined)
         this.subscription.unsubscribe();
   }
+
+  collapseAddContact(){
+    this.addSection.showAddContact = !this.addSection.showAddContact;//toggle
+    if(this.addSection.showAddContact)
+    {
+      this.addSection.icon="keyboard_arrow_up";
+      this.addSection.showAddContactBtnTitle="Hide";
+
+    }
+    else{
+      this.addSection.icon="keyboard_arrow_down";
+      this.addSection.showAddContactBtnTitle= "To add contact";
+
+    }
+  }
+
 
 }
