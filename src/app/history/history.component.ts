@@ -844,6 +844,3 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
 
 }
 
-function enableRipple(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
