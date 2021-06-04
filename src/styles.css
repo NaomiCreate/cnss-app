@@ -9,6 +9,7 @@ html, body {
     font-family: 'Open Sans' ;
     /* background-color:rgba(149, 82, 81, 0.712); */
     background-color: RosyBrown;
+    /* background-color: rgb(241, 241, 241); */
 
 }
 
@@ -17,18 +18,9 @@ a {
     text-decoration: none;
 }
 
-/* .btn-danger{
-    color: rgb(51, 48, 48);
-    background-color:rgba(71, 16, 16, 0.664);
-} */
 
 
 .btn-primary {
-    /* color: #fff;
-    background-color: #507eb1;
-    border-color: #507eb1; 
-    width: 150px;
-    margin: 3px; */
     color: bisque;
   background-color: #3e3f41;
   border-color: #3e3f41; 
@@ -40,10 +32,6 @@ a {
   width: 150px;
 }
 .btn-primary:hover{
-    /* background-color: #8aa2bc;
-    border-color:#8aa2bc;
-    width: 150px;
-    margin: 3px; */
     color: bisque;
     background-color: #747679;
     border-color:  #747679; 
@@ -61,15 +49,6 @@ a {
 }
 
 button{
-    /* color: bisque;
-    background-color: #3e3f41;
-    border-color: #3e3f41; 
-    width: 150px;
-    margin: 3px;     
-    margin:3px;
-    padding: 5px;
-    border-radius: 5px;
-    width: 150px; */
     color: bisque;
     background-color: #3e3f41;
     border-color: #3e3f41; 
@@ -79,19 +58,52 @@ button{
     padding: 5px;
     border-radius: 5px;
     width: 150px;
+    outline: none;
 }
-button:hover{
-    /* color: bisque;
-    background-color: #747679;
-    border-color:  #747679;  */
+ button:hover{
     color: bisque;
     background-color: #747679;
     border-color:  #747679; 
 
+} 
+
+/* element.style {
+}
+button:not(:disabled), [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled) {
+    cursor: pointer;
+} */
+button:focus {
+    outline: none;
 }
 .btn-danger:hover{
     background-color: #f5949cc2;
     border-color:  #f5949cc2; 
     width: 150px;
     margin: 3px;
+}
+/* btn to show/hide content */
+.collapse-btn{
+    align-self: center;
+    display: grid;
+    width: 130px;
+    height: 52px;
+    background: #000000;
+    border: none;
+    outline: none;
+}
+.btn-delete{
+    background-color: #ff0015cf;
+    border-color: #ff0015cf;
+    align-self: flex-end;
+    width: 55px;
+    color: #000000e0;
+}
+.btn-delete:hover{
+    background-color: #fb3c4ccf;
+    border-color:  #fb3c4ccf;
+    color: #000000e0;
+}
+.btn-edit{
+    align-self: center;
+    width: 100px;
 }

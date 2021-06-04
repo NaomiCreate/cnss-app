@@ -1,84 +1,71 @@
-
-   /* .container-content{
-    margin-left: 15%;
-  
-  }
- .add-contact-section{
-    margin-left: 15%;
-    margin-top: 10%;
-    display: inline-block;
-    margin-bottom: 10px;
-
-  }
-
-h3{
-    color: aliceblue;
-    font-weight: bold;
-    font-family: URW Chancery L, cursive;
-    margin-bottom: 10px;
-} */
-
-.card { 
+.card#contacts { 
   margin-top:50px;
   margin-bottom: 20px;
-  width: 340px;
-  
+  width: 400px;
+  background-color: #97e29d;
+
+ }   
+ .card#requests { 
+  margin-top:50px;
+  margin-bottom: 20px;
+  width: 400px;
+  background-color: #eec37d;
  } 
 label{
   color: rgb(39, 95, 144);
   font-weight: bold;
   font-family: URW Chancery L, cursive;
-  /* margin-bottom: 10px;  */
-} 
 
+} 
+/* input[type="radio"], input[type="checkbox"] {
+  margin-right: 10px;
+  margin-left: 40px;
+} */
+/* input{
+  border-radius: 5px;
+  border-color: #3e3f419a;
+} */
+input[type="radio"]{
+  margin: 0 10px 0 10px;
+}
+
+.error-msg{
+  background-color: rgb(236, 236, 236);
+}
+/*
 input[type="radio"]{
     margin: 0 10px 0 10px;
 }
 
-  
-  
-  /* a{
-    color: bisque;
-    background-color: #3e3f41;
-    border-color: #3e3f41; 
-    width: 150px;
-    margin: 3px;     
-    margin:3px;
-    padding: 5px;
-    border-radius: 5px;
-    width: 150px;
-  } */
-  
-  a:hover{
-    color: bisque;
-    background-color: #747679;
-    border-color:  #747679; 
-  
-  }
-  
-  #cancel{
-    margin-bottom: 40px;
-  }
+a:hover{
+  color: bisque;
+  background-color: #747679;
+  border-color:  #747679; 
 
-  input{
-    border-radius: 5px;
-    border-color: #3e3f419a;
-    /* padding-right: 10px; */
-  }
-  
-  .error-msg{
-    background-color: rgb(236, 236, 236);
-  }
-  .btn-danger {
-    color: #fff;
-    background-color: #fc5b6b86;
-    border-color:  #fc5b6b86;
-    width: 150px;
-    margin: 3px;     
-    margin:3px;
-    padding: 5px;
-    border-radius: 5px;
-    width: 150px;
+}
+
+#cancel{
+  margin-bottom: 40px;
+}
+
+input{
+  border-radius: 5px;
+  border-color: #3e3f419a;
+}
+
+.error-msg{
+  background-color: rgb(236, 236, 236);
+}
+.btn-danger {
+  color: #fff;
+  background-color: #fc5b6b86;
+  border-color:  #fc5b6b86;
+  width: 150px;
+  margin: 3px;     
+  margin:3px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 150px;
 }
 .btn-danger:hover{
     background-color: #f5949cc2;
@@ -88,35 +75,21 @@ input[type="radio"]{
 }
 #table1 {
   margin-bottom: 30px
-}
-/* input{
-    margin: 3px;
-    border-radius: 5px;
-    height: 40px;
-}
+} */
 
-.edit-from-control{
-    border-radius: 5px;
-    height: 30px;
-    width: 140px;
-}
-.add-contact-section{
+/* align-self: center; */
 
-    width: 400px;
+.card#btn-add-section{
+  background:RosyBrown;
+  /* background:rgb(241, 241, 241); */
+  border:  rgb(241, 241, 241);
+  margin-top: 55px;
 
 }
-
-#add-contact-btn{
-    position: relative;
-    color: black;
-    background-color:rgba(190, 190, 190, 0.739); 
-    margin:3px;
-    padding: 5px;
-    border-radius: 5px;
-    width: 150px;
+.card#add-section{
+  border: 3px solid #54722b;
+  background-color: rgb(255, 238, 218);  
+  margin-bottom: 40px;
+  width: 400px;
 }
-    #add-contact-btn:hover{
-    color: black;
-    background-color: #ff7c25d8;
-    }*/
-    
+
