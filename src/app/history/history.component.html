@@ -4,8 +4,7 @@
 <div class="card" id="card-top-bar">
        <button class="button" id="btn-history-top-bar" (click)="myHistoySelected = true">My History</button>
        <button id="btn-history-top-bar" (click)="myHistoySelected = false">Connections History</button>
-</div>  
-
+</div>
 
 <div class="container-content" *ngIf="myHistoySelected; else elseBlock">
 
@@ -34,14 +33,26 @@
                                    </div>
 
                                    <div class="card-btn-controls">
-                                          <div *ngIf="user.prevStartPoint != null">
-                                                 <!-- <button class="btn-controls" (click)="getPrev(-1,false)">Prev</button> -->
-                                                 <button class="btn-controls" (click)="getNext(user, true)">Prev</button>
+                                          <div *ngIf="hasPrev(user)">
+                                                 <button class="btn-controls" (click)="user.PREV_FLAG = true; getNext(user, true)">Prev</button>
                                           </div>
-                                          <div *ngIf="user.nextStartPoint != null">
-                                                 <!-- <button class="btn-controls" (click)="getNext(-1,false)">Next</button> -->
-                                                 <button class="btn-controls" (click)="getNext(user, false)">Next</button>
+                                          <div *ngIf="hasNext(user)">
+                                                 <button class="btn-controls" (click)="user.NEXT_FLAG = true; getNext(user, false)">Next</button>
                                           </div>
+                                   </div>
+
+                                   <div>
+                                          <form (ngSubmit)="search(user)">
+                                                 <label>Show All:</label>
+                                                 <input type="checkbox" name="showAll" [checked]="user.showAll" (change)="user.showAll = !user.showAll">
+                                                 <label>From:</label>
+                                                 <input name="fromDate" type="Date" [(ngModel)]="user.fromDate" class="form-control">
+                                                 <input name="fromTime" type="time" [(ngModel)]="user.fromTime" class="form-control">
+                                                 <label>To:</label>
+                                                 <input name="toDate" type="date" [(ngModel)]="user.toDate" class="form-control">
+                                                 <input name="toTime" type="time" [(ngModel)]="user.toTime" class="form-control">
+                                                 <input type="submit" value="Search" class="btn float-right search_btn">
+                                          </form>
                                    </div>
                                    
                             </div>
@@ -111,14 +122,26 @@
                                                                       </div>
 
                                                                        <div class="card-btn-controls">
-                                                                             <div *ngIf="connection.prevStartPoint != null">
-                                                                                    <!-- <button class="btn-controls" (click)="getPrev(connection.index,true)">Prev</button> -->
-                                                                                    <button class="btn-controls" (click)="getNext(connection,true)">Prev</button>
+                                                                             <div *ngIf="hasPrev(connection)">
+                                                                                    <button class="btn-controls" (click)="connection.PREV_FLAG = true; getNext(connection,true)">Prev</button>
                                                                              </div>
-                                                                             <div *ngIf="connection.nextStartPoint != null">
-                                                                                    <!-- <button class="btn-controls" (click)="getNext(connection.index,true)">Next</button> -->
-                                                                                    <button class="btn-controls" (click)="getNext(connection,false)">Next</button>
+                                                                             <div *ngIf="hasNext(connection)">
+                                                                                    <button class="btn-controls" (click)="connection.NEXT_FLAG = true; getNext(connection,false)">Next</button>
                                                                              </div>
+                                                                      </div>
+
+                                                                      <div>
+                                                                             <form (ngSubmit)="search(connection)">
+                                                                                    <label>Show All:</label>
+                                                                                    <input type="checkbox" name="showAll" [checked]="user.showAll" (change)="user.showAll = !user.showAll">
+                                                                                    <label>From:</label>
+                                                                                    <input name="fromDate" type="Date" [(ngModel)]="user.fromDate" class="form-control">
+                                                                                    <input name="fromTime" type="time" [(ngModel)]="user.fromTime" class="form-control">
+                                                                                    <label>To:</label>
+                                                                                    <input name="toDate" type="date" [(ngModel)]="user.toDate" class="form-control">
+                                                                                    <input name="toTime" type="time" [(ngModel)]="user.toTime" class="form-control">
+                                                                                    <input type="submit" value="Search" class="btn float-right search_btn">
+                                                                             </form>
                                                                       </div>
                                                                       
                                                                </div>
@@ -167,87 +190,22 @@
 </ng-template>
 
 
-<!-- *********************For Testing********************* :-->
-<h3>Use Search:</h3>
-<td class="ownership" name="ownership">
-       <input type="radio"  [(ngModel)]="user.useSearch" [value]="true" />  
-       <label>Yes</label><br>  
-       <input type="radio"  [(ngModel)]="user.useSearch" [value]="false" />
-       <label>No</label><br>  
-   </td>
-
-<div *ngIf="user.useSearch">
-       <h3>From:</h3>
-       <form (ngSubmit)="search()">
-              <div class="form-group">
-                     <label>Date start point:</label>
-                     <input name="dateStart"  type="Date" [(ngModel)]="user.searchDateStartPoint" class="form-control">
-                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
-              </div>
-              <div class="form-group">
-                     <label>Time start point:</label>
-                     <input name="time-start"  type="time"  [(ngModel)]="user.searchTimeStartPoint" class="form-control">
-                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
-              </div>
-              <div class="form-group">
-                     <label>Date end point:</label>
-                     <input name="date-end"  type="date" [(ngModel)]="user.searchDateEndPoint" class="form-control">
-                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
-              </div>
-              <div class="form-group">
-                     <label>Time end point:</label>
-                     <input name="time-end"  type="time" [(ngModel)]="user.searchTimeEndPoint" class="form-control">
-                     <!-- <input name="Status" #Status="ngModel" type="date" [(ngModel)]="UserService.formData.CreateDate" class="form-control"> -->
-              </div>
-              <div class="clickable">
-                     <div class="form-group">
-                            <input type="submit" value="Search" class="btn float-right search_btn">
-                     </div>
-              </div>
-       </form>
-
-       <!-- <label>Choose a Year:</label>
-       <input type="number" [(ngModel)]="user.searchStartPoint.year" class="from-control"><br>
-       <label>Choose a month:</label>
-       <input type="number" [(ngModel)]="user.searchStartPoint.month" class="from-control"><br>
-       <label>Choose a day:</label>
-       <input type="number" [(ngModel)]="user.searchStartPoint.day" class="from-control"><br>
-       <label>Choose an hour:</label>
-       <input type="number" [(ngModel)]="user.searchStartPoint.hour" class="from-control"><br>
-       <label>Choose minutes:</label>
-       <input type="number" [(ngModel)]="user.searchStartPoint.minutes" class="from-control"><br>
-       <label>Choose seconds:</label>
-       <input type="number" [(ngModel)]="user.searchStartPoint.seconds" class="from-control"><br>
-       
-       <h3>To:</h3>
-       <label>Choose a Year:</label>
-       <input type="number" [(ngModel)]="user.searchEndPoint.year" class="from-control"><br>
-       <label>Choose a month:</label>
-       <input type="number" [(ngModel)]="user.searchEndPoint.month" class="from-control"><br>
-       <label>Choose a day:</label>
-       <input type="number" [(ngModel)]="user.searchEndPoint.day" class="from-control"><br>
-       <label>Choose an hour:</label>
-       <input type="number" [(ngModel)]="user.searchEndPoint.hour" class="from-control"><br>
-       <label>Choose minutes:</label>
-       <input type="number" [(ngModel)]="user.searchEndPoint.minutes" class="from-control"><br>
-       <label>Choose seconds:</label>
-       <input type="number" [(ngModel)]="user.searchEndPoint.seconds" class="from-control"><br>
-        -->
-       <!-- <button (click)="getNextSearch(false,user.searchStartPoint,user.searchEndPoint)">getNextSearch</button> -->
-</div>
 
 
-<!-- *********************For Testing********************* :-->
 
-<!-- <button (click)="testSearch()">testSearch</button> --> 
+<!-- <form (ngSubmit)="search(user)">
+       <label>Show All:</label>
+       <input type="checkbox" name="showAll" [checked]="user.showAll" (change)="user.showAll = !user.showAll">
+       <label>From:</label>
+       <input name="fromDate" type="Date" [(ngModel)]="user.fromDate" class="form-control">
+       <input name="fromTime" type="time" [(ngModel)]="user.fromTime" class="form-control">
+       <label>To:</label>
+       <input name="toDate" type="date" [(ngModel)]="user.toDate" class="form-control">
+       <input name="toTime" type="time" [(ngModel)]="user.toTime" class="form-control">
+       <input type="submit" value="Search" class="btn float-right search_btn">
+</form> -->
 
-<!--<div *ngIf="user.nextStartPoint != null">
-       <button (click)="getNext(-1,false)">Get Next</button>
-</div>
-<div *ngIf="user.prevStartPoint != null">
-       <button (click)="getPrev(-1,false)">Get Prev</button>
-</div> -->
-<!-- <button (click)="getPrev()">Get Prev</button> -->
+
 
 
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RealTimeService } from '../services/real-time.service';
 
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -7,8 +7,13 @@ import { ValueTransformer } from '@angular/compiler/src/util';
 import { CrudService } from '../services/crud.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+// import { Console } from 'console';
+import { validateEventsArray } from '@angular/fire/firestore';
+
 
 //import { timeStamp } from 'console';
+
+//TOASTS: https://ej2.syncfusion.com/angular/documentation/toast/timeout/?_ga=2.203180305.1660293228.1622753500-518789863.1617545645
 
 
 export interface Alert {
@@ -44,8 +49,22 @@ export interface Connection {
   hasAlerts: Status;
   index: number;
 
-  prevStartPoint:number;
-  nextStartPoint:number;
+  largestTimestamp:number;
+  smallestTimestamp:number;
+  prevTimestamp:number;
+  nextTimestamp:number;
+
+  showAll:boolean;//change to showAll checkBox
+  searchLargestTimestamp:number;
+  searchSmallestTimestamp:number;
+  fromDate?: Date;//---added For search
+  toDate?: Date;//---added For search
+  fromTime?: Date;//---added For search
+  toTime?: Date;//---added For search
+
+  INDEPENDENT_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
+  PREV_FLAG: boolean;
+  NEXT_FLAG: boolean;
 
   //searchStartPoint: SearchPoints;//---added For search
   //searchEndPoint: SearchPoints;//---added For search
@@ -59,18 +78,27 @@ export interface User {
   deviceID: any;
   hasConnections:Status;
 
-  prevStartPoint:number;
-  nextStartPoint:number;
+  largestTimestamp:number;
+  smallestTimestamp:number;
+  prevTimestamp:number;
+  nextTimestamp:number;
 
-  useSearch:boolean;//change to showAll checkBox
+  showAll:boolean;//change to showAll checkBox
+
+
   // searchStartPoint: SearchPoints;//---added For search
   // searchEndPoint: SearchPoints;//---added For search
 
-  searchDateStartPoint?: Date;//---added For search
-  searchDateEndPoint?: Date;//---added For search
-  searchTimeStartPoint?: Date;//---added For search
-  searchTimeEndPoint?: Date;//---added For search
+  searchLargestTimestamp:number;
+  searchSmallestTimestamp:number;
+  fromDate?: Date;//---added For search
+  toDate?: Date;//---added For search
+  fromTime?: Date;//---added For search
+  toTime?: Date;//---added For search
 
+  INDEPENDENT_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
+  PREV_FLAG: boolean;
+  NEXT_FLAG: boolean;
   //startPoint:number;
   //endPoint:number;
 }
@@ -89,17 +117,23 @@ export interface User {
 
 // }
 
+
+const UINIX_MIN_TIMESTAMP =  0x0;
+// const UINIX_MAX_TIMESTAMP =  0x7FFFFFFF;
+
+
 //---added for search
 const ALERT_LIMIT = 3;//The value should be: limit+1 
 
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
-  styleUrls: ['./history.component.css']
+  styleUrls: ['./history.component.css'],
 })
 
 export class HistoryComponent implements OnInit {
 
+  INDEPENDENT_FLAG = false; // this flag will turn to true when there is no next and there is only one alert in the array
 
   public user: User = {
     isOwner: Status.StandBy,
@@ -109,18 +143,30 @@ export class HistoryComponent implements OnInit {
     deviceID: "",
     hasConnections:Status.StandBy,
 
-    useSearch:false,
-    prevStartPoint:null,
-    nextStartPoint:null,
+    showAll:true,
+    searchLargestTimestamp:null,
+    searchSmallestTimestamp:null,
+    fromDate: null,
+    toDate: null,
+    fromTime: null,
+    toTime: null,
+
+    largestTimestamp:null,
+    smallestTimestamp:null,
+    prevTimestamp:null,
+    nextTimestamp:null,
 
 
     //searchStartPoint: null,//---added For search
     //searchEndPoint: null,//---added For search
 
-    searchDateStartPoint: null,//---added For search
-    searchDateEndPoint: null,//---added For search
-    searchTimeStartPoint: null,//---added For search
-    searchTimeEndPoint: null,//---added For search
+    
+    
+
+    INDEPENDENT_FLAG: false,
+    PREV_FLAG: false,
+    NEXT_FLAG: true,
+    
     //startPoint:null,
     //endPoint:null
   }
@@ -153,9 +199,21 @@ export class HistoryComponent implements OnInit {
 
           
           //console.log("Debug::user.dbPath", this.user.dbPath)
+          this.setLargestTimestap(this.user).then(res =>
+          {
+            console.log("ngInin => returnd from set largest time stamp")
+            this.setSmallestTimestap(this.user).then(res =>
+            {
+              this.user.nextTimestamp = this.user.searchLargestTimestamp; // set the next timestamp
+              //getAlerts
+              this.getNext(this.user, false);
+            })
+          
+          })
+          
+          
 
-          //getAlerts
-          this.getNext(this.user, false);
+      
         
         }
         else{
@@ -202,8 +260,20 @@ export class HistoryComponent implements OnInit {
               alerts: [],
               hasAlerts: Status.StandBy,
               index: i,
-              prevStartPoint:null,
-              nextStartPoint:null
+              showAll:true,
+              searchLargestTimestamp:null,
+              searchSmallestTimestamp:null,
+              fromDate: null,
+              toDate: null,
+              fromTime: null,
+              toTime: null,
+              largestTimestamp:null,
+              smallestTimestamp:null,
+              prevTimestamp:null,
+              nextTimestamp:null,
+              INDEPENDENT_FLAG: false,
+              PREV_FLAG:false,
+              NEXT_FLAG: true,
             }
           
             this.crudservice.get_contact_details(new_connection.email,  c.payload.doc.data()['id'])
@@ -265,21 +335,50 @@ export class HistoryComponent implements OnInit {
     };
   }
 
+  // /*Sets alert and returns it*/
+  // getAlert(doc:any):Alert{
+  //   //this.time_stamp_to_date(doc.payload.val()["timestamp"]);//For DEBUG
+
+  //   let date = new Date(+doc.val()["timestamp"]);
+  //   //console.log("Debug:: date from getAlert = ",date);
+
+  //   return {
+  //     image_path:doc.val()["image_path"],
+  //     notes: doc.val()["notes"],
+  //     timestamp: doc.val()["timestamp"],
+  //     year: date.getFullYear(),
+  //     month:date.getMonth()+1,
+  //     day: date.getUTCDate(),
+  //     hour: date.getHours(),
+  //     minutes: date.getMinutes(),
+  //     inEdit:false,
+  //     alertID: doc.key
+  //   };
+  // }
+
 
   /**This functin is an on click listener, it receives a connection and retreivs all alerts 
    * index -> should be connections index in array connections
   */
   showAlerts(index: number){
 
-    //console.log("Debug:: connection email", index)
-    //console.log("Debug:: connections[index]", this.connections[index])
-
-
     if(this.connections[index].shareHistory == Status.Accept){
 
       this.connections[index].hideHistory = false; //show history for HTML
       if(this.connections[index].alerts.length == 0){
-        this.getNext(this.connections[index], false);
+
+        this.setLargestTimestap(this.connections[index]).then(res =>
+          {
+            console.log("ngInin => returnd from set largest time stamp")
+            this.setSmallestTimestap(this.connections[index]).then(res =>
+            {
+              this.connections[index].nextTimestamp = this.connections[index].searchLargestTimestamp; // set the next timestamp
+              //getAlerts
+              this.getNext(this.connections[index], false);
+            })
+          
+          })
+        
       }
       
     }
@@ -289,7 +388,7 @@ export class HistoryComponent implements OnInit {
     
   }
 
-  //NEED TO TEST
+
   /**This function is an onclick listener for hideHistory HTML 
    * index -> should be connections index in array connections
   */
@@ -304,8 +403,9 @@ export class HistoryComponent implements OnInit {
     this.data_subscriptions.forEach(element => element.unsubscribe())
   }
 
-//function for debug
-time_stamp_to_date(timestamp: number){
+
+//function for debugging
+timestamp_to_date(timestamp: number){
   var date = new Date(+timestamp);
   console.log("date = ",date);
   console.log("date.toDateString() = ",date.toDateString());
@@ -316,86 +416,290 @@ time_stamp_to_date(timestamp: number){
   console.log("date.getSeconds() = ",date.getSeconds());
   console.log("date.getHours() = ",date.getHours());
   console.log("date.toLocaleTimeString() = ",date.toLocaleTimeString());
+
+}
+
+/**
+ * Note: for some reason when value changes the query is fired twice,
+ * once with an empty object and a second time with the object.
+ * @param person
+ * @returns true, when data object is not empty, false otherwise.
+ * If returns false from value changes it might be user doesn't have alerts but one can't tell.
+ */
+setLargestTimestap(person:Connection | User):Promise<boolean>{
+
+  let code = `ref=>ref.orderByChild('timestamp').startAt(${UINIX_MIN_TIMESTAMP}).limitToLast(${1})`;
+
+  return new Promise((resolve) =>
+  {
+    this.data_subscriptions.push(this.db.list(person.dbPath,eval(code))
+    .valueChanges()
+    .subscribe(data => {
+
+      // This value changes triggers when new alert arrives
+      if(data.length > 0){
+        console.log("Largest timestamp alert",data[0]["timestamp"]);
+        if(person.largestTimestamp < data[0]["timestamp"]){
+          //TOAST//
+          console.log("new alert");
+          //TOAST//
+        }
+        person.largestTimestamp = data[0]["timestamp"];
+        if(person.showAll){
+          person.searchLargestTimestamp = person.largestTimestamp;
+        }
+        resolve(true);
+      }
+      resolve(false);
+   }))
+  })
+
+}
+
+setSmallestTimestap(person:Connection | User):Promise<boolean>{
+
+  let code = `ref=>ref.orderByChild('timestamp').startAt(${UINIX_MIN_TIMESTAMP}).limitToFirst(${1})`;
+
+  return new Promise((resolve) =>
+  {
+    this.data_subscriptions.push(this.db.list(person.dbPath,eval(code))
+    .valueChanges()
+    .subscribe(data => {
+
+      if(data.length > 0){
+        console.log("Smallest timestamp alert",data[0]["timestamp"]);
+        person.smallestTimestamp = data[0]["timestamp"];
+        if(person.showAll){
+          person.searchSmallestTimestamp = person.smallestTimestamp;
+        }
+        resolve(true);
+      }
+      resolve(false);
+
+    })
+    )
+  })
+  
+}
+
+/**This function sets the next batch of alerts, 
+   * it relies on the fact that person is an object and is there for passed by reference.
+   * Inorder to get previous batch of alerts ser prev as true, otherwise set it as false*/
+//  getNext(person:Connection | User){
+
+//   person.hasAlerts = Status.StandBy;
+
+//   let isStart = false;
+//   if(person.alerts.length == 0){ // for first batch
+//     person.prevTimestamp = null;
+//     person.nextTimestamp = person.largestTimestamp;
+//     isStart = true;
+//   }
+
+//   this.db.list(person.dbPath).query.orderByChild('timestamp')
+//   .startAt(person.smallestTimestamp)
+//   .endAt(person.nextTimestamp)
+//   .limitToLast(ALERT_LIMIT)
+//   .once("value")
+//   .then(data => {
+
+//     person.alerts = [];
+//     data.forEach((doc:any) => {person.alerts.push(this.getAlert(doc))})
+
+//     //sort alerts by date
+//     person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+
+
+//     // set prev and next timestamps
+//     if(person.alerts.length == 0){
+
+//       person.prevTimestamp = null;
+//       person.nextTimestamp = null;
+//       person.hasAlerts = Status.Deny;
+
+//     }else{
+
+//       if(person.alerts.length == ALERT_LIMIT){
+//         //pop the last item - its time stamp will be usefull when clicking next again next 
+//         person.nextTimestamp = person.alerts.pop().timestamp;
+//       }else{
+//         person.nextTimestamp = null;
+//       }
+
+//       // not openning group
+//       if(!isStart){
+//         person.prevTimestamp = person.alerts[0].timestamp; //as this is not the opening group 
+//       }
+
+//       person.hasAlerts = Status.Accept;
+//     }
+//   });
+
+// }
+
+// getPrev(person:Connection | User){
+
+//   person.hasAlerts = Status.StandBy;
+
+//   // set prev for this round and next for next round
+//   // person.prevTimestamp = person.alerts[0].timestamp
+//   // person.nextTimestamp = person.alerts[0].timestamp
+    
+//   this.db.list(person.dbPath).query.orderByChild('timestamp')
+//   .startAt(person.prevTimestamp)
+//   .endAt(person.largestTimestamp)
+//   .limitToFirst(ALERT_LIMIT + 1)
+//   .once("value")
+//   .then(data => {
+
+//     person.alerts = [];
+//     data.forEach((doc:any) => {person.alerts.push(this.getAlert(doc))})
+
+//     //sort alerts by date
+//     person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+
+//     if(person.alerts.length == 0){
+//       person.nextTimestamp = null;
+
+//     }else{
+//       if(person.alerts.length == (ALERT_LIMIT + 1)){
+//         // Then we are still able to go beackwoards
+//         person.alerts.shift(); // need to shift first
+//         person.prevTimestamp = person.alerts[0].timestamp; // and then set prevStarting point
+//       }else{ //this.user.alerts.length <= ALERT_LIMIT
+//         person.prevTimestamp = null;
+//       }
+//       person.nextTimestamp = person.alerts.pop().timestamp; // pop last item as it was already displayed
+//     }
+
+    
+//   })
+
+// }
+
+  /** to be used in html
+   * returns true if person should have the 'next' button otherwise returns false*/ 
+  hasNext(person:Connection | User):boolean{
+
+    if( person.alerts.length != 0 && 
+        person.alerts[person.alerts.length - 1].timestamp > person.searchSmallestTimestamp){
+      return true
+    }else{
+      return false;
+    }
+
   }
 
+  /** to be used in html
+   * returns true if person should have the 'prev' button otherwise returns false*/ 
+  hasPrev(person:Connection | User):boolean{
 
+    if(person.alerts.length != 0 && 
+       person.alerts[0].timestamp < person.searchLargestTimestamp){
+      return true
+    }else{
+      return false;
+    }
 
-//--------------------------------------------------------------------------27/04/2021
-
+  }
 
   /**This function sets the next batch of alerts, 
    * it relies on the fact that person is an object and is there for passed by reference.
-   * Inorder to get previous batch of alerts ser prev as true, otherwise set it as false*/
+   * Inorder to get previous batch of alerts ser prev as true, otherwise set it as false.
+   * Note: this function asumes next and prev timestamp should always be set the same way.
+   * in other words that there value does not affect the visability of the buttons*/
   getNext(person:Connection | User, prev:boolean){
 
-    person.hasAlerts = Status.StandBy;
+    // person.hasAlerts = Status.StandBy;
 
-    let isStart:boolean = true;
-    if( person.alerts.length != 0){ // This is not the first batch
-      isStart = false;
-    }
+    // let isStart = false;
+    // if( person.alerts.length == 0){ // This is not the first batch
+    //   person.prevTimestamp = null; // reset the previous point
+    //   isStart = true;
+    // }
+
 
     this.data_subscriptions.push(
       this.db.list(person.dbPath,eval(this.get_code(person,prev)))
         .snapshotChanges()
         .subscribe(data => {
 
-          console.log("Debug:: isStart:",isStart)
-          if(isStart && person.alerts.length != 0){
-            console.log("Debug:: NEW ALERT - THIS WILL BE OUR FLAG TO MAKE FIRST ALERT IN SPECIAL COLOR")
-          }
-         
-          person.alerts = data.map(doc => {return this.getAlert(doc)}) //empty alerts, incase - snapshotChanges
-          console.log("Debug::Test user alerts: ",person.alerts)
+          // do the following only if we are in the firs batch 
+          // or if we are in snap shot changes and the largest timstamp is smaller or equal to 
+          // the largest presont timestamp
+          // NOTE: after vigures checking it seems each time there is a change (remove or create) 
+          // snapshot changes is calles 4 times
+          // twice with the following two alerts and twice with the previouse two alerts.
+          if(  person.PREV_FLAG 
+            || person.NEXT_FLAG 
+            || (!person.INDEPENDENT_FLAG 
+              && (data.length != 0 
+                && data[data.length - 1].payload.val()['timestamp'] <= person.alerts[0].timestamp))
+            || (person.INDEPENDENT_FLAG 
+              && data.length != 0 
+              && (data[data.length - 1].payload.val()['timestamp'] > person.alerts[0].timestamp))){
 
-          //sort alerts by date
-          person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+            //alert(`person.PREV_FLAG=${person.PREV_FLAG}`)
+            person.hasAlerts = Status.StandBy;
 
-          if(!prev){ // case :: next
-
-            if(person.alerts.length == ALERT_LIMIT){
-              //pop the last item - its time stamp will be usefull when clicking next again next 
-              person.nextStartPoint = person.alerts.pop().timestamp;
-            }
-            else{
-              person.nextStartPoint = null;
-            }
-
-            // snapChanges remembers enitial local variables 
-            //- there for isStart == true when new alert arrives 
-            if(!isStart){
-              person.prevStartPoint = person.alerts[0].timestamp; //as this is not the opening group 
-            }
-            else{
-              person.prevStartPoint = null; // reset the previous point
-            }
-
-          }
-
-          else{ // case :: prev
-            
-            if(person.alerts.length == (ALERT_LIMIT + 1)){
-              // Then we are still able to go beackwoards
-              person.alerts.shift().timestamp; // need to shift first
-              person.prevStartPoint = person.alerts[0].timestamp; // and then set prevStarting point
-            
-            }
-            else{//this.user.alerts.length <= ALERT_LIMIT
-              person.prevStartPoint = null;
-            }
-
-            person.alerts.pop() // pop last item as it was already displayed
-
-          }
+            // console.log("Debug:: isStart:",isStart)
+            // if(isStart && person.alerts.length != 0){
+            //   console.log("Debug:: NEW ALERT - THIS WILL BE OUR FLAG TO MAKE FIRST ALERT IN SPECIAL COLOR")
+            // }
           
+            person.alerts = data.map(doc => {return this.getAlert(doc)}) //empty alerts, incase - snapshotChanges
+            console.log("Debug::Test user alerts: ",person.alerts)
 
-          //set hasAlerts
-          if(person.alerts.length != 0){
-            person.hasAlerts = Status.Accept
+            //sort alerts by date
+            person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
+
+
+            if(person.alerts.length == 0){
+              person.hasAlerts = Status.Deny
+            }else{
+
+              if(!prev){ // case :: next
+
+                if(person.alerts.length == ALERT_LIMIT){
+                  //pop the last item - it's timestamp will be usefull when clicking next again 
+                  person.nextTimestamp = person.alerts.pop().timestamp;
+                } 
+                person.prevTimestamp = person.alerts[0].timestamp; // set prev 
+            
+              }
+              else{ // case :: prev
+                
+                if(person.alerts.length == (ALERT_LIMIT + 1)){
+                  // Then we are still able to go beackwoards
+                  person.alerts.shift().timestamp; // need to shift first
+                  person.prevTimestamp = person.alerts[0].timestamp; // and then set prevStarting point
+                
+                }
+                person.nextTimestamp = person.alerts.pop().timestamp // pop last item as it was already displayed
+
+              }
+
+              person.hasAlerts = Status.Accept
+            }
+          }//else if(person.INDEPENDENT_FLAG && data.length != 0 && !this.hasPrev(person)){
+          //   person.hasAlerts = Status.Deny
+          //   person.INDEPENDENT_FLAG = false;
+          // }
+
+          if(!this.hasNext(person) && person.alerts.length == 1){
+            person.INDEPENDENT_FLAG = true;
+          }else{
+            person.INDEPENDENT_FLAG = false;
           }
-          else{
-            person.hasAlerts = Status.Deny
+
+          if(person.PREV_FLAG){
+            person.PREV_FLAG = false;
           }
+
+          if(person.NEXT_FLAG){
+            person.NEXT_FLAG = false;
+          }
+            
         }
       )
 
@@ -409,38 +713,18 @@ time_stamp_to_date(timestamp: number){
   */
   get_code(person:Connection | User, prev:boolean){
 
-    let start: number;
+    console.log("In get code")
+
+    //let start: number;
     let code: string;
 
-
-    if(!prev){ // get next batch of alerts
-
-      console.log("Debug:: get Next")
-
-      if(person.alerts.length != 0){
-        start = person.nextStartPoint;
-        code = `ref=>ref.orderByChild('timestamp').endAt(${start}).limitToLast(${ALERT_LIMIT})` ;
-      }
-      else{ //The opening group of alerts
-        start = null;
-        person.prevStartPoint = null; // as this is the openning group set prev to null
-        code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToLast(${ALERT_LIMIT})`;
-      }
-
+    if(!prev){ // next
+      console.log("person.nextTimestamp", person.nextTimestamp);
+      code = `ref=>ref.orderByChild('timestamp').startAt(${person.searchSmallestTimestamp}).endAt(${person.nextTimestamp}).limitToLast(${ALERT_LIMIT})`;
+    }else{ // prev
+      console.log("person.prevTimestamp", person.prevTimestamp);
+      code = `ref=>ref.orderByChild('timestamp').startAt(${person.prevTimestamp}).endAt(${person.searchLargestTimestamp}).limitToFirst(${ALERT_LIMIT + 1})`;
     }
-    else{ // get previous batch of alerts
-
-      console.log("Debug:: get Prev")
-
-      start = person.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
-                                        //unless only the first group was called and then it's null
-      person.nextStartPoint = person.alerts[0].timestamp; //set nextStatingPoint before goint back
-      code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToFirst(${ALERT_LIMIT + 1})` ;
-      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
-  
-    }
-
-    console.log("Debug:: start ",start)
     return code;
     
   }
@@ -448,48 +732,33 @@ time_stamp_to_date(timestamp: number){
   /**This function deletes alert from the devices collection in realtime firebase, 
     *Parm: the alert's ID*/
   deleteAlert(alertID:string){
-    this.db.database.ref(`/devices/${this.user.deviceID}/history/${alertID}`).remove();
+
+    if(!this.hasNext(this.user) && this.user.alerts.length == 1){
+      this.user.INDEPENDENT_FLAG = true;
+    }else{
+      this.user.INDEPENDENT_FLAG = false;
+    }
+
+    this.db.database.ref(`/devices/${this.user.deviceID}/history/${alertID}`).remove()
   }
 
-  get_code_testing(person:Connection | User, prev:boolean){
+  search(person:Connection | User){
 
-    let start: number;
-    let end: number;
+    console.log("in search")
 
-    let code: string;
-
-
-    if(!prev){ // get next batch of alerts
-
-      console.log("Debug:: get Next")
-
-      if(person.alerts.length != 0){
-        start = person.nextStartPoint;
-        code = `ref=>ref.orderByChild('timestamp').endAt(${start}).limitToLast(${ALERT_LIMIT})` ;
-      }
-      else{ //The opening group of alerts
-        start = null; //If search: start="to point"
-        person.prevStartPoint = null; // as this is the openning group set prev to null
-        code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToLast(${ALERT_LIMIT})`;
-      }
-
+   if(!person.showAll){
+      person.searchSmallestTimestamp = this.dateToTimestamp(person.fromDate,person.fromTime);
+      person.searchLargestTimestamp = this.dateToTimestamp(person.toDate,person.toTime);
+    }else{
+      person.searchSmallestTimestamp = person.smallestTimestamp;
+      person.searchLargestTimestamp = person.largestTimestamp;
     }
-    else{ // get previous batch of alerts
-
-      console.log("Debug:: get Prev")
-
-      start = person.prevStartPoint; // sould always be equal to this.user.alerts[0].timestamp, 
-                                        //unless only the first group was called and then it's null
-      person.nextStartPoint = person.alerts[0].timestamp; //set nextStatingPoint before goint back
-      code = `ref=>ref.orderByChild('timestamp').startAt(${start}).limitToFirst(${ALERT_LIMIT + 1})` ;
-      // Get ALERT_LIMIT + 1 to know when we reached the beginning.
-  
-    }
-
-    console.log("Debug:: start ",start)
-    return code;
+    person.nextTimestamp = person.searchLargestTimestamp; // set the next timestamp
+    person.NEXT_FLAG = true;
+    this.getNext(person, false);  //getAlerts
     
   }
+
 
 
 
@@ -544,33 +813,37 @@ time_stamp_to_date(timestamp: number){
   //   }
   // }
 
-  search()
-  {
-      console.log("Search Debug:: searchStartPoint.date=",this.user.searchDateStartPoint);
-      console.log("Search Debug:: searchStartPoint.time=",this.user.searchTimeStartPoint);
-      console.log("Search Debug:: searchEndPoint.date=",this.user.searchDateEndPoint);
-      console.log("Search Debug:: searchEndPoint.time=",this.user.searchTimeEndPoint);
+  // search()
+  // {
+  //     console.log("Search Debug:: searchStartPoint.date=",this.user.searchDateStartPoint);
+  //     console.log("Search Debug:: searchStartPoint.time=",this.user.searchTimeStartPoint);
+  //     console.log("Search Debug:: searchEndPoint.date=",this.user.searchDateEndPoint);
+  //     console.log("Search Debug:: searchEndPoint.time=",this.user.searchTimeEndPoint);
 
-      let startPoint= this.dateToTimestamp(this.user.searchDateStartPoint,this.user.searchTimeStartPoint);
-      let endPoint= this.dateToTimestamp(this.user.searchDateEndPoint,this.user.searchTimeEndPoint);
+  //     let startPoint= this.dateToTimestamp(this.user.searchDateStartPoint,this.user.searchTimeStartPoint);
+  //     let endPoint= this.dateToTimestamp(this.user.searchDateEndPoint,this.user.searchTimeEndPoint);
 
-      this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(startPoint).endAt(endPoint).once('value').then(function(snapshot) {
-        snapshot.forEach(function(child) {
+  //     this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(startPoint).endAt(endPoint).once('value').then(function(snapshot) {
+  //       snapshot.forEach(function(child) {
 
-          let childData = child.val();
-          let timestamps=child.val().timestamp;
+  //         let childData = child.val();
+  //         let timestamps=child.val().timestamp;
 
-          console.log("Search Debug:: childData= ",childData);
-          console.log("Search Debug:: timestamps= ",timestamps);
-        });
-      });
+  //         console.log("Search Debug:: childData= ",childData);
+  //         console.log("Search Debug:: timestamps= ",timestamps);
+  //       });
+  //     });
 
       // let start = this.dateToTimestamp(searchStartPoint);
       // let end = this.dateToTimestamp(searchEndPoint);
     
-  }
+  //}
 
   
 
 
+}
+
+function enableRipple(arg0: boolean) {
+  throw new Error('Function not implemented.');
 }
