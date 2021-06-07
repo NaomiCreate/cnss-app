@@ -66,8 +66,6 @@ export interface Connection {
   PREV_FLAG: boolean;
   NEXT_FLAG: boolean;
 
-  //searchStartPoint: SearchPoints;//---added For search
-  //searchEndPoint: SearchPoints;//---added For search
 }
 
 export interface User {
@@ -85,10 +83,6 @@ export interface User {
 
   showAll:boolean;//change to showAll checkBox
 
-
-  // searchStartPoint: SearchPoints;//---added For search
-  // searchEndPoint: SearchPoints;//---added For search
-
   searchLargestTimestamp:number;
   searchSmallestTimestamp:number;
   fromDate?: Date;//---added For search
@@ -99,24 +93,8 @@ export interface User {
   INDEPENDENT_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
   PREV_FLAG: boolean;
   NEXT_FLAG: boolean;
-  //startPoint:number;
-  //endPoint:number;
+
 }
-
-//---added for search
-// export interface SearchPoints {
-//   // date: String;
-//   // year: number;
-//   // month: number;
-//   // day: number;
-//   // hour: number;
-//   // minutes: number;
-//   // seconds: number;
-//   date: Date;//---added For search
-//   time: Date;//---added For search
-
-// }
-
 
 const UINIX_MIN_TIMESTAMP =  0x0;
 // const UINIX_MAX_TIMESTAMP =  0x7FFFFFFF;
@@ -156,19 +134,10 @@ export class HistoryComponent implements OnInit {
     prevTimestamp:null,
     nextTimestamp:null,
 
-
-    //searchStartPoint: null,//---added For search
-    //searchEndPoint: null,//---added For search
-
-    
-    
-
     INDEPENDENT_FLAG: false,
     PREV_FLAG: false,
     NEXT_FLAG: true,
     
-    //startPoint:null,
-    //endPoint:null
   }
 
   public connections: Array<Connection> = []; // will contain all users connections that allow sharing their history with him
@@ -211,10 +180,6 @@ export class HistoryComponent implements OnInit {
           
           })
           
-          
-
-      
-        
         }
         else{
           //for HTML output
@@ -334,27 +299,6 @@ export class HistoryComponent implements OnInit {
       alertID: doc.key
     };
   }
-
-  // /*Sets alert and returns it*/
-  // getAlert(doc:any):Alert{
-  //   //this.time_stamp_to_date(doc.payload.val()["timestamp"]);//For DEBUG
-
-  //   let date = new Date(+doc.val()["timestamp"]);
-  //   //console.log("Debug:: date from getAlert = ",date);
-
-  //   return {
-  //     image_path:doc.val()["image_path"],
-  //     notes: doc.val()["notes"],
-  //     timestamp: doc.val()["timestamp"],
-  //     year: date.getFullYear(),
-  //     month:date.getMonth()+1,
-  //     day: date.getUTCDate(),
-  //     hour: date.getHours(),
-  //     minutes: date.getMinutes(),
-  //     inEdit:false,
-  //     alertID: doc.key
-  //   };
-  // }
 
 
   /**This functin is an on click listener, it receives a connection and retreivs all alerts 
@@ -482,106 +426,11 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
   
 }
 
-/**This function sets the next batch of alerts, 
-   * it relies on the fact that person is an object and is there for passed by reference.
-   * Inorder to get previous batch of alerts ser prev as true, otherwise set it as false*/
-//  getNext(person:Connection | User){
-
-//   person.hasAlerts = Status.StandBy;
-
-//   let isStart = false;
-//   if(person.alerts.length == 0){ // for first batch
-//     person.prevTimestamp = null;
-//     person.nextTimestamp = person.largestTimestamp;
-//     isStart = true;
-//   }
-
-//   this.db.list(person.dbPath).query.orderByChild('timestamp')
-//   .startAt(person.smallestTimestamp)
-//   .endAt(person.nextTimestamp)
-//   .limitToLast(ALERT_LIMIT)
-//   .once("value")
-//   .then(data => {
-
-//     person.alerts = [];
-//     data.forEach((doc:any) => {person.alerts.push(this.getAlert(doc))})
-
-//     //sort alerts by date
-//     person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-
-
-//     // set prev and next timestamps
-//     if(person.alerts.length == 0){
-
-//       person.prevTimestamp = null;
-//       person.nextTimestamp = null;
-//       person.hasAlerts = Status.Deny;
-
-//     }else{
-
-//       if(person.alerts.length == ALERT_LIMIT){
-//         //pop the last item - its time stamp will be usefull when clicking next again next 
-//         person.nextTimestamp = person.alerts.pop().timestamp;
-//       }else{
-//         person.nextTimestamp = null;
-//       }
-
-//       // not openning group
-//       if(!isStart){
-//         person.prevTimestamp = person.alerts[0].timestamp; //as this is not the opening group 
-//       }
-
-//       person.hasAlerts = Status.Accept;
-//     }
-//   });
-
-// }
-
-// getPrev(person:Connection | User){
-
-//   person.hasAlerts = Status.StandBy;
-
-//   // set prev for this round and next for next round
-//   // person.prevTimestamp = person.alerts[0].timestamp
-//   // person.nextTimestamp = person.alerts[0].timestamp
-    
-//   this.db.list(person.dbPath).query.orderByChild('timestamp')
-//   .startAt(person.prevTimestamp)
-//   .endAt(person.largestTimestamp)
-//   .limitToFirst(ALERT_LIMIT + 1)
-//   .once("value")
-//   .then(data => {
-
-//     person.alerts = [];
-//     data.forEach((doc:any) => {person.alerts.push(this.getAlert(doc))})
-
-//     //sort alerts by date
-//     person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
-
-//     if(person.alerts.length == 0){
-//       person.nextTimestamp = null;
-
-//     }else{
-//       if(person.alerts.length == (ALERT_LIMIT + 1)){
-//         // Then we are still able to go beackwoards
-//         person.alerts.shift(); // need to shift first
-//         person.prevTimestamp = person.alerts[0].timestamp; // and then set prevStarting point
-//       }else{ //this.user.alerts.length <= ALERT_LIMIT
-//         person.prevTimestamp = null;
-//       }
-//       person.nextTimestamp = person.alerts.pop().timestamp; // pop last item as it was already displayed
-//     }
-
-    
-//   })
-
-// }
-
   /** to be used in html
    * returns true if person should have the 'next' button otherwise returns false*/ 
   hasNext(person:Connection | User):boolean{
 
-    if( person.alerts.length != 0 && 
+    if(person.alerts.length != 0 && 
         person.alerts[person.alerts.length - 1].timestamp > person.searchSmallestTimestamp){
       return true
     }else{
@@ -623,6 +472,9 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
       this.db.list(person.dbPath,eval(this.get_code(person,prev)))
         .snapshotChanges()
         .subscribe(data => {
+
+
+         // alert("snapshotChanges");
 
           // do the following only if we are in the firs batch 
           // or if we are in snap shot changes and the largest timstamp is smaller or equal to 
@@ -747,17 +599,98 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
     console.log("in search")
 
    if(!person.showAll){
-      person.searchSmallestTimestamp = this.dateToTimestamp(person.fromDate,person.fromTime);
-      person.searchLargestTimestamp = this.dateToTimestamp(person.toDate,person.toTime);
-    }else{
+     
+      this.getLargestTimestap(this.dateToTimestamp(person.toDate,person.toTime), person)
+      .then(res => {
+        if(res > 0){
+          person.searchLargestTimestamp = res;
+          this.getSmallestTimestap(this.dateToTimestamp(person.fromDate,person.fromTime),person)
+          .then(res =>{
+            if(res > 0){
+              person.searchSmallestTimestamp = res;
+              person.nextTimestamp = person.searchLargestTimestamp; // set the next timestamp
+              if(person.searchLargestTimestamp >= person.searchSmallestTimestamp){
+                person.NEXT_FLAG = true;
+                this.getNext(person, false);  //getAlerts
+              }
+              else{
+                console.log("no alerts 3");
+              }
+            }
+            else{
+              console.log("no alerts 2");
+            }
+          }) 
+        }
+        else{
+          console.log("no alerts 1");
+        }
+        // person.searchSmallestTimestamp = this.dateToTimestamp(person.fromDate,person.fromTime);
+        // person.searchLargestTimestamp = this.dateToTimestamp(person.toDate,person.toTime);
+      })
+    }
+    else{
       person.searchSmallestTimestamp = person.smallestTimestamp;
       person.searchLargestTimestamp = person.largestTimestamp;
+      person.nextTimestamp = person.searchLargestTimestamp; // set the next timestamp
+      person.NEXT_FLAG = true;
+      this.getNext(person, false);  //getAlerts
     }
-    person.nextTimestamp = person.searchLargestTimestamp; // set the next timestamp
-    person.NEXT_FLAG = true;
-    this.getNext(person, false);  //getAlerts
+    
     
   }
+
+  /**
+   * @param timestamp 
+   * @param person 
+   * @returns -1 if non exists
+   */
+  getLargestTimestap(timestamp:number, person: User | Connection):Promise<number>{
+  
+    return new Promise((resolve) =>
+    {
+      this.db.list(person.dbPath).query.orderByChild('timestamp')
+      .startAt(UINIX_MIN_TIMESTAMP)
+      .endAt(timestamp)
+      .limitToLast(1)
+      .once("value")
+      .then(data => {
+
+        data.forEach(c => {console.log("getLargestTimestap",c.val()["timestamp"])})
+        if(data.exists){
+          data.forEach(c => {resolve(c.val()["timestamp"])})
+        }
+        resolve(-1);
+    })
+ 
+  })
+}
+  
+/**
+ * @param timestamp 
+ * @param person 
+ * @returns -1 if non exists
+ */
+getSmallestTimestap(timestamp:number,  person: User | Connection):Promise<number>{
+
+  return new Promise((resolve) =>
+  {
+    this.db.list(person.dbPath).query.orderByChild('timestamp')
+    .startAt(timestamp)
+    .endAt(person.largestTimestamp)
+    .limitToFirst(1)
+    .once("value")
+    .then(data => {
+
+      data.forEach(c => {console.log("getSmallestTimestap", c.val()["timestamp"])})
+      if(data.exists){
+        data.forEach(c => {resolve(c.val()["timestamp"])})
+      }
+      resolve(-1);
+    })
+
+  })
+}
 
 
 
@@ -778,68 +711,6 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
 
     return date.getTime();
   }
-
-  // getNextSearch(isConnection:boolean, searchStartPoint:SearchPoints, searchEndPoint:SearchPoints)
-  // {
-  //   console.log("Search Debug:: In getNextSearch");
-  //   if(!isConnection)//isUser
-  //   {
-  //     //this.user.hasAlerts = Status.StandBy;
-  //     console.log("Search Debug:: searchStartPoint=",searchStartPoint);
-  //     console.log("Search Debug:: searchEndPoint=",searchEndPoint); 
-  //     let start = this.dateToTimestamp(searchStartPoint);
-  //     let end = this.dateToTimestamp(searchEndPoint);
-  //     console.log("Search Debug:: start=",start);
-  //     console.log("Search Debug:: end=",end);
-
-  //     this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(start).endAt(end).once('value').then(function(snapshot) {
-  //       snapshot.forEach(function(child) {
-
-  //         let childData = child.val();
-  //         let timestamps=child.val().timestamp;
-
-  //         console.log("Search Debug:: childData= ",childData);
-  //         console.log("Search Debug:: timestamps= ",timestamps);
-  //       });
-  //     });
-      
-  //     //set hasAlerts
-  //     if(this.user.alerts.length != 0){
-  //       this.user.hasAlerts = Status.Accept
-  //     }
-  //     else{
-  //       this.user.hasAlerts = Status.Deny
-  //     }
-  //   }
-  // }
-
-  // search()
-  // {
-  //     console.log("Search Debug:: searchStartPoint.date=",this.user.searchDateStartPoint);
-  //     console.log("Search Debug:: searchStartPoint.time=",this.user.searchTimeStartPoint);
-  //     console.log("Search Debug:: searchEndPoint.date=",this.user.searchDateEndPoint);
-  //     console.log("Search Debug:: searchEndPoint.time=",this.user.searchTimeEndPoint);
-
-  //     let startPoint= this.dateToTimestamp(this.user.searchDateStartPoint,this.user.searchTimeStartPoint);
-  //     let endPoint= this.dateToTimestamp(this.user.searchDateEndPoint,this.user.searchTimeEndPoint);
-
-  //     this.db.database.ref(`/devices/${this.user.deviceID}/history`).orderByChild("timestamp").startAt(startPoint).endAt(endPoint).once('value').then(function(snapshot) {
-  //       snapshot.forEach(function(child) {
-
-  //         let childData = child.val();
-  //         let timestamps=child.val().timestamp;
-
-  //         console.log("Search Debug:: childData= ",childData);
-  //         console.log("Search Debug:: timestamps= ",timestamps);
-  //       });
-  //     });
-
-      // let start = this.dateToTimestamp(searchStartPoint);
-      // let end = this.dateToTimestamp(searchEndPoint);
-    
-  //}
-
-  
 
 
 }

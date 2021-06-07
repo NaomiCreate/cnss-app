@@ -19,10 +19,10 @@ export class AuthGuard implements CanActivate {
       this.authService.auth.onAuthStateChanged((user) => {
         if (user) {
           this.authService.set_user(user);
-          console.log("Debug:: auth.gaurd - user IS logged in")
+          // console.log("Debug:: auth.gaurd - user IS logged in")
           resolve(true);
         } else {
-          console.log("Debug:: auth.gaurd - user IS NOT logged in")
+          // console.log("Debug:: auth.gaurd - user IS NOT logged in")
           resolve(false);
         }
       })
