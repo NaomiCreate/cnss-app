@@ -22,12 +22,13 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'home-page', component: HomePageComponent, canActivate: [AuthGuard] },
   {path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
-  {path: 'contact-list', component: ContactListComponent, canActivate: [ManagerGuard]},
+  {path: 'contact-list', component: ContactListComponent},
   {path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   {path: 'connected-to', component: ConnectedToComponent, canActivate: [AuthGuard] },
   {path: 'system-control', component: SystemControlComponent, canActivate: [ManagerGuard]},
   {path: "**", component: PageNotFoundComponent}
+  // {path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
 
 ];
 

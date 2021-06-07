@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
+import * as firebase from 'firebase';
 
 export interface User {
   email: string;
@@ -19,7 +20,7 @@ export class AuthService {
   constructor(private firebaseAuth: AngularFireAuth, private router: Router) {
 
     this.firebaseAuth.authState.subscribe((auth =>{
-      console.log("Debug:: IN auth.service authState")
+      //console.log("Debug:: IN auth.service authState")
       this.authState = auth;
     }))
 
@@ -69,7 +70,7 @@ export class AuthService {
         resolve(credential.user);
       }).catch(error=>{
         console.log(error)
-        throw error;
+        //throw error;
       })
     });
   }
@@ -83,9 +84,9 @@ export class AuthService {
         //this.isAuth=true;//user is logged in
         resolve(credential.user);
       }).catch(error=>{
-        console.log(error)
-        alert("Error: The email or password are incorrect, please try again");
-        throw error;
+        console.log("Error: The email or password are incorrect, please try again")
+        //alert("Error: The email or password are incorrect, please try again");
+        //throw error;
       })
     });
   }

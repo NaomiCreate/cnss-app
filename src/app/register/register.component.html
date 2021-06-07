@@ -31,8 +31,82 @@
 	</div>
 
 	<div class="card-body">
-		<div class="form-group">
-			<form (ngSubmit)="register()">
+		<!-- <div class="form-group"> -->
+			<form [formGroup]="rForm" (ngSubmit)="addPost(rForm.value)">
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fa fa-envelope"></i></span>
+					</div>
+					<input type="email" formControlName="userInputEmail" class="form-control" placeholder="Enter email">	
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputEmail'].touched && !rForm.controls['userInputEmail'].valid">Email is required in format: userName@example.com</div>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-key"></i></span>
+					</div>
+					<input type="password" formControlName="userInputPassword" class="form-control" placeholder="Enter password">
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPassword'].touched && !rForm.controls['userInputPassword'].valid">Password should be minimum 6 characters</div>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-key"></i></span>
+					</div>
+					<input type="password" formControlName="userInputPasswordValidation" class="form-control" placeholder="Verify password">
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPasswordValidation'].touched && !rForm.controls['userInputPasswordValidation'].valid">Password should be minimum 6 characters</div>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="name" formControlName="userInputFirstName" class="form-control" placeholder="Enter first name">
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputFirstName'].touched && !rForm.controls['userInputFirstName'].valid">First name is required</div>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-user"></i></span>
+					</div>
+					<input type="name" formControlName="userInputLastName" class="form-control" placeholder="Enter last name">
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputLastName'].touched && !rForm.controls['userInputLastName'].valid">Last name is required</div>
+				</div>
+				<div class="input-group form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="fas fa-phone"></i></span>
+					</div>
+					<input type="phone" formControlName="userInputPhone" class="form-control" placeholder="Enter phone number (digits only)">
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPhone'].touched && !rForm.controls['userInputPhone'].valid">Phone number is required</div>
+					<!-- <input type="phone" name="phone" class="form-control" [(ngModel)]="userInfoRecord.phone" placeholder="Enter phone number (digits only)" required> -->
+				</div>
+
+				<div class="ownrship">
+					<!-- <input type="radio" formControlName="userInputIsOwner" [value]="true"> -->
+					<input type="radio" name="ownrship" [ngModelOptions]="{standalone: true}" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true">
+					<!-- <input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true" />   -->
+					<label> I own a CNSS security system</label><br> 
+					<!-- <input type="radio" formControlName="userInputIsOwner" [value]="false"> -->
+					<input type="radio" name="ownrship" [ngModelOptions]="{standalone: true}" [(ngModel)]="userInfoRecord.is_device_owner" [value]="false">
+					<!-- <input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="false" /> -->
+					<label> I don't own a CNSS security system</label><br>  
+				</div>
+				<div class="input-group form-group" *ngIf="userInfoRecord.is_device_owner">
+					<div class="input-group-prepend">
+						<span class="input-group-text"><i class="far fa-id-card"></i></span>
+					</div>
+					<!-- <input type="phone" formControlName="userInputDeviceId" class="form-control" placeholder="Enter device id"> -->
+					<!-- <input type="text" formControlName="userInputDeviceId" name="device_id"  class="form-control"  placeholder="Enter device id" > -->
+					<!-- <div class="alert alert-danger" *ngIf="rForm.controls['userInputDeviceId'].touched && !rForm.controls['userInputDeviceId'].valid">Device Id is required</div> -->
+					<input type="text" name="device_id" [ngModelOptions]="{standalone: true}" class="form-control" [(ngModel)]="userInfoRecord.device_id" placeholder="Enter device id" required>				
+				</div>
+				
+				<div class="register">
+					<a href="#" routerLink="/login">Back to Log in</a>
+				</div>
+				<div class="form-group">
+					<input type="submit" value="Register" class="btn float-right login_btn" [disabled]="!rForm.valid">
+				</div>
+			</form>
+
+
+			<!-- <form (ngSubmit)="register()">
 				<div class="input-group form-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fa fa-envelope"></i></span>
@@ -53,7 +127,6 @@
 				</div>
 				
 
-				<!-- --- -->
 				<div class="input-group form-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -72,13 +145,6 @@
 					</div>
 					<input type="phone" name="phone" class="form-control" [(ngModel)]="userInfoRecord.phone" placeholder="Enter phone number (digits only)" required>
 				</div>
-				<!-- <div class="input-group form-group" *ngIf="userInfoRecord.is_device_owner">
-					<div class="input-group-prepend">
-						<span class="input-group-text"><i class="far fa-id-card"></i></span>
-					</div>
-					<input type="device_id" name="device_id" class="form-control" [(ngModel)]="userInfoRecord.device_id" placeholder="Enter device id" required>
-				</div> -->
-
 				<div class="ownrship">
 					<input type="radio" name="ownrship" [(ngModel)]="userInfoRecord.is_device_owner" [value]="true" />  
 					<label> I own a CNSS security system</label><br>  
@@ -97,8 +163,8 @@
 				<div class="form-group">
 					<input type="submit" value="Register" class="btn float-right login_btn">
 				</div>
-			</form>
-		</div>
+			</form> -->
+		<!-- </div> -->
 
 	</div>
 </div>

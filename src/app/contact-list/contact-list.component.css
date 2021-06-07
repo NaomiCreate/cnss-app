@@ -1,21 +1,47 @@
+.card#btn-add-section{
+  /* background:RosyBrown; */
+  background-color: rgba(241, 241, 241, 0);
+  border:  rgba(241, 241, 241, 0);
+  margin-top: 55px;
+}
+.card#add-section{
+  /* border:3px solid #1b2743; */
+  border: 3px solid #2d0a32;
+  width: 400px;
+}
+.card-head{
+/* background-color: #0f1131; */
+background-color: rgb(73 25 57);
+padding: 10px;
+}
+.card-title {
+  margin: 8px;
+  color: bisque;
+  font-weight: 600;
+}
+.card-body {
+  padding: 1.25rem;
+  /* background-color: #d0cac0; */
+  background-color: #d8b9ed;
+}
 .card#contacts { 
   margin-top:50px;
   margin-bottom: 20px;
   width: 400px;
-  background-color: #97e29d;
+  background-color: #598763;
 
  }   
  .card#requests { 
   margin-top:50px;
   margin-bottom: 20px;
   width: 400px;
-  background-color: #eec37d;
+  background-color: #875959;
  } 
+
 label{
   color: rgb(39, 95, 144);
   font-weight: bold;
   font-family: URW Chancery L, cursive;
-
 } 
 /* input[type="radio"], input[type="checkbox"] {
   margin-right: 10px;
@@ -30,7 +56,7 @@ input[type="radio"]{
 }
 
 .error-msg{
-  background-color: rgb(236, 236, 236);
+  background-color: rgba(236, 236, 236, 0);
 }
 /*
 input[type="radio"]{
@@ -79,17 +105,4 @@ input{
 
 /* align-self: center; */
 
-.card#btn-add-section{
-  background:RosyBrown;
-  /* background:rgb(241, 241, 241); */
-  border:  rgb(241, 241, 241);
-  margin-top: 55px;
-
-}
-.card#add-section{
-  border: 3px solid #54722b;
-  background-color: rgb(255, 238, 218);  
-  margin-bottom: 40px;
-  width: 400px;
-}
 

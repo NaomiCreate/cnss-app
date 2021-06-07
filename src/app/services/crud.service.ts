@@ -64,7 +64,10 @@ export class CrudService {
     return this.fireservices.collection('emailToUid').doc(email).get().toPromise()
   }
 
-
+  check_futureContactInContacts(email:string)
+  {
+    return this.fireservices.collection('users').doc(this.authservice.currentUserId).collection('contacts').doc(email).get().toPromise();
+  }
 
   get_userInfo()
   {

@@ -3,6 +3,7 @@ import { CrudService } from '../services/crud.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface UserRecord {
   email: string;
@@ -39,7 +40,49 @@ export class RegisterComponent implements OnInit {
 
   dbData: any;
 
-  constructor(private authservice: AuthService, private router: Router, public crudservice: CrudService, private db: AngularFireDatabase) { }
+  rForm: FormGroup;
+  post: any;//property for our submitted form
+  //The inputs of the form:
+  userInputEmail: string = '';
+  userInputPassword: string = '';
+  userInputPasswordValidation: string = '';
+  userInputFirstName: string = '';
+  userInputLastName: string = '';
+  userInputPhone: string = '';
+
+  // userInputIsOwner: boolean = false;
+  // userInputIsDeviceOwner: string = '';
+  //userInputDeviceId: string = '';
+
+  constructor(private fb: FormBuilder, private authservice: AuthService, private router: Router, public crudservice: CrudService, private db: AngularFireDatabase) {
+    //here we will specifie the validations
+    this.rForm = fb.group({
+      'userInputEmail': [null, Validators.compose([Validators.required, Validators.email])],
+      'userInputPassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputPasswordValidation': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputFirstName':[null,Validators.required],
+      'userInputLastName':[null,Validators.required],
+      'userInputPhone': [null, Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
+      // 'userInputIsOwner':'',
+      // 'userInputIsDeviceOwner':[null,Validators.required],
+      // 'userInputDeviceId':''
+
+      //'userInputDeviceId':[null,Validators.required]
+    });
+  }
+  addPost(post) {
+    this.userInfoRecord.email = post.userInputEmail;
+    this.password = post.userInputPassword;
+    this.passwordVerif = post.userInputPasswordValidation;
+    this.userInfoRecord.firstName = post.userInputFirstName;
+    this.userInfoRecord.lastName = post.userInputLastName;
+    this.userInfoRecord.phone = post.userInputPhone;
+    // this.userInfoRecord.is_device_owner = post.userInputIsOwner;
+    // if(this.userInfoRecord.is_device_owner)
+   //this.userInfoRecord.device_id= post.userInputDeviceId;
+
+    this.register();
+  }
 
   ngOnInit() { }
 
@@ -54,19 +97,22 @@ export class RegisterComponent implements OnInit {
 
       //update EmailToUid collection
       this.crudservice.add_EmailToUid(this.userInfoRecord.email).then()
-        .catch(error => { console.log(error); })
+        .catch(error => { 
+          console.log(error); })
 
       //update DeviceToUid collection if needed
       if (this.userInfoRecord.is_device_owner) {
         this.crudservice.add_deviceToUid(this.userInfoRecord.device_id).then()
-          .catch(error => { console.log(error); })
+          .catch(error => { 
+            console.log(error); })
       }
 
       //update UserInfo collection
       this.crudservice.create_userInfo(this.userInfoRecord).then(() => {
         this.password = this.passwordVerif = "";
         this.message = "user-info was saved succefully";
-      }).catch(error => { console.log(error); })
+      }).catch(error => { 
+        console.log(error); })
     }
   }
 
@@ -114,6 +160,7 @@ export class RegisterComponent implements OnInit {
             this.router.navigate(['/profile'])
 
           }).catch(_error => {
+            console.log("try exist email1");
             this.error = _error
             this.router.navigate(['/register'])
           })

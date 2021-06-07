@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div [ngSwitch]="connections_state">
     <div *ngSwitchCase="state.Accept">
 
@@ -12,15 +14,14 @@
                   } -->
 
             <div *ngFor="let request of  requests">
-                <div class="card">
-                    <label for="first_name">First name</label>
-                    {{request.firstName}}
-                    <label for="last_name">Last name</label>
-                    {{request.lastName}}
-                    <label for="email">Email</label>
-                    {{request.email}}
-                    <label for="phone">Phone</label>
-                    {{request.phone}}
+                <div class="card" id="requests">
+                    <h5 class="card-title text-center">{{request.firstName}} {{request.lastName}}</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><label>First name</label><br>{{request.firstName}}</li>
+                        <li class="list-group-item"><label>Last name</label><br>{{request.lastName}}</li>
+                        <li class="list-group-item"><label>Email</label><br>{{request.email}}</li>
+                        <li class="list-group-item"><label>Phone</label><br>{{request.phone}}</li>
+                    </ul>
                     <span>
                         <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger">Reject request</a>
                         <a style="float: right;" routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn btn-danger">Confirm request</a>
@@ -29,18 +30,16 @@
             </div>
 
             <div *ngFor="let connection of  connections">
-                <div class="card">
-                    <label for="first_name">First name</label>
-                    {{connection.firstName}}
-                    <label for="last_name">Last name</label>
-                    {{connection.lastName}}
-                    <label for="email">Email</label>
-                    {{connection.email}}
-                    <label for="phone">Phone</label>
-                    {{connection.phone}}
-                    <span>
-                        <a style="float: right;" routerLink="/connected-to"  (click)="DeleteConnection(connection.email)" class="btn btn-danger">Delete Connection</a>
-                    </span>
+                <div class="card" id="connections">
+                    <button class="btn-delete" (click)="DeleteConnection(connection.email)"><i class="fa fa-trash"></i></button>
+                    <h5 class="card-title text-center">{{connection.firstName}} {{connection.lastName}}</h5>
+                    <!-- <button class="btn-delete" (click)="DeleteRequest(contact.email)"><i class="fa fa-trash"></i></button> -->
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><label>First name</label><br>{{connection.firstName}}</li>
+                        <li class="list-group-item"><label>Last name</label><br>{{connection.lastName}}</li>
+                        <li class="list-group-item"><label>Email</label><br>{{connection.email}}</li>
+                        <li class="list-group-item"><label>Phone</label><br>{{connection.phone}}</li>
+                    </ul>
                 </div>
             </div>
        

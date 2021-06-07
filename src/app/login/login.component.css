@@ -80,3 +80,12 @@ input:focus{
     margin-left: 4px;
 }
 
+input.ng-invalid.ng-touched,textarea.ng-invalid.ng-touched{
+    border: 2px solid red;
+    width: 300px;
+}
+.alert.alert-danger{
+    padding: 2px;
+    font-size: 12px;
+    width: 350px
+}

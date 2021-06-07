@@ -1,8 +1,22 @@
-.card { 
+.card#connections { 
+  margin-top:50px;
+  margin-bottom: 20px;
+  width: 400px;
+  background-color: #598763;
+
+ }   
+ .card#requests { 
+  margin-top:50px;
+  margin-bottom: 20px;
+  width: 400px;
+  background-color: #875959;
+ } 
+
+/* .card { 
   margin-top:50px;
   margin-bottom: 20px;
   width: 340px;
- } 
+ }  */
 label{
   color: rgb(39, 95, 144);
   font-weight: bold;

@@ -28,7 +28,39 @@
 			<p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
 
 		</div>
-		<form (ngSubmit)="login()">
+
+		<form [formGroup]="rForm" (ngSubmit)="addPost(rForm.value)">
+			<div class="input-group form-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text"><i class="fa fa-envelope"></i></span>
+				</div>
+				<input type="email" formControlName="userInputEmail" class="form-control" placeholder="Enter email">
+				<div class="alert alert-danger" *ngIf="rForm.controls['userInputEmail'].touched && !rForm.controls['userInputEmail'].valid">Email is required in format: userName@example.com</div>
+
+			</div>
+			<div class="input-group form-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text"><i class="fas fa-key"></i></span>
+				</div>
+				<input type="password" formControlName="userInputPassword" class="form-control" placeholder="Enter your current password">
+				<div class="alert alert-danger" *ngIf="rForm.controls['userInputPassword'].touched && !rForm.controls['userInputPassword'].valid">Password should be minimum 6 characters</div>
+			</div>
+
+			<div class="clickable">
+				<div class="form-group">
+					<input type="submit" class="btn float-right login_btn" value="Log in"  [disabled]="!rForm.valid">
+				</div>
+
+				<div class="register">
+					<a href="#" routerLink="/register">New User</a>
+				</div>
+			</div>
+		</form>
+
+
+
+
+		<!-- <form (ngSubmit)="login()">
 			<div class="input-group form-group">
 				<div class="input-group-prepend">
 					<span class="input-group-text"><i class="fa fa-envelope"></i></span>
@@ -52,6 +84,6 @@
 					<a href="#" routerLink="/register">New User</a>
 				</div>
 			</div>
-		</form>
+		</form> -->
 	</div>
 </div>

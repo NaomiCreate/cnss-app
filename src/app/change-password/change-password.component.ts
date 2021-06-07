@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+// import * as firebase from 'firebase';
 import { AuthService } from '../services/auth.service';
+// import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
+import firebase from 'firebase/app';
+import 'firebase/database'; // If using Firebase database
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-interface currentAndNewDetails{
-  currentPassword:string;
-  newPassword:string;
-  verifyNewPassword:string;
+
+interface currentAndNewDetails {
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+  verifyNewPassword: string;
 }
 
 @Component({
@@ -14,69 +21,128 @@ interface currentAndNewDetails{
   styleUrls: ['./change-password.component.css']
 })
 export class ChangePasswordComponent implements OnInit {
-
   userInput: currentAndNewDetails = {
-  currentPassword:'',
-  newPassword:'',
-  verifyNewPassword:''
+    email: '',
+    currentPassword: '',
+    newPassword: '',
+    verifyNewPassword: ''
   }
-
+  
   message = '';
   errorMessage = ''; //validation error handle
-  error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
+  error: { name: string, message: string } = { name: '', message: '' }; //firebase error handle
 
-  constructor(public authservice: AuthService, private router: Router) { }
+  rForm: FormGroup;
+  post: any;//property for our submitted form
+  //The inputs of the form:
+  userInputEmail: string = '';
+  userInputCurrentPassword: string = '';
+  userInputFuturePassword: string = '';
+  userInputFuturePasswordValidation: string = '';
+
+  constructor(private fb: FormBuilder, public authservice: AuthService, private router: Router) {
+    //here we will specifie the validations
+    this.rForm = fb.group({
+      'userInputEmail': [null, Validators.compose([Validators.required, Validators.email])],//[null,Validators.required], //Validators.email?
+      'userInputCurrentPassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputFuturePassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputFuturePasswordValidation': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+    });
+  }
+
+  addPost(post) {
+    this.userInput.email = post.userInputEmail;
+    this.userInput.currentPassword = post.userInputCurrentPassword;
+    this.userInput.newPassword = post.userInputFuturePassword;
+    this.userInput.verifyNewPassword = post.userInputFuturePasswordValidation;
+
+    this.changePassword();
+  }
 
   ngOnInit(): void {
   }
 
-  changePassword(){
-  if(this.validateForm())
-  {
-      // var user = firebase.auth().currentUser;
-      // var credentials = firebase.auth.EmailAuthProvider.credential(
-      //   user.email,
-      //   'yourpassword'
-      // );
-      // user.reauthenticateWithCredential(credentials);
+  changePassword() {
+    this.clearMessages();
+    console.log("this.userInput.newPassword", this.userInput.newPassword);
 
-      var user = this.authservice.currentUser;
-      //var credential;
-      const credential = this.authservice.currentUser.EmailAuthProvider.credential(
-        user.email, 
-        this.userInput.currentPassword
-      ).then(function() {
-      // Prompt the user to re-provide their sign-in credentials
-      user.reauthenticateWithCredential(credential);
-      });
+    //First you get the current logged in user
+    const cpUser = firebase.auth().currentUser;
+    if (this.userInput.email == cpUser.email) {
+      /*Then you set credentials to be the current logged in user's email
+            and the password the user typed in the input named "old password"
+            where he is basically confirming his password just like facebook for example.*/
 
-      //------------------------------
-      // this.authservice.currentUser.updatePassword(this.userInput.newPassword)
-      // .then(() => {
-      //   alert("Password changed successfully");
-      //   this.message ="Password changed successfully"
-      //   this.userInput.currentPassword =this.userInput.newPassword =this.userInput.verifyNewPassword= "";
-      // }).catch(function(error) {
-      //   this.errorMessage="error";
-      // });
+      const credentials = firebase.auth.EmailAuthProvider.credential(
+        this.userInput.email, this.userInput.currentPassword);
+
+      //Reauthenticating here with the data above
+      cpUser.reauthenticateWithCredential(credentials).then(success => {
+        console.log('successfully reauthenticated!');
+
+        if (this.userInput.newPassword != this.userInput.verifyNewPassword) {
+          console.log("Password changed failed");
+          this.errorMessage = "The new password verification does not match the new password";
+
+        } else if (this.userInput.newPassword.length < 6) {
+          console.log(" newPassword.length < 6");
+          this.errorMessage = "The new password should be at least 6 characters";
+        } else {
+          console.log("The input is valid");
+
+          /* Update the password to the password the user typed into the
+            new password input field */
+          cpUser.updatePassword(this.userInput.newPassword).then(res => {
+            //Success
+            this.message = "The password change successed";
+            this.clearForm();
+          }).catch(err => {
+            //Failed
+            this.errorMessage = "The password changed failed";
+            console.log("error=", err);
+            console.log("Password changed failed");
+          });
+
+        }
+      })
+        .catch(err => {
+          console.log('failed reauthenticated!');
+          this.errorMessage = "The current email or current password you entered is incorrect";
+          console.log(err);
+          if (err.code === "auth/wrong-password") {
+            console.log("Password changed failed");
+            this.errorMessage = "Password changed failed";
+          }
+        })
+    }
+    else {
+      this.errorMessage = "The current email or current password you entered is incorrect";
     }
   }
 
-  validateForm()
-  {
+  clearForm() {
+    this.rForm.reset({
+      'userInputEmail': '',
+      'userInputCurrentPassword': '',
+      'userInputFuturePassword': '',
+      'userInputFuturePasswordValidation': ''
+    });
+  }
+
+  clearMessages(){
+    this.message = '';
+    this.errorMessage = '';
+    this.error = {name: '', message:''};
+  }
+
+  validateForm() {
     this.errorMessage = this.message = "";
-    if(this.userInput.currentPassword.length === 0)
-    {
+
+    if (this.userInput.currentPassword.length === 0) {
       this.errorMessage = "Please enter your current password";
       return false
     }
-    // if(!(this.userInput.currentPassword === <currentPasswword>))
-    // {
-    //   this.errorMessage = "The current password you entered is incorrect";
-    //   return false
-    // }
-    if(this.userInput.newPassword.length < 6)
-    {
+    if (this.userInput.newPassword.length < 6) {
       this.errorMessage = "The new password should be at least 6 characters";
       return false
     }

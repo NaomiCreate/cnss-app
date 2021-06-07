@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import {Router} from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface UserCredentials{
   email:string;
@@ -22,7 +23,27 @@ export class LoginComponent implements OnInit {
   errorMessage = ''; //validation error handle
   error: {name:string, message:string} = {name:'' , message:''}; //firebase error handle
 
-  constructor(private authservice: AuthService, private router: Router) { }
+  rForm: FormGroup;
+  post: any;//property for our submitted form
+  //The inputs of the form:
+  userInputEmail: string = '';
+  userInputPassword: string = '';
+
+
+  addPost(post) {
+    this.user.email = post.userInputEmail;
+    this.user.password = post.userInputPassword;
+
+    this.login();
+  }
+
+  constructor(private fb: FormBuilder,private authservice: AuthService, private router: Router) { 
+    //here we will specifie the validations
+    this.rForm = fb.group({
+      'userInputEmail': [null, Validators.compose([Validators.required, Validators.email])],
+      'userInputPassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])]
+    });
+  }
   
   ngOnInit(): void {
   }
@@ -32,12 +53,14 @@ export class LoginComponent implements OnInit {
     this.clearErrorMessage();
     if(this.validateForm())
     {
-      this.authservice.loginWithEmail(this.user.email, this.user.password);
+      //this.authservice.loginWithEmail(this.user.email, this.user.password);
       this.authservice.loginWithEmail(this.user.email, this.user.password)
       .then(() => {
         // this.router.navigate(['/home-page'])
         this.router.navigate(['/profile'])
-      }).catch()
+      }).catch(error=>{
+        this.errorMessage = "The email or password are incorrect, please try again";
+      })
     }  
   }
 
