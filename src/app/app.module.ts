@@ -26,6 +26,10 @@ import { ConnectedToComponent } from './connected-to/connected-to.component';
 import { SystemControlComponent } from './system-control/system-control.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +52,9 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFirestoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [CrudService,
               RealTimeService],

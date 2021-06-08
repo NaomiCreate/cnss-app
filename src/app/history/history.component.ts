@@ -11,22 +11,19 @@ import { AuthService } from '../services/auth.service';
 import { validateEventsArray } from '@angular/fire/firestore';
 
 
-//import { timeStamp } from 'console';
+import { ToastrService } from 'ngx-toastr';
 
-//TOASTS: https://ej2.syncfusion.com/angular/documentation/toast/timeout/?_ga=2.203180305.1660293228.1622753500-518789863.1617545645
 
 
 export interface Alert {
   image_path: string; //url :URL
   notes: string;
   timestamp: any;
-
   year: number;//---added For search
   month: number;//---added For search
   day: number;//---added For search
   hour: number;//---added For search
   minutes: number;//---added For search
-
   inEdit: boolean; // needed for device owner, that is current user 
   alertID: string; // needed for device owner, that is current user  for edit
 }
@@ -39,6 +36,7 @@ enum Status {
 }
 
 export interface Connection {
+  isCurrentUser:boolean;
   shareHistory: Status;
   firstName: string;
   lastName: string;
@@ -49,12 +47,10 @@ export interface Connection {
   alerts: Array<Alert>;
   hasAlerts: Status;
   index: number;
-
   largestTimestamp:number;
   smallestTimestamp:number;
   prevTimestamp:number;
   nextTimestamp:number;
-
   showAll:boolean;//change to showAll checkBox
   searchLargestTimestamp:number;
   searchSmallestTimestamp:number;
@@ -62,39 +58,34 @@ export interface Connection {
   toDate?: Date;//---added For search
   fromTime?: Date;//---added For search
   toTime?: Date;//---added For search
-
-  REMOVE_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
   PREV_FLAG: boolean;
   NEXT_FLAG: boolean;
 
 }
 
 export interface User {
+  firstName?:String;
+  lastName?:String;
+  isCurrentUser:boolean;
   isOwner: Status;
   dbPath: string;
   alerts: Array<Alert>;
   hasAlerts: Status;
   deviceID: any;
   hasConnections:Status;
-
   largestTimestamp:number;
   smallestTimestamp:number;
   prevTimestamp:number;
   nextTimestamp:number;
-
   showAll:boolean;//change to showAll checkBox
-
   searchLargestTimestamp:number;
   searchSmallestTimestamp:number;
   fromDate?: Date;//---added For search
   toDate?: Date;//---added For search
   fromTime?: Date;//---added For search
   toTime?: Date;//---added For search
-
-  REMOVE_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
   PREV_FLAG: boolean;
   NEXT_FLAG: boolean;
-
 }
 
 const UNIX_MIN_TIMESTAMP =  0x0;
@@ -113,6 +104,7 @@ const ALERT_LIMIT = 3;//The value should be: limit+1
 export class HistoryComponent implements OnInit {
 
   public user: User = {
+    isCurrentUser:true,
     isOwner: Status.StandBy,
     dbPath: `/devices/`, //beginig of path to realtime database'
     alerts: [],
@@ -130,7 +122,6 @@ export class HistoryComponent implements OnInit {
     smallestTimestamp:UNIX_MIN_TIMESTAMP,
     prevTimestamp:null,
     nextTimestamp:null,
-    REMOVE_FLAG: false,
     PREV_FLAG: false,
     NEXT_FLAG: true,
     
@@ -144,7 +135,7 @@ export class HistoryComponent implements OnInit {
   public state = Status; 
 
   constructor(private authservice: AuthService, private crudservice: CrudService, private realtimeservice: RealTimeService, 
-    private db: AngularFireDatabase, private sanitizer: DomSanitizer) { }
+    private db: AngularFireDatabase, private sanitizer: DomSanitizer, private toastr: ToastrService) { }
 
   ngOnInit(): void{
 
@@ -214,6 +205,7 @@ export class HistoryComponent implements OnInit {
         data.forEach((c,i) => {
           
             let new_connection:Connection = {
+              isCurrentUser:false,
               shareHistory: Status.StandBy,
               firstName: '',
               lastName: '',
@@ -235,7 +227,6 @@ export class HistoryComponent implements OnInit {
               smallestTimestamp:UNIX_MIN_TIMESTAMP,
               prevTimestamp:null,
               nextTimestamp:null,
-              REMOVE_FLAG: false,
               PREV_FLAG:false,
               NEXT_FLAG: true,
             }
@@ -384,6 +375,7 @@ export class HistoryComponent implements OnInit {
 
           console.log("Largest timestamp alert",data[0]["timestamp"]);
           if(person.largestTimestamp < data[0]["timestamp"]){
+            this.showToast(person);
             //TOAST//
             console.log("new alert");
             //TOAST//
@@ -431,6 +423,21 @@ export class HistoryComponent implements OnInit {
       )
     })
     
+  }
+
+  showToast(person:Connection | User){
+
+    if(person.isCurrentUser){
+      this.toastr.info('You have a new alert', "Notice",
+        {timeOut: 15000}
+      );
+    }
+    else{
+      console.log()
+      this.toastr.info(`${person.firstName} ${person.lastName} has a new alert`,"Notice", 
+        {timeOut: 15000} 
+      );
+    }
   }
 
   /** to be used in html
