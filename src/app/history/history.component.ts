@@ -32,9 +32,10 @@ export interface Alert {
 }
 
 enum Status {
-   StandBy,
-   Accept,
-   Deny
+   StandBy, // loading
+   Accept, 
+   Deny,
+   Faulty // search not valid
 }
 
 export interface Connection {
@@ -62,7 +63,7 @@ export interface Connection {
   fromTime?: Date;//---added For search
   toTime?: Date;//---added For search
 
-  INDEPENDENT_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
+  REMOVE_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
   PREV_FLAG: boolean;
   NEXT_FLAG: boolean;
 
@@ -90,14 +91,14 @@ export interface User {
   fromTime?: Date;//---added For search
   toTime?: Date;//---added For search
 
-  INDEPENDENT_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
+  REMOVE_FLAG: boolean; // this flag will turn to true when there is no next and there is only one alert in the array
   PREV_FLAG: boolean;
   NEXT_FLAG: boolean;
 
 }
 
-const UINIX_MIN_TIMESTAMP =  0x0;
-// const UINIX_MAX_TIMESTAMP =  0x7FFFFFFF;
+const UNIX_MIN_TIMESTAMP =  0x0;
+const UNIX_MAX_TIMESTAMP =  Number.MAX_SAFE_INTEGER;
 
 
 //---added for search
@@ -111,8 +112,6 @@ const ALERT_LIMIT = 3;//The value should be: limit+1
 
 export class HistoryComponent implements OnInit {
 
-  INDEPENDENT_FLAG = false; // this flag will turn to true when there is no next and there is only one alert in the array
-
   public user: User = {
     isOwner: Status.StandBy,
     dbPath: `/devices/`, //beginig of path to realtime database'
@@ -120,7 +119,6 @@ export class HistoryComponent implements OnInit {
     hasAlerts: Status.StandBy,
     deviceID: "",
     hasConnections:Status.StandBy,
-
     showAll:true,
     searchLargestTimestamp:null,
     searchSmallestTimestamp:null,
@@ -128,13 +126,11 @@ export class HistoryComponent implements OnInit {
     toDate: null,
     fromTime: null,
     toTime: null,
-
-    largestTimestamp:null,
-    smallestTimestamp:null,
+    largestTimestamp:UNIX_MAX_TIMESTAMP,
+    smallestTimestamp:UNIX_MIN_TIMESTAMP,
     prevTimestamp:null,
     nextTimestamp:null,
-
-    INDEPENDENT_FLAG: false,
+    REMOVE_FLAG: false,
     PREV_FLAG: false,
     NEXT_FLAG: true,
     
@@ -159,7 +155,7 @@ export class HistoryComponent implements OnInit {
       this.crudservice.get_userInfo().subscribe(data => {
 
         //if owner ->
-        if(this.isDeviceOwner){
+        if(this.isDeviceOwner(data)){
 
           //set info
           this.user.isOwner = Status.Accept;
@@ -170,13 +166,16 @@ export class HistoryComponent implements OnInit {
           //console.log("Debug::user.dbPath", this.user.dbPath)
           this.setLargestTimestap(this.user).then(res =>
           {
-            console.log("ngInin => returnd from set largest time stamp")
-            this.setSmallestTimestap(this.user).then(res =>
-            {
-              this.user.nextTimestamp = this.user.searchLargestTimestamp; // set the next timestamp
-              //getAlerts
-              this.getNext(this.user, false);
-            })
+            if(res){
+              this.setSmallestTimestap(this.user).then(res =>
+              {
+                this.user.nextTimestamp = this.user.searchLargestTimestamp; // set the next timestamp
+                //getAlerts
+                this.getNext(this.user, false);
+              })
+            }else{
+              this.user.hasAlerts = Status.Deny;
+            }
           
           })
           
@@ -232,11 +231,11 @@ export class HistoryComponent implements OnInit {
               toDate: null,
               fromTime: null,
               toTime: null,
-              largestTimestamp:null,
-              smallestTimestamp:null,
+              largestTimestamp:UNIX_MAX_TIMESTAMP,
+              smallestTimestamp:UNIX_MIN_TIMESTAMP,
               prevTimestamp:null,
               nextTimestamp:null,
-              INDEPENDENT_FLAG: false,
+              REMOVE_FLAG: false,
               PREV_FLAG:false,
               NEXT_FLAG: true,
             }
@@ -348,89 +347,97 @@ export class HistoryComponent implements OnInit {
   }
 
 
-//function for debugging
-timestamp_to_date(timestamp: number){
-  var date = new Date(+timestamp);
-  console.log("date = ",date);
-  console.log("date.toDateString() = ",date.toDateString());
-  console.log("date.getFullYear() =",date.getFullYear());
-  console.log("date.getMonth()+1 =",date.getMonth()+1);
-  console.log("date.getUTCDate() =",date.getUTCDate());
-  console.log("date.getMinutes() = ",date.getMinutes());
-  console.log("date.getSeconds() = ",date.getSeconds());
-  console.log("date.getHours() = ",date.getHours());
-  console.log("date.toLocaleTimeString() = ",date.toLocaleTimeString());
+  //function for debugging
+  timestamp_to_date(timestamp: number){
+    var date = new Date(+timestamp);
+    console.log("date = ",date);
+    console.log("date.toDateString() = ",date.toDateString());
+    console.log("date.getFullYear() =",date.getFullYear());
+    console.log("date.getMonth()+1 =",date.getMonth()+1);
+    console.log("date.getUTCDate() =",date.getUTCDate());
+    console.log("date.getMinutes() = ",date.getMinutes());
+    console.log("date.getSeconds() = ",date.getSeconds());
+    console.log("date.getHours() = ",date.getHours());
+    console.log("date.toLocaleTimeString() = ",date.toLocaleTimeString());
 
-}
+  }
 
-/**
- * Note: for some reason when value changes the query is fired twice,
- * once with an empty object and a second time with the object.
- * @param person
- * @returns true, when data object is not empty, false otherwise.
- * If returns false from value changes it might be user doesn't have alerts but one can't tell.
- */
-setLargestTimestap(person:Connection | User):Promise<boolean>{
+  /**
+   * Note: for some reason when value changes the query is fired twice,
+   * once with an empty object and a second time with the object.
+   * @param person
+   * @returns true, when data object is not empty, false otherwise.
+   * If returns false from value changes it might be user doesn't have alerts but one can't tell.
+   */
+  setLargestTimestap(person:Connection | User):Promise<boolean>{
 
-  let code = `ref=>ref.orderByChild('timestamp').startAt(${UINIX_MIN_TIMESTAMP}).limitToLast(${1})`;
+    let code = `ref=>ref.orderByChild('timestamp').startAt(${UNIX_MIN_TIMESTAMP}).limitToLast(${1})`;
 
-  return new Promise((resolve) =>
-  {
-    this.data_subscriptions.push(this.db.list(person.dbPath,eval(code))
-    .valueChanges()
-    .subscribe(data => {
+    return new Promise((resolve) =>
+    {
+      this.data_subscriptions.push(this.db.list(person.dbPath,eval(code))
+      .valueChanges()
+      .subscribe(data => {
 
-      // This value changes triggers when new alert arrives
-      if(data.length > 0){
-        console.log("Largest timestamp alert",data[0]["timestamp"]);
-        if(person.largestTimestamp < data[0]["timestamp"]){
-          //TOAST//
-          console.log("new alert");
-          //TOAST//
+        // This value changes triggers when new alert arrives
+        if(data.length > 0){
+
+          console.log("Largest timestamp alert",data[0]["timestamp"]);
+          if(person.largestTimestamp < data[0]["timestamp"]){
+            //TOAST//
+            console.log("new alert");
+            //TOAST//
+          }
+          person.largestTimestamp = data[0]["timestamp"];
+          if(person.showAll){
+            person.searchLargestTimestamp = person.largestTimestamp;
+          }
+
+          if(person.hasAlerts == Status.Deny){
+            this.setSmallestTimestap(person).then(res =>{
+              person.nextTimestamp = person.searchLargestTimestamp;
+              this.getNext(person,false);
+            })
+          }
+          resolve(true);
         }
-        person.largestTimestamp = data[0]["timestamp"];
-        if(person.showAll){
-          person.searchLargestTimestamp = person.largestTimestamp;
-        }
-        resolve(true);
-      }
-      resolve(false);
-   }))
-  })
-
-}
-
-setSmallestTimestap(person:Connection | User):Promise<boolean>{
-
-  let code = `ref=>ref.orderByChild('timestamp').startAt(${UINIX_MIN_TIMESTAMP}).limitToFirst(${1})`;
-
-  return new Promise((resolve) =>
-  {
-    this.data_subscriptions.push(this.db.list(person.dbPath,eval(code))
-    .valueChanges()
-    .subscribe(data => {
-
-      if(data.length > 0){
-        console.log("Smallest timestamp alert",data[0]["timestamp"]);
-        person.smallestTimestamp = data[0]["timestamp"];
-        if(person.showAll){
-          person.searchSmallestTimestamp = person.smallestTimestamp;
-        }
-        resolve(true);
-      }
-      resolve(false);
-
+        resolve(false);
+    }))
     })
-    )
-  })
-  
-}
+
+  }
+
+  setSmallestTimestap(person:Connection | User):Promise<boolean>{
+
+    let code = `ref=>ref.orderByChild('timestamp').startAt(${UNIX_MIN_TIMESTAMP}).limitToFirst(${1})`;
+
+    return new Promise((resolve) =>
+    {
+      this.data_subscriptions.push(this.db.list(person.dbPath,eval(code))
+      .valueChanges()
+      .subscribe(data => {
+
+        if(data.length > 0){
+          console.log("Smallest timestamp alert",data[0]["timestamp"]);
+          person.smallestTimestamp = data[0]["timestamp"];
+          if(person.showAll){
+            person.searchSmallestTimestamp = person.smallestTimestamp;
+          }
+          resolve(true);
+        }
+        resolve(false);
+
+      })
+      )
+    })
+    
+  }
 
   /** to be used in html
    * returns true if person should have the 'next' button otherwise returns false*/ 
   hasNext(person:Connection | User):boolean{
 
-    if(person.alerts.length != 0 && 
+    if(person.alerts.length > 0 && 
         person.alerts[person.alerts.length - 1].timestamp > person.searchSmallestTimestamp){
       return true
     }else{
@@ -443,14 +450,15 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
    * returns true if person should have the 'prev' button otherwise returns false*/ 
   hasPrev(person:Connection | User):boolean{
 
-    if(person.alerts.length != 0 && 
-       person.alerts[0].timestamp < person.searchLargestTimestamp){
+    if(person.alerts.length > 0 && 
+        person.alerts[0].timestamp < person.searchLargestTimestamp){
       return true
     }else{
       return false;
     }
 
   }
+
 
   /**This function sets the next batch of alerts, 
    * it relies on the fact that person is an object and is there for passed by reference.
@@ -459,45 +467,18 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
    * in other words that there value does not affect the visability of the buttons*/
   getNext(person:Connection | User, prev:boolean){
 
-    // person.hasAlerts = Status.StandBy;
-
-    // let isStart = false;
-    // if( person.alerts.length == 0){ // This is not the first batch
-    //   person.prevTimestamp = null; // reset the previous point
-    //   isStart = true;
-    // }
-
-
     this.data_subscriptions.push(
       this.db.list(person.dbPath,eval(this.get_code(person,prev)))
         .snapshotChanges()
         .subscribe(data => {
 
-
-         // alert("snapshotChanges");
-
-          // do the following only if we are in the firs batch 
-          // or if we are in snap shot changes and the largest timstamp is smaller or equal to 
-          // the largest presont timestamp
-          // NOTE: after vigures checking it seems each time there is a change (remove or create) 
-          // snapshot changes is calles 4 times
-          // twice with the following two alerts and twice with the previouse two alerts.
-          if(  person.PREV_FLAG 
-            || person.NEXT_FLAG 
-            || (!person.INDEPENDENT_FLAG 
-              && (data.length != 0 
-                && data[data.length - 1].payload.val()['timestamp'] <= person.alerts[0].timestamp))
-            || (person.INDEPENDENT_FLAG 
-              && data.length != 0 
-              && (data[data.length - 1].payload.val()['timestamp'] > person.alerts[0].timestamp))){
-
-            //alert(`person.PREV_FLAG=${person.PREV_FLAG}`)
+          if(this.shallPass(person, data)){
+        
+            //alert("snapshotChanges");
+            // console.log(data)
+            console.log("prev",prev);
             person.hasAlerts = Status.StandBy;
 
-            // console.log("Debug:: isStart:",isStart)
-            // if(isStart && person.alerts.length != 0){
-            //   console.log("Debug:: NEW ALERT - THIS WILL BE OUR FLAG TO MAKE FIRST ALERT IN SPECIAL COLOR")
-            // }
           
             person.alerts = data.map(doc => {return this.getAlert(doc)}) //empty alerts, incase - snapshotChanges
             console.log("Debug::Test user alerts: ",person.alerts)
@@ -505,51 +486,40 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
             //sort alerts by date
             person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
 
+            if(!prev){ // case :: next
 
-            if(person.alerts.length == 0){
-              person.hasAlerts = Status.Deny
-            }else{
-
-              if(!prev){ // case :: next
-
-                if(person.alerts.length == ALERT_LIMIT){
-                  //pop the last item - it's timestamp will be usefull when clicking next again 
-                  person.nextTimestamp = person.alerts.pop().timestamp;
-                } 
-                person.prevTimestamp = person.alerts[0].timestamp; // set prev 
-            
-              }
-              else{ // case :: prev
-                
-                if(person.alerts.length == (ALERT_LIMIT + 1)){
-                  // Then we are still able to go beackwoards
-                  person.alerts.shift().timestamp; // need to shift first
-                  person.prevTimestamp = person.alerts[0].timestamp; // and then set prevStarting point
-                
-                }
-                person.nextTimestamp = person.alerts.pop().timestamp // pop last item as it was already displayed
-
-              }
-
-              person.hasAlerts = Status.Accept
+              if(person.alerts.length == ALERT_LIMIT){
+                //pop the last item - it's timestamp will be usefull when clicking next again 
+                person.nextTimestamp = person.alerts.pop().timestamp;
+              } 
+              person.prevTimestamp = person.alerts[0].timestamp; // set prev 
+          
             }
-          }//else if(person.INDEPENDENT_FLAG && data.length != 0 && !this.hasPrev(person)){
-          //   person.hasAlerts = Status.Deny
-          //   person.INDEPENDENT_FLAG = false;
-          // }
+            else{ // case :: prev
+              
+              if(person.alerts.length == (ALERT_LIMIT + 1)){
+                // Then we are still able to go beackwoards
+                person.alerts.shift().timestamp; // need to shift first
+                person.prevTimestamp = person.alerts[0].timestamp; // and then set prevStarting point
+              
+              }
+              if(person.alerts.length > 1){
+                person.nextTimestamp = person.alerts.pop().timestamp // pop last item as it was already displayed
+              }
+              else{ // == 1
+                person.nextTimestamp = person.alerts[0].timestamp;
+              }
+            }
 
-          if(!this.hasNext(person) && person.alerts.length == 1){
-            person.INDEPENDENT_FLAG = true;
-          }else{
-            person.INDEPENDENT_FLAG = false;
-          }
-
-          if(person.PREV_FLAG){
-            person.PREV_FLAG = false;
-          }
-
-          if(person.NEXT_FLAG){
-            person.NEXT_FLAG = false;
+            if(person.PREV_FLAG){
+              person.PREV_FLAG = false;
+            }
+  
+            if(person.NEXT_FLAG){
+              person.NEXT_FLAG = false;
+            }
+            
+            person.hasAlerts = Status.Accept
           }
             
         }
@@ -557,6 +527,44 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
 
     );
 
+  }
+
+  shallPass(person:Connection | User, data:any):boolean{
+
+    console.log("shall pass:", data);
+
+    if(person.PREV_FLAG){
+      console.log("prev flag");
+      return true;
+    } 
+    else if(person.NEXT_FLAG){
+      console.log("next flag");
+      return true;
+    }
+    else if(person.alerts.length > 0 && this.hasNext(person)
+            && data.length > 0  
+            &&  data[data.length - 1].payload.val()['timestamp'] <= person.alerts[0].timestamp){
+
+      console.log("update flag");
+      return true;
+    }
+    else if(person.alerts.length > 1 && !this.hasNext(person)
+            && data.length > 0  
+            &&  data[data.length - 1].payload.val()['timestamp'] <= person.alerts[0].timestamp){
+      console.log("removing last");
+      return true;
+    }
+    else if(person.alerts.length == 1 && !this.hasNext(person)
+            && data.length > 0  
+            &&  data[data.length - 1].payload.val()['timestamp'] >= person.alerts[0].timestamp){
+      console.log("independent flag");
+      return true;
+    }
+
+    console.log("you shall not pass");
+    return false;
+          
+    
   }
 
 
@@ -583,13 +591,11 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
 
   /**This function deletes alert from the devices collection in realtime firebase, 
     *Parm: the alert's ID*/
-  deleteAlert(alertID:string){
+  deleteAlert(person:User, alertID:string){
 
-    if(!this.hasNext(this.user) && this.user.alerts.length == 1){
-      this.user.INDEPENDENT_FLAG = true;
-    }else{
-      this.user.INDEPENDENT_FLAG = false;
-    }
+   if(person.alerts.length == 1 && !this.hasPrev(person) && !this.hasNext(person)){
+     person.hasAlerts = Status.Deny;
+   }
 
     this.db.database.ref(`/devices/${this.user.deviceID}/history/${alertID}`).remove()
   }
@@ -615,15 +621,18 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
               }
               else{
                 console.log("no alerts 3");
+                this.noAlerts(person);
               }
             }
             else{
               console.log("no alerts 2");
+              this.noAlerts(person);
             }
           }) 
         }
         else{
           console.log("no alerts 1");
+          this.noAlerts(person);
         }
         // person.searchSmallestTimestamp = this.dateToTimestamp(person.fromDate,person.fromTime);
         // person.searchLargestTimestamp = this.dateToTimestamp(person.toDate,person.toTime);
@@ -640,6 +649,15 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
     
   }
 
+  noAlerts(person: User | Connection){
+
+    person.alerts = [];
+    person.searchLargestTimestamp = person.largestTimestamp;
+    person.searchSmallestTimestamp = person.smallestTimestamp;
+    person.hasAlerts = Status.Faulty;
+
+  }
+
   /**
    * @param timestamp 
    * @param person 
@@ -650,7 +668,7 @@ setSmallestTimestap(person:Connection | User):Promise<boolean>{
     return new Promise((resolve) =>
     {
       this.db.list(person.dbPath).query.orderByChild('timestamp')
-      .startAt(UINIX_MIN_TIMESTAMP)
+      .startAt(UNIX_MIN_TIMESTAMP)
       .endAt(timestamp)
       .limitToLast(1)
       .once("value")

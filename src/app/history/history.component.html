@@ -28,7 +28,7 @@
                                                  <p>{{alert.image_path}}</p>
                                                  <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
                                                  <p>{{alert.notes}}</p>
-                                                 <button class="btn" (click)="deleteAlert(alert.alertID)"><i class="fa fa-trash"></i></button>
+                                                 <button class="btn" (click)="deleteAlert(user, alert.alertID)"><i class="fa fa-trash"></i></button>
                                           </div>
                                    </div>
 
@@ -54,7 +54,22 @@
                                                  <input type="submit" value="Search" class="btn float-right search_btn">
                                           </form>
                                    </div>
-                                   
+                            </div>
+                            <div *ngSwitchCase="state.Faulty"> 
+                                   No alerts found
+                                   <div>
+                                          <form (ngSubmit)="search(user)">
+                                                 <label>Show All:</label>
+                                                 <input type="checkbox" name="showAll" [checked]="user.showAll" (change)="user.showAll = !user.showAll">
+                                                 <label>From:</label>
+                                                 <input name="fromDate" type="Date" [(ngModel)]="user.fromDate" class="form-control">
+                                                 <input name="fromTime" type="time" [(ngModel)]="user.fromTime" class="form-control">
+                                                 <label>To:</label>
+                                                 <input name="toDate" type="date" [(ngModel)]="user.toDate" class="form-control">
+                                                 <input name="toTime" type="time" [(ngModel)]="user.toTime" class="form-control">
+                                                 <input type="submit" value="Search" class="btn float-right search_btn">
+                                          </form>
+                                   </div>
                             </div>
                             <div *ngSwitchCase="state.Deny"> 
                                    Currently, your alert history is empty
@@ -144,6 +159,22 @@
                                                                              </form>
                                                                       </div>
                                                                       
+                                                               </div>
+                                                               <div *ngSwitchCase="state.Faulty"> 
+                                                                     No alerts found
+                                                                     <div>
+                                                                             <form (ngSubmit)="search(connection)">
+                                                                                    <label>Show All:</label>
+                                                                                    <input type="checkbox" name="showAll" [checked]="connection.showAll" (change)="connection.showAll = !connection.showAll">
+                                                                                    <label>From:</label>
+                                                                                    <input name="fromDate" type="Date" [(ngModel)]="connection.fromDate" class="form-control">
+                                                                                    <input name="fromTime" type="time" [(ngModel)]="connection.fromTime" class="form-control">
+                                                                                    <label>To:</label>
+                                                                                    <input name="toDate" type="date" [(ngModel)]="connection.toDate" class="form-control">
+                                                                                    <input name="toTime" type="time" [(ngModel)]="connection.toTime" class="form-control">
+                                                                                    <input type="submit" value="Search" class="btn float-right search_btn">
+                                                                             </form>
+                                                                      </div>
                                                                </div>
                                                                <div *ngSwitchCase="state.Deny"> 
                                                                       Currently, connections alert history is empty
