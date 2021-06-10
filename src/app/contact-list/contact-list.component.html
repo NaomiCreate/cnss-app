@@ -80,10 +80,10 @@
                             <li class="list-group-item"><label>Last name</label><br>{{contact.lastName}}</li>
                             <li class="list-group-item"><label>Email</label><br>{{contact.email}}</li>
                             <li class="list-group-item"><label>Phone</label><br>{{contact.phone}}</li>
-                            <!-- <li class="list-group-item"><label>Share history</label><br>
+                            <li class="list-group-item"><label>Share history</label><br>
                                 <div *ngIf="contact.shareHistory;else not_share">Yes</div>
                                 <ng-template #not_share>No</ng-template>
-                            </li> -->
+                            </li>
                             <!-- <li class="list-group-item"><label>Confirmed</label><br>{{contact.confirmed}}</li> -->
                         </ul>
                         <button (click)="editRecord(contact)" class="btn-edit">Edit</button>         
