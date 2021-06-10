@@ -1,8 +1,6 @@
 /* Add application styles & imports to this file! */
-h3{
-    color: aliceblue;
-    font-weight: bold;
-    /* margin-top: 5%; */
+/* h3{
+/
     font-family: URW Chancery L, cursive;
     margin-bottom: 10px;
 }
@@ -20,7 +18,6 @@ h3{
 }
 #btn-history-top-bar:hover{
     background-color: #f79e6393;
-    /* border-color:  rgba(117, 117, 117, 0.507); */
 }
 
 #btn-history-bottom-bar{
@@ -37,7 +34,6 @@ h3{
 }
 #btn-history-bottom-bar:hover{
     background-color: #f79e6393;
-    /* border-color:  rgba(117, 117, 117, 0.507); */
 }
 .card{
     background-color: rgba(255, 255, 255, 0.082);
@@ -61,18 +57,15 @@ h3{
 } 
 
 .card-btn-controls {
-    /* background-color: rgb(255, 238, 0);  */
     display: table;
     padding: 2px;
     margin-top: 25px;
     margin-bottom: 2px;
     position: initial;
     display: -webkit-box
-    /* display: flex; */
 }
 .btn-controls{
     color: rgb(59, 57, 53); 
-    /* background-color: rgba(255, 255, 255, 0.479); */
     background-color: rgb(149 113 113 / 36%);
     margin: 3px;
     padding: 2px;
@@ -82,7 +75,134 @@ h3{
     border-color: rgba(255, 221, 221, 0.644);
     margin-left: 10px;
     border-style: none;
-}
- .ng-untouched.ng-pristine.ng-valid{
+} */
+/* .ng-untouched.ng-pristine.ng-valid{
          display: -webkit-box;
-} 
+}  */
+.nav-tabs {
+    border-bottom: 1px solid #ffffff;
+}
+#nav-tab{
+    margin:30px;
+    justify-content: center;
+}
+
+.card.user_search {
+    /* margin-top:  30px; 
+    margin-bottom:  250px;  */
+    display: table-cell;
+    background-color: #ffffff17;
+}
+.card.connection_search{
+    display: table-cell;
+    background-color: #ffffff17;
+    /* margin-top:  30px; 
+    margin-bottom: 30px;  */
+}
+.searchCheckbox{
+    text-align: center;
+}
+.checkbox {
+    margin-left: 5px;
+}
+table {
+    margin-bottom: 15px;
+    margin: auto;
+}
+th{
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+tr{
+    text-align: center;
+}
+.datetimeTitle {
+    background-color: rebeccapurple;
+}
+.card-title {
+    background-color: none;
+    color: darksalmon;
+    /* margin-right: 20px;
+    margin-left: 20px; */
+}
+.card-subtitle{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: beige;
+}
+td {
+    text-align: center;
+    /* background-color: blueviolet; */
+    /* display: inline-grid; */
+}
+td.mainColumns{
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.search_btn {
+    border-color: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #0e272a;
+    color: #fffffe;
+}
+/* .search_btn#connection_search_btn{
+     margin-bottom: 30px; 
+} */
+.card-title {
+    /* margin: 8px; */
+    font-weight: 600;
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    /* background-color: #fff; */
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    width: 700px;
+}
+.card.connection_alert{
+    display: table-cell;
+    background-color: #fffffe;
+}
+.card.user_alert{
+    display: table-cell;
+    background-color: #fffffe;
+}
+.card-btn-controls {
+    padding: 2px;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+}
+button.btn-controls {
+    border: none;
+    background-color: coral;
+    color: #0f292c;
+}
+
+.card.connection{
+    margin-top:  30px; 
+    margin-bottom: 100px;
+    background-color: #173e43;
+    border: 3px solid #2d0a32;
+
+}
+/* .card.user{
+    margin-top:  30px; 
+    margin-bottom: 100px;
+    background-color: #173e43;
+    border: 3px solid #2d0a32;
+
+} */
+button.showOrHideBtn{
+    color: #0f292c;
+    background-color: #fae596;
+    border-color: #fae596;
+}

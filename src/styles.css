@@ -9,7 +9,8 @@ html, body {
     min-height: 100%;
     font-family: 'Open Sans' ;
     /* background-color:rgba(149, 82, 81, 0.712); */
-    background-color: RosyBrown;
+    /* background-color: RosyBrown; */
+    background-color: #dddfd4;
     /* background-color: rgb(229 231 243); */
     /* background-color: rgb(249 249 249); */
 }

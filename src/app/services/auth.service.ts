@@ -83,11 +83,40 @@ export class AuthService {
         this.authState = credential.user;
         //this.isAuth=true;//user is logged in
         resolve(credential.user);
-      }).catch(error=>{
-        console.log("Error: The email or password are incorrect, please try again")
-        //alert("Error: The email or password are incorrect, please try again");
-        //throw error;
+      }).catch((error) => {
+        switch (error.code) {
+          case "auth/invalid-email":
+          {
+            console.log("2: auth/invalid-email");
+            break;
+          }
+          case "auth/wrong-password":
+          {
+            console.log("2: auth/wrong-password");
+            break;
+          }
+          case "auth/user-not-found":
+          {
+            console.log("2:auth/user-not-found");
+            //resolve(null);
+             //this.errorMessage = "Wrong email address or password.";
+            break;
+          }
+             default:
+          {
+            console.log("Unexpected Error");
+              //this.errorMessage = "Unexpected Error";
+              break;
+          }
+        }
       })
+      
+      
+      // .catch(error=>{
+      //   console.log("Error: The email or password are incorrect, please try again")
+      //   //alert("Error: The email or password are incorrect, please try again");
+      //   //throw error;
+      // })
     });
   }
 

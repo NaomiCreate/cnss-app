@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
         // this.router.navigate(['/home-page'])
         this.router.navigate(['/profile'])
       }).catch(error=>{
+        console.log("1:error in service");
         this.errorMessage = "The email or password are incorrect, please try again";
       })
     }  
