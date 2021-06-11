@@ -1,84 +1,4 @@
 /* Add application styles & imports to this file! */
-/* h3{
-/
-    font-family: URW Chancery L, cursive;
-    margin-bottom: 10px;
-}
-#btn-history-top-bar{
-    color: rgb(59, 57, 53);
-    background-color: rgba(255, 221, 221, 0.644);
-    margin: 3px;
-    padding: 2px;
-    border-radius: 5px;
-    width: 200px;
-    margin-right: 10px;
-    border-color: rgba(255, 221, 221, 0.644);
-    margin-left: 10px;
-    border-style: none;
-}
-#btn-history-top-bar:hover{
-    background-color: #f79e6393;
-}
-
-#btn-history-bottom-bar{
-    color: rgb(27, 26, 24);
-    background-color: rgba(255, 221, 221, 0.644);
-    margin: 3px;
-    padding: 2px;
-    border-radius: 5px;
-    width: 200px;
-    margin-right: 10px;
-    border-color: rgba(255, 221, 221, 0.644);
-    margin-left: 10px;
-    border-style: none;
-}
-#btn-history-bottom-bar:hover{
-    background-color: #f79e6393;
-}
-.card{
-    background-color: rgba(255, 255, 255, 0.082);
-}
-
-#card-top-bar {
-    background-color: rgba(255, 255, 255, 0.24);
-    display: table;
-    padding: 2px;
-    margin-top: 25px;
-    margin-bottom: 2px;
-    position: initial;
-} 
-#card-bottom-bar {
-     background-color: rgba(255, 255, 255, 0.24);
-     display: table;
-     padding: 2px;
-     margin-top: 2px;
-     margin-bottom: 25px;
-     position: initial;
-} 
-
-.card-btn-controls {
-    display: table;
-    padding: 2px;
-    margin-top: 25px;
-    margin-bottom: 2px;
-    position: initial;
-    display: -webkit-box
-}
-.btn-controls{
-    color: rgb(59, 57, 53); 
-    background-color: rgb(149 113 113 / 36%);
-    margin: 3px;
-    padding: 2px;
-    border-radius: 5px;
-    width: 200px;
-    margin-right: 10px;
-    border-color: rgba(255, 221, 221, 0.644);
-    margin-left: 10px;
-    border-style: none;
-} */
-/* .ng-untouched.ng-pristine.ng-valid{
-         display: -webkit-box;
-}  */
 .nav-tabs {
     border-bottom: 1px solid #ffffff;
 }
@@ -86,18 +6,22 @@
     margin:30px;
     justify-content: center;
 }
-
+a {
+    color: #0f2135;
+    text-decoration: none;
+    background-color: transparent;
+}
 .card.user_search {
-    /* margin-top:  30px; 
-    margin-bottom:  250px;  */
+    margin-top:  30px; 
+    margin-bottom:  250px;
     display: table-cell;
     background-color: #ffffff17;
+    color: beige;
 }
 .card.connection_search{
     display: table-cell;
     background-color: #ffffff17;
-    /* margin-top:  30px; 
-    margin-bottom: 30px;  */
+    color: beige;
 }
 .searchCheckbox{
     text-align: center;
@@ -105,40 +29,14 @@
 .checkbox {
     margin-left: 5px;
 }
-table {
-    margin-bottom: 15px;
-    margin: auto;
-}
-th{
-    text-align: center;
-    padding: 0;
-    margin: 0;
-}
-tr{
-    text-align: center;
-}
-.datetimeTitle {
-    background-color: rebeccapurple;
-}
 .card-title {
     background-color: none;
     color: darksalmon;
-    /* margin-right: 20px;
-    margin-left: 20px; */
 }
 .card-subtitle{
     margin-top: 0;
     margin-bottom: 1rem;
     color: beige;
-}
-td {
-    text-align: center;
-    /* background-color: blueviolet; */
-    /* display: inline-grid; */
-}
-td.mainColumns{
-    padding-left: 25px;
-    padding-right: 25px;
 }
 .search_btn {
     border-color: none;
@@ -146,10 +44,10 @@ td.mainColumns{
     margin-bottom: 10px;
     background-color: #0e272a;
     color: #fffffe;
+    margin: 3px;
+    padding: 5px;
+    clear: right;
 }
-/* .search_btn#connection_search_btn{
-     margin-bottom: 30px; 
-} */
 .card-title {
     /* margin: 8px; */
     font-weight: 600;
@@ -177,16 +75,32 @@ td.mainColumns{
 .card-btn-controls {
     padding: 2px;
     margin-top: 25px;
-    margin-bottom: 30px;
-    display: -webkit-box;
-    -webkit-box-pack: center;
+    margin-bottom: 70px;
+    /* display: -webkit-box;
+    -webkit-box-pack: center; */
 }
 button.btn-controls {
     border: none;
     background-color: coral;
     color: #0f292c;
 }
-
+.btn-controls#prev_btn{
+    float: left;
+}
+.btn-controls#next_btn{
+    float: right;
+}
+.search_inputs {
+    margin-top: 10px;
+}
+.search_start{
+    float: left;
+}
+.search_end{
+    float: right;
+    margin: 3px;
+    margin-bottom: 30px;
+}
 .card.connection{
     margin-top:  30px; 
     margin-bottom: 100px;
@@ -194,15 +108,19 @@ button.btn-controls {
     border: 3px solid #2d0a32;
 
 }
-/* .card.user{
+.card.user{
     margin-top:  30px; 
     margin-bottom: 100px;
     background-color: #173e43;
     border: 3px solid #2d0a32;
-
-} */
+}
 button.showOrHideBtn{
     color: #0f292c;
     background-color: #fae596;
     border-color: #fae596;
+        margin-top: 35px;
+}
+.searchInput{
+    border-radius: 5px;
+
 }
