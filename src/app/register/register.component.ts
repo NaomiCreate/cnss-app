@@ -36,8 +36,6 @@ export class RegisterComponent implements OnInit {
 
   message = '';
   errorMessage = ''; //validation error handle
-  error: { name: string, message: string } = { name: '', message: '' }; //firebase error handle
-
   dbData: any;
 
   rForm: FormGroup;
@@ -53,9 +51,10 @@ export class RegisterComponent implements OnInit {
   // userInputIsOwner: boolean = false;
   // userInputIsDeviceOwner: string = '';
   //userInputDeviceId: string = '';
-
+  
   constructor(private fb: FormBuilder, private authservice: AuthService, private router: Router, public crudservice: CrudService, private db: AngularFireDatabase) {
     //here we will specifie the validations
+    
     this.rForm = fb.group({
       'userInputEmail': [null, Validators.compose([Validators.required, Validators.email])],
       'userInputPassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -70,6 +69,8 @@ export class RegisterComponent implements OnInit {
       //'userInputDeviceId':[null,Validators.required]
     });
   }
+
+
   addPost(post) {
     this.userInfoRecord.email = post.userInputEmail;
     this.password = post.userInputPassword;
@@ -110,7 +111,6 @@ export class RegisterComponent implements OnInit {
       //update UserInfo collection
       this.crudservice.create_userInfo(this.userInfoRecord).then(() => {
         this.password = this.passwordVerif = "";
-        this.message = "user-info was saved succefully";
       }).catch(error => { 
         console.log(error); })
     }
@@ -118,15 +118,15 @@ export class RegisterComponent implements OnInit {
 
 
   register() {
-    this.clearErrorMessage();
 
+    this.clearErrorMessage();
     if (this.validateForm()) {
       if (this.userInfoRecord.is_device_owner == true) {
         let dbPath = `/device-list/` + this.userInfoRecord.device_id;//path to realtime database
         this.dbData = this.db.list(dbPath).snapshotChanges()
           .subscribe(data => {
             if (data[0] == undefined) {
-              this.errorMessage = "The device id does not exist in the system";
+              this.errorMessage = "Device id is not registered in the system";
             }
             else {
               this.crudservice.get_uidFromDeviceID(this.userInfoRecord.device_id).then((doc) => {
@@ -137,32 +137,41 @@ export class RegisterComponent implements OnInit {
                   this.authservice.registerWithEmail(this.userInfoRecord.email, this.password)
                     .then(() => {
                       this.CreateRecordUserInfo();
-                      this.message = "Your details saved successfully"
                       this.router.navigate(['/profile'])
 
-                    }).catch(_error => {
-                      this.error = _error
-                      this.router.navigate(['/register'])
+                    }).catch(error => {
+                      console.log("There is a problem", error.code)
+                      if(error.message == "auth/email-already-in-use"){
+                        this.errorMessage = " The email address is already in use by a nother account"
+                      }
+                      else{
+                        this.errorMessage = "Error, registration failed";
+                      }
+                
                     })
                 }
               }).catch((error) => {
-                console.log("error");
-
+                console.log("error",error);
+                this.errorMessage = "Error, registration failed";
               });
             }
           })
       }
       else {
+        this.userInfoRecord.device_id = ''; // clear device id
         this.authservice.registerWithEmail(this.userInfoRecord.email, this.password)
           .then(() => {
             this.CreateRecordUserInfo();
-            this.message = "Your data is registered in firebase"
             this.router.navigate(['/profile'])
 
-          }).catch(_error => {
-            console.log("try exist email1");
-            this.error = _error
-            this.router.navigate(['/register'])
+          }).catch(error => {
+            console.log("There is a problem", error.code)
+            if(error.message == "auth/email-already-in-use"){
+              this.errorMessage = " The email address is already in use by a nother account."
+            }
+            else{
+              this.errorMessage = "Error, registration failed";
+            }
           })
       }
 
@@ -171,45 +180,12 @@ export class RegisterComponent implements OnInit {
 
   validateForm() {
 
-    if (this.userInfoRecord.email.length === 0) {
-      this.errorMessage = "Please enter your email address in format:\nyourname@example.com";
-      return false
-    }
-    if (this.password.length === 0) {
-      this.errorMessage = "Please enter a password";
-      return false
-    }
-    if (this.password.length < 6) {
-      this.errorMessage = "The password should be at least 6 characters";
-      return false
-    }
     if (!(this.passwordVerif === this.password)) {
-      this.errorMessage = "The password verification does not match the password";
+      this.errorMessage = "The password confirmation does not match password";
       return false
     }
-    if (this.userInfoRecord.firstName.length === 0) {
-      this.errorMessage = "Please enter your first name";
-      return false
-    }
-    if (this.userInfoRecord.lastName.length === 0) {
-      this.errorMessage = "Please enter your last name";
-      return false
-    }
-    if (this.userInfoRecord.phone.length === 0) {
-      this.errorMessage = "Please enter your cell phone number";
-      return false
-    }
-    if (this.userInfoRecord.phone.length != 10) {
-      this.errorMessage = "Cell phone number is not valid";
-      return false
-    }
-    // if(this.userInfoRecord.is_device_owner===undefined)
-    // {
-    //   this.errorMessage = "Select option";
-    //   return false
-    // }
     if (this.userInfoRecord.is_device_owner == true && this.userInfoRecord.device_id.length == 0) {
-      this.errorMessage = "Please enter your device id";
+      this.errorMessage = "Enter your device id";
       return false
     }
     //NEED TO ADD: The device id is already in use
@@ -220,7 +196,6 @@ export class RegisterComponent implements OnInit {
 
   clearErrorMessage() {
     this.errorMessage = '';
-    this.error = { name: '', message: '' };
   }
 
 

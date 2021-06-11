@@ -20,7 +20,6 @@ export class AuthService {
   constructor(private firebaseAuth: AngularFireAuth, private router: Router) {
 
     this.firebaseAuth.authState.subscribe((auth =>{
-      //console.log("Debug:: IN auth.service authState")
       this.authState = auth;
     }))
 
@@ -62,61 +61,31 @@ export class AuthService {
 
   //function in use in register.component.ts
   registerWithEmail(email: string, password: string){
-    return new Promise(resolve => {
+
+    return new Promise((resolve,reject) => {
+
       this.firebaseAuth.createUserWithEmailAndPassword(email, password)
       .then((credential) => {
         this.authState = credential.user;
-        //this.isAuth=true;//user is logged in
-        resolve(credential.user);
+        resolve(true);
       }).catch(error=>{
-        console.log(error)
-        //throw error;
+        reject(new Error(error.code));
       })
     });
   }
 
 /*function in use in login.component.ts*/
  loginWithEmail(email: string, password: string){
-    return new Promise(resolve => {
+
+    return new Promise((resolve,reject) => {
       this.firebaseAuth.signInWithEmailAndPassword(email, password)
       .then((credential) => {
         this.authState = credential.user;
-        //this.isAuth=true;//user is logged in
-        resolve(credential.user);
+        resolve(true);
       }).catch((error) => {
-        switch (error.code) {
-          case "auth/invalid-email":
-          {
-            console.log("2: auth/invalid-email");
-            break;
-          }
-          case "auth/wrong-password":
-          {
-            console.log("2: auth/wrong-password");
-            break;
-          }
-          case "auth/user-not-found":
-          {
-            console.log("2:auth/user-not-found");
-            //resolve(null);
-             //this.errorMessage = "Wrong email address or password.";
-            break;
-          }
-             default:
-          {
-            console.log("Unexpected Error");
-              //this.errorMessage = "Unexpected Error";
-              break;
-          }
-        }
+        // console.log("error.code", error.code);
+        reject(new Error(error.code));
       })
-      
-      
-      // .catch(error=>{
-      //   console.log("Error: The email or password are incorrect, please try again")
-      //   //alert("Error: The email or password are incorrect, please try again");
-      //   //throw error;
-      // })
     });
   }
 

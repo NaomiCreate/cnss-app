@@ -19,7 +19,6 @@ import { LoginComponent } from './login/login.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { from } from 'rxjs';
 import { RegisterComponent } from './register/register.component';
-import { HomePageComponent } from './home-page/home-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ConnectedToComponent } from './connected-to/connected-to.component';
@@ -38,7 +37,6 @@ import { ToastrModule } from 'ngx-toastr';
     LoginComponent,
     SidebarComponent,
     RegisterComponent,
-    HomePageComponent,
     PageNotFoundComponent,
     ProfileComponent,
     ConnectedToComponent,

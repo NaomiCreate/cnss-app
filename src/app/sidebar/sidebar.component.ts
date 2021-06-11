@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';//So the sidebar appears after the user registered
-import {Router} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {CrudService} from '../services/crud.service';
+import { AuthGuard } from '../guards/auth.guard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit{
   isSidebarOpen:boolean = false; //will hold the sidebar state 
 
   // is_device_owner:any;
@@ -24,12 +26,8 @@ export class SidebarComponent implements OnInit {
       this.isSidebarOpen = true; 
 
   }
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
-  }
-
-  ngOnDestroy(){
-
-  }
+  ngOnDestroy(){}
 
 }

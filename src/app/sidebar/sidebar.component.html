@@ -1,5 +1,5 @@
 <!-- page-container is parent to the sidebar -->
-<div class="page-container" *ngIf = "(router.url != '/login') && router.url != '/register';  else elseNotAuthBlock">
+<div class="page-container" *ngIf = "(router.url != '/login') && router.url != '/register' && this.authservice.isUserEmailLoggedIn;  else elseNotAuthBlock">
     <div *ngIf="isSidebarOpen; else elseBlock">
         <div class="sidebar">   
             <div class="open-sidebar-toggle" (click)="toggleSideBar()">

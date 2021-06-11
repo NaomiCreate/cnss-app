@@ -20,7 +20,6 @@ export class ManagerGuard implements CanActivate {
         this.authService.auth.onAuthStateChanged((user) => {
           if (user) {
             this.authService.set_user(user);
-            console.log("Debug:: manager.gaurd - user IS logged in")
             resolve( this.crudservice.get_userDetails()
                       .then(doc => {
                       if (!doc.data()['is_device_owner']){
@@ -29,7 +28,6 @@ export class ManagerGuard implements CanActivate {
                       return doc.data()['is_device_owner'];
                     }));
           } else {
-            console.log("Debug:: manager.gaurd - user IS NOT logged in")
             resolve(false);
           }
         })
