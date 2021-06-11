@@ -75,7 +75,7 @@
                                                                              <input name="toTime" type="time" [(ngModel)]="user.toTime" class="searchInput" [disabled]="user.showAll">
                                                                       </div>
                                                                </div>                                                                                    
-                                                               <button type="submit" class="btn float-right search_btn" [disabled]="user.fromDate==null||user.fromTime||user.toDate||user.toTime">
+                                                               <button type="submit" class="btn float-right search_btn" [disabled]="!user.showAll&&(user.fromDate==null||user.fromTime==null||user.toDate==null||user.toTime==null)">
                                                                       Search  <i class="fa fa-search"></i>
                                                                </button>
                                                         </form>
@@ -84,7 +84,7 @@
                                           
                                    </div>
                                    <div *ngSwitchCase="state.Faulty">
-                                          <p class="card-subtitle">No alerts found</p>
+                                          <p class="card-subtitle" style="color:red">No alerts found</p>
                                           <div class="card user_search">
                                                  <form (ngSubmit)="search(user)">
                                                         <div class="searchCheckbox">
@@ -105,7 +105,7 @@
                                                                       <input name="toTime" type="time" [(ngModel)]="user.toTime" class="searchInput" [disabled]="user.showAll">
                                                                </div>
                                                         </div> 
-                                                        <button type="submit" class="btn float-right search_btn" [disabled]="user.fromDate==null||user.fromTime||user.toDate||user.toTime">
+                                                        <button type="submit" class="btn float-right search_btn" [disabled]="!user.showAll&&(user.fromDate==null||user.fromTime==null||user.toDate==null||user.toTime==null)">
                                                                Search<i class="fa fa-search"></i>
                                                         </button>
                                                  </form>
@@ -217,7 +217,7 @@
                                                                                                   <input name="toTime" type="time" [(ngModel)]="connection.toTime" class="searchInput" [disabled]="connection.showAll">
                                                                                            </div>
                                                                                     </div> 
-                                                                                    <button type="submit" class="btn float-right search_btn" [disabled]="connection.fromDate==null||connection.fromTime||connection.toDate||connection.toTime">
+                                                                                    <button type="submit" class="btn float-right search_btn" [disabled]="!connection.showAll&&(connection.fromDate==null||connection.fromTime==null||connection.toDate==null||connection.toTime==null)">
                                                                                            Search<i class="fa fa-search"></i>
                                                                                     </button>
                                                                              </form>
@@ -247,7 +247,7 @@
                                                                                                   <input name="toTime" type="time" [(ngModel)]="connection.toTime" class="searchInput" [disabled]="connection.showAll">
                                                                                            </div>
                                                                                     </div> 
-                                                                                    <button type="submit" class="btn float-right search_btn" [disabled]="connection.fromDate==null||connection.fromTime||connection.toDate||connection.toTime">
+                                                                                    <button type="submit" class="btn float-right search_btn" [disabled]="!connection.showAll&&(connection.fromDate==null||connection.fromTime==null||connection.toDate==null||connection.toTime==null)">
                                                                                            Search<i class="fa fa-search"></i>
                                                                                     </button>
                                                                              </form>
