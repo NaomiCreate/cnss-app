@@ -78,45 +78,33 @@ export class ChangePasswordComponent implements OnInit {
 
       //Reauthenticating here with the data above
       cpUser.reauthenticateWithCredential(credentials).then(success => {
-        console.log('successfully reauthenticated!');
-
         if (this.userInput.newPassword != this.userInput.verifyNewPassword) {
-          console.log("Password changed failed");
-          this.errorMessage = "The new password verification does not match the new password";
-
-        } else if (this.userInput.newPassword.length < 6) {
-          console.log(" newPassword.length < 6");
-          this.errorMessage = "The new password should be at least 6 characters";
+          this.errorMessage = "The password confirmation does not match password";
         } else {
-          console.log("The input is valid");
+          //console.log("The input is valid");
 
           /* Update the password to the password the user typed into the
             new password input field */
           cpUser.updatePassword(this.userInput.newPassword).then(res => {
             //Success
-            this.message = "The password change successed";
+            this.message = "Password has been successfully changed";
             this.clearForm();
           }).catch(err => {
             //Failed
-            this.errorMessage = "The password changed failed";
-            console.log("error=", err);
-            console.log("Password changed failed");
+            this.errorMessage = "Password change failed";
           });
 
         }
       })
         .catch(err => {
-          console.log('failed reauthenticated!');
-          this.errorMessage = "The current email or current password you entered is incorrect";
-          console.log(err);
+          this.errorMessage = "Email or Current password are incorrect";
           if (err.code === "auth/wrong-password") {
-            console.log("Password changed failed");
-            this.errorMessage = "Password changed failed";
+            this.errorMessage = "Current password is incorrect";
           }
         })
     }
     else {
-      this.errorMessage = "The current email or current password you entered is incorrect";
+      this.errorMessage = "Email or Current password are incorrect";
     }
   }
 
@@ -135,23 +123,23 @@ export class ChangePasswordComponent implements OnInit {
     this.error = {name: '', message:''};
   }
 
-  validateForm() {
-    this.errorMessage = this.message = "";
+  // validateForm() {
+  //   this.errorMessage = this.message = "";
 
-    if (this.userInput.currentPassword.length === 0) {
-      this.errorMessage = "Please enter your current password";
-      return false
-    }
-    if (this.userInput.newPassword.length < 6) {
-      this.errorMessage = "The new password should be at least 6 characters";
-      return false
-    }
-    if (!(this.userInput.newPassword === this.userInput.verifyNewPassword)) {
-      this.errorMessage = "The new password verification does not match the new password";
-      return false
-    }
-    this.errorMessage = '';
-    return true;
-  }
+  //   // if (this.userInput.currentPassword.length === 0) {
+  //   //   this.errorMessage = "Please enter your current password";
+  //   //   return false
+  //   // }
+  //   // if (this.userInput.newPassword.length < 6) {
+  //   //   this.errorMessage = "The new password should be at least 6 characters";
+  //   //   return false
+  //   // }
+  //   if (!(this.userInput.newPassword === this.userInput.verifyNewPassword)) {
+  //     this.errorMessage = "The password confirmation does not match password";
+  //     return false
+  //   }
+  //   this.errorMessage = '';
+  //   return true;
+  // }
 
 }

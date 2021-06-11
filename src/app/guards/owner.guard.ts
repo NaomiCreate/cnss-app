@@ -17,13 +17,12 @@ export class OwnerGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
 
-    return this.crudservice.get_userDetails()
-    .then(doc => {
-      if (!doc.data()['is_device_owner']){
-        alert("This page is accessible to device owners only");
-      }
-      return doc.data()['is_device_owner'];
-    });
+    // return this.crudservice.get_userDetails()
+    // .then(doc => {
+    //   return doc.data()['is_device_owner'];
+    // });
+
+    return true;
     
   }
   
