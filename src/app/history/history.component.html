@@ -16,75 +16,45 @@
 
 <div class="container-content" *ngIf="myHistoySelected; else elseBlock">
        <div class="card user">
-       <div [ngSwitch]="user.isOwner">
-              
-                     <!-- the same view can be shown in more than one case -->
-              <div *ngSwitchCase="state.Accept">
+              <div [ngSwitch]="user.isOwner">
 
-                     <div [ngSwitch]="user.hasAlerts">
-                            <!-- <div class="card user"> -->
+                     <!-- the same view can be shown in more than one case -->
+                     <div *ngSwitchCase="state.Accept">
+
+                            <div [ngSwitch]="user.hasAlerts">
                                    <!-- the same view can be shown in more than one case -->
                                    <div *ngSwitchCase="state.Accept">
-                                                 <div *ngFor="let alert of  user.alerts">
-                                                        <br />
-                                                        <!-- <div class="card" id="alert_card"> -->
-                                                        <div class="card user_alert">
-                                                               <button class="btn-delete"
-                                                                      (click)="deleteAlert(user, alert.alertID)"><i
-                                                                             class="fa fa-trash"></i></button>
-                                                               <h5 class="card-title text-center">Alert was sent from my CNSS device at:</h5>
-                                                               <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
-                                                               <!-- <p>"Alert"</p>
+                                          <div *ngFor="let alert of  user.alerts">
+                                                 <br />
+                                                 <!-- <div class="card" id="alert_card"> -->
+                                                 <div class="card user_alert">
+                                                        <button class="btn-delete"
+                                                               (click)="deleteAlert(user, alert.alertID)"><i
+                                                                      class="fa fa-trash"></i></button>
+                                                        <h5 class="card-title text-center">Alert was sent from my CNSS
+                                                               device at:</h5>
+                                                        <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+                                                        <!-- <p>"Alert"</p>
                                                                <p>{{alert.image_path}}</p>
                                                                <p>{{alert.notes}}</p> -->
-                                                               <p>For Testig: {{alert.alertID}}</p>
-                                                               <p>For Testig: {{alert.timestamp}}</p>
-                                                        </div>
+                                                        <p>For Testig: {{alert.alertID}}</p>
+                                                        <p>For Testig: {{alert.timestamp}}</p>
                                                  </div>
+                                          </div>
 
-                                                 <div class="card-btn-controls">
-                                                        <div *ngIf="hasPrev(user)">
-                                                               <!-- <button id="prev_btn" -->
-                                                               <button class="btn-controls" id="prev_btn"
-                                                                      (click)="user.PREV_FLAG = true; getNext(user, true)">Prev</button>
-                                                        </div>
-                                                        <div *ngIf="hasNext(user)">
-                                                               <!-- <button id="next_btn" -->
-                                                               <button class="btn-controls" id="next_btn"
-                                                                      (click)="user.NEXT_FLAG = true; getNext(user, false)">Next</button>
-                                                        </div>
+                                          <div class="card-btn-controls">
+                                                 <div *ngIf="hasPrev(user)">
+                                                        <!-- <button id="prev_btn" -->
+                                                        <button class="btn-controls" id="prev_btn"
+                                                               (click)="user.PREV_FLAG = true; getNext(user, true)">Prev</button>
                                                  </div>
+                                                 <div *ngIf="hasNext(user)">
+                                                        <!-- <button id="next_btn" -->
+                                                        <button class="btn-controls" id="next_btn"
+                                                               (click)="user.NEXT_FLAG = true; getNext(user, false)">Next</button>
+                                                 </div>
+                                          </div>
 
-                                                 <div class="card user_search">
-                                                        <form (ngSubmit)="search(user)">
-                                                               <div class="searchCheckbox">
-                                                                      <label>Show All </label>
-                                                                      <input class="checkbox" type="checkbox" name="showAll"
-                                                                             [checked]="user.showAll"
-                                                                             (change)="user.showAll = !user.showAll">
-                                                               </div>
-                                                               <div class="search_inputs">
-                                                                      <div class="search_start">
-                                                                             <label>Start :</label>
-                                                                             <input name="fromDate" type="Date" [(ngModel)]="user.fromDate" class="searchInput" [disabled]="user.showAll">
-                                                                             <input name="fromTime" type="time" [(ngModel)]="user.fromTime" class="searchInput" [disabled]="user.showAll">
-                                                                      </div>
-                                                                      <div class="search_end">
-                                                                             <label>End :</label>
-                                                                             <input name="toDate" type="date" [(ngModel)]="user.toDate" class="searchInput" [disabled]="user.showAll">
-                                                                             <input name="toTime" type="time" [(ngModel)]="user.toTime" class="searchInput" [disabled]="user.showAll">
-                                                                      </div>
-                                                               </div>                                                                                    
-                                                               <button type="submit" class="btn float-right search_btn" [disabled]="!user.showAll&&(user.fromDate==null||user.fromTime==null||user.toDate==null||user.toTime==null)">
-                                                                      Search  <i class="fa fa-search"></i>
-                                                               </button>
-                                                        </form>
-                                                 </div>
-                                                 </div>
-                                          
-                                   </div>
-                                   <div *ngSwitchCase="state.Faulty">
-                                          <p class="card-subtitle" style="color:red">No alerts found</p>
                                           <div class="card user_search">
                                                  <form (ngSubmit)="search(user)">
                                                         <div class="searchCheckbox">
@@ -96,16 +66,71 @@
                                                         <div class="search_inputs">
                                                                <div class="search_start">
                                                                       <label>Start :</label>
-                                                                      <input name="fromDate" type="Date" [(ngModel)]="user.fromDate" class="searchInput" [disabled]="user.showAll">
-                                                                      <input name="fromTime" type="time" [(ngModel)]="user.fromTime" class="searchInput" [disabled]="user.showAll">
+                                                                      <input name="fromDate" type="Date"
+                                                                             [(ngModel)]="user.fromDate"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
+                                                                      <input name="fromTime" type="time"
+                                                                             [(ngModel)]="user.fromTime"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
                                                                </div>
                                                                <div class="search_end">
                                                                       <label>End :</label>
-                                                                      <input name="toDate" type="date" [(ngModel)]="user.toDate" class="searchInput" [disabled]="user.showAll">
-                                                                      <input name="toTime" type="time" [(ngModel)]="user.toTime" class="searchInput" [disabled]="user.showAll">
+                                                                      <input name="toDate" type="date"
+                                                                             [(ngModel)]="user.toDate"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
+                                                                      <input name="toTime" type="time"
+                                                                             [(ngModel)]="user.toTime"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
                                                                </div>
-                                                        </div> 
-                                                        <button type="submit" class="btn float-right search_btn" [disabled]="!user.showAll&&(user.fromDate==null||user.fromTime==null||user.toDate==null||user.toTime==null)">
+                                                        </div>
+                                                        <button type="submit" class="btn float-right search_btn"
+                                                               [disabled]="!user.showAll&&(user.fromDate==null||user.fromTime==null||user.toDate==null||user.toTime==null)">
+                                                               Search <i class="fa fa-search"></i>
+                                                        </button>
+                                                 </form>
+                                          </div>
+                                   </div>
+                                   <!-- </div> -->
+                                   <div *ngSwitchCase="state.Faulty">
+                                          <p class="card-subtitle">No alerts found</p>
+                                          <div class="card user_search">
+                                                 <form (ngSubmit)="search(user)">
+                                                        <div class="searchCheckbox">
+                                                               <label>Show All </label>
+                                                               <input class="checkbox" type="checkbox" name="showAll"
+                                                                      [checked]="user.showAll"
+                                                                      (change)="user.showAll = !user.showAll">
+                                                        </div>
+                                                        <div class="search_inputs">
+                                                               <div class="search_start">
+                                                                      <label>Start :</label>
+                                                                      <input name="fromDate" type="Date"
+                                                                             [(ngModel)]="user.fromDate"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
+                                                                      <input name="fromTime" type="time"
+                                                                             [(ngModel)]="user.fromTime"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
+                                                               </div>
+                                                               <div class="search_end">
+                                                                      <label>End :</label>
+                                                                      <input name="toDate" type="date"
+                                                                             [(ngModel)]="user.toDate"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
+                                                                      <input name="toTime" type="time"
+                                                                             [(ngModel)]="user.toTime"
+                                                                             class="searchInput"
+                                                                             [disabled]="user.showAll">
+                                                               </div>
+                                                        </div>
+                                                        <button type="submit" class="btn float-right search_btn"
+                                                               [disabled]="!user.showAll&&(user.fromDate==null||user.fromTime==null||user.toDate==null||user.toTime==null)">
                                                                Search<i class="fa fa-search"></i>
                                                         </button>
                                                  </form>
@@ -114,20 +139,22 @@
                                    <div *ngSwitchCase="state.Deny">
                                           <p class="card-subtitle">Currently, your alert history is empty</p>
                                    </div>
-                                   <div *ngSwitchDefault> <p class="card-subtitle">Loading, please wait... </p></div>
+                                   <div *ngSwitchDefault>
+                                          <p class="card-subtitle">Loading, please wait... </p>
+                                   </div>
                                    <!--For state.StandBy-->
-
-
                             </div>
+                     </div>
 
-                     <div *ngSwitchCase="state.Deny"> <p class="card-subtitle">Currently, you are not a security system owner</p></div>
-
+                     <div *ngSwitchCase="state.Deny"> 
+                            <p class="card-subtitle">Currently, you are not a security system owner</p>
+                     </div>
                      <!--default case when there are no matches -->
-                     <div *ngSwitchDefault> <p class="card-subtitle">Loading, please wait...</p> </div>
-                     <!--For state.StandBy-->
+                     <div *ngSwitchDefault> 
+                            <p class="card-subtitle">Loading, please wait...</p> 
+                     </div> <!--For state.StandBy-->
               </div>
        </div>
-       
 </div>
 
 
@@ -154,7 +181,8 @@
                                                  <p class="card-subtitle">{{connection.phone}}</p>
 
                                                  <div *ngIf="connection.hideHistory; else elseBlock">
-                                                        <button class="showOrHideBtn" (click)="showAlerts(connection.index)">Show
+                                                        <button class="showOrHideBtn"
+                                                               (click)="showAlerts(connection.index)">Show
                                                                history</button>
                                                  </div>
 
@@ -170,7 +198,10 @@
                                                                              <br />
                                                                              <!-- <div class="card" id="connection_alert"> -->
                                                                              <div class="card connection_alert">
-                                                                                    <h5 class="card-title text-center">Alert recieved from {{connection.firstName}}'s CNSS device at:</h5>
+                                                                                    <h5 class="card-title text-center">
+                                                                                           Alert recieved from
+                                                                                           {{connection.firstName}}'s
+                                                                                           CNSS device at:</h5>
                                                                                     <p>{{alert.timestamp |
                                                                                            date:'dd/MM/yyyy HH:mm:ss'}}
                                                                                     </p>
@@ -184,13 +215,15 @@
                                                                              </div>
                                                                       </div>
 
-                                                                      <div class="card-btn-controls" >
+                                                                      <div class="card-btn-controls">
                                                                              <div *ngIf="hasPrev(connection)">
-                                                                                    <button class="btn-controls" id="prev_btn"
+                                                                                    <button class="btn-controls"
+                                                                                           id="prev_btn"
                                                                                            (click)="connection.PREV_FLAG = true; getNext(connection,true)">Prev</button>
                                                                              </div>
                                                                              <div *ngIf="hasNext(connection)">
-                                                                                    <button class="btn-controls" id="next_btn"
+                                                                                    <button class="btn-controls"
+                                                                                           id="next_btn"
                                                                                            (click)="connection.NEXT_FLAG = true; getNext(connection,false)">Next</button>
                                                                              </div>
                                                                       </div>
@@ -208,17 +241,36 @@
                                                                                     <div class="search_inputs">
                                                                                            <div class="search_start">
                                                                                                   <label>Start :</label>
-                                                                                                  <input name="fromDate" type="Date" [(ngModel)]="connection.fromDate" class="searchInput" [disabled]="connection.showAll">
-                                                                                                  <input name="fromTime" type="time" [(ngModel)]="connection.fromTime" class="searchInput" [disabled]="connection.showAll">
+                                                                                                  <input name="fromDate"
+                                                                                                         type="Date"
+                                                                                                         [(ngModel)]="connection.fromDate"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
+                                                                                                  <input name="fromTime"
+                                                                                                         type="time"
+                                                                                                         [(ngModel)]="connection.fromTime"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
                                                                                            </div>
                                                                                            <div class="search_end">
                                                                                                   <label>End :</label>
-                                                                                                  <input name="toDate" type="date" [(ngModel)]="connection.toDate" class="searchInput" [disabled]="connection.showAll">
-                                                                                                  <input name="toTime" type="time" [(ngModel)]="connection.toTime" class="searchInput" [disabled]="connection.showAll">
+                                                                                                  <input name="toDate"
+                                                                                                         type="date"
+                                                                                                         [(ngModel)]="connection.toDate"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
+                                                                                                  <input name="toTime"
+                                                                                                         type="time"
+                                                                                                         [(ngModel)]="connection.toTime"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
                                                                                            </div>
-                                                                                    </div> 
-                                                                                    <button type="submit" class="btn float-right search_btn" [disabled]="!connection.showAll&&(connection.fromDate==null||connection.fromTime==null||connection.toDate==null||connection.toTime==null)">
-                                                                                           Search<i class="fa fa-search"></i>
+                                                                                    </div>
+                                                                                    <button type="submit"
+                                                                                           class="btn float-right search_btn"
+                                                                                           [disabled]="!connection.showAll&&(connection.fromDate==null||connection.fromTime==null||connection.toDate==null||connection.toTime==null)">
+                                                                                           Search<i
+                                                                                                  class="fa fa-search"></i>
                                                                                     </button>
                                                                              </form>
                                                                       </div>
@@ -238,31 +290,55 @@
                                                                                     <div class="search_inputs">
                                                                                            <div class="search_start">
                                                                                                   <label>Start :</label>
-                                                                                                  <input name="fromDate" type="Date" [(ngModel)]="connection.fromDate" class="searchInput" [disabled]="connection.showAll">
-                                                                                                  <input name="fromTime" type="time" [(ngModel)]="connection.fromTime" class="searchInput" [disabled]="connection.showAll">
+                                                                                                  <input name="fromDate"
+                                                                                                         type="Date"
+                                                                                                         [(ngModel)]="connection.fromDate"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
+                                                                                                  <input name="fromTime"
+                                                                                                         type="time"
+                                                                                                         [(ngModel)]="connection.fromTime"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
                                                                                            </div>
                                                                                            <div class="search_end">
                                                                                                   <label>End :</label>
-                                                                                                  <input name="toDate" type="date" [(ngModel)]="connection.toDate" class="searchInput" [disabled]="connection.showAll">
-                                                                                                  <input name="toTime" type="time" [(ngModel)]="connection.toTime" class="searchInput" [disabled]="connection.showAll">
+                                                                                                  <input name="toDate"
+                                                                                                         type="date"
+                                                                                                         [(ngModel)]="connection.toDate"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
+                                                                                                  <input name="toTime"
+                                                                                                         type="time"
+                                                                                                         [(ngModel)]="connection.toTime"
+                                                                                                         class="searchInput"
+                                                                                                         [disabled]="connection.showAll">
                                                                                            </div>
-                                                                                    </div> 
-                                                                                    <button type="submit" class="btn float-right search_btn" [disabled]="!connection.showAll&&(connection.fromDate==null||connection.fromTime==null||connection.toDate==null||connection.toTime==null)">
-                                                                                           Search<i class="fa fa-search"></i>
+                                                                                    </div>
+                                                                                    <button type="submit"
+                                                                                           class="btn float-right search_btn"
+                                                                                           [disabled]="!connection.showAll&&(connection.fromDate==null||connection.fromTime==null||connection.toDate==null||connection.toTime==null)">
+                                                                                           Search<i
+                                                                                                  class="fa fa-search"></i>
                                                                                     </button>
                                                                              </form>
                                                                       </div>
                                                                </div>
                                                                <div *ngSwitchCase="state.Deny">
-                                                                      <p class="card-subtitle">Currently, connections alert history is empty</p>
+                                                                      <p class="card-subtitle">Currently, connections
+                                                                             alert history is empty</p>
                                                                </div>
-                                                               <div *ngSwitchDefault> <p class="card-subtitle">Loading, please wait... </p></div>
+                                                               <div *ngSwitchDefault>
+                                                                      <p class="card-subtitle">Loading, please wait...
+                                                                      </p>
+                                                               </div>
                                                                <!--For state.StandBy-->
 
                                                         </div>
 
 
-                                                        <button class="showOrHideBtn" (click)="connection.hideHistory = true">Hide
+                                                        <button class="showOrHideBtn"
+                                                               (click)="connection.hideHistory = true">Hide
                                                                history</button>
                                                  </ng-template>
 
