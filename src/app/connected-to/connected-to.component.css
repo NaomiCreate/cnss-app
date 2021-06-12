@@ -25,7 +25,9 @@ label{
   font-weight: bold;
   font-family: URW Chancery L, cursive;
 }
-
+#reject{
+  float: left;
+ }
 
 /* a{
   color: bisque;

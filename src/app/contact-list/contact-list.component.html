@@ -139,8 +139,8 @@
                                 <!-- <li class="list-group-item"><label>Confirmed</label><br>{{contact.confirmed}}</li> -->
                             </ul>
                             <span>
-                                <button (click)="contact.inEdit = false; cleanMessages();">Cancel</button>
-                                <button style="float: right;" (click)="updateRecord(contact)">Update Card</button>
+                                <button id="cancel" (click)="contact.inEdit = false; cleanMessages();">Cancel</button>
+                                <button id="up-date" style="float: right;" (click)="updateRecord(contact)">Update Card</button>
                             </span>
                         </div>
                     </ng-template>
@@ -192,7 +192,7 @@
                                 <!-- <li class="list-group-item"><label>Confirmed</label><br>{{request.confirmed}}</li> -->
                             </ul>
                             <span>
-                                <button (click)="request.inEdit = false; cleanMessages();">Cancel</button>
+                                <button id="cancel" (click)="request.inEdit = false; cleanMessages();">Cancel</button>
                                 <button style="float: right;" (click)="updateRecord(request)">Update Card</button>
                             </span>
                         </div>

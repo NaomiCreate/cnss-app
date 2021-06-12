@@ -43,7 +43,7 @@
                             <li class="list-group-item"><label>Phone</label><br>{{request.phone}}</li>
                         </ul>
                         <span>
-                            <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger">Reject request</a>
+                            <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger" id="reject">Reject request</a>
                             <a style="float: right;" routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn btn-danger">Confirm request</a>
                         </span>
                     </div>
