@@ -4,10 +4,10 @@ import { OwnerGuard } from '../guards/owner.guard';
 import { AuthService } from '../services/auth.service';
 import { CrudService } from '../services/crud.service';
 
-enum Status {
+enum Switch {
   StandBy,
   On,
-  Off,
+  Off
 }
 
 @Component({
@@ -17,8 +17,9 @@ enum Status {
 })
 export class SystemControlComponent implements OnInit {
 
-  Status = Status;
-  state:Status = Status.StandBy
+  public state = Switch; // for HTML
+  switch:Switch = Switch.StandBy; // for TS
+
   visualSwitchState: boolean;//for the [(ngModel)] in HTML
 
   public deviceId: string;
@@ -29,11 +30,13 @@ export class SystemControlComponent implements OnInit {
   
 
   ngOnInit(): void {
+
     //check if the user owns CNSS system
-    // if((this.authservice.currentUser != null) && this.checkIfOwner())//make sure the user is logged in + CNSS owner
-    if((this.authservice.currentUser != null))//make sure the user is logged in
-    {
-      this.crudservice.get_userInfo().subscribe(data => {
+    this.checkIfOwner().then((result) => {
+
+      if(result){
+        this.crudservice.get_userInfo().subscribe(data => {
+
           this.deviceId = data[0].payload.doc.data()['device_id'];//Get user device id
           console.log("Debug::user.deviceId", this.deviceId)
 
@@ -41,59 +44,61 @@ export class SystemControlComponent implements OnInit {
           console.log("Debug::this.dbPath", this.dbPath)
           
           this.checkState();//show current switch state on the screen
-      })
-    }
+        })
+      }
+
+    })
+   
   }
 
   checkState(){
+
     this.db.database.ref(this.dbPath+"/control").on('value',(snap)=>{
       if(snap.val() == null || snap.val() == undefined)
       {
         //create path and defined it as off
         this.db.list(this.dbPath).update('control',{state: 'off' });
-        this.state = Status.StandBy;
+        this.switch = Switch.Off;
       }
       else
       {
         if(snap.val()['state'] == 'on')
         {
           this.visualSwitchState=true;
-          this.state = Status.On;
+          this.switch = Switch.On;
         }
         else//snap.val()['state'] == 'off'
         {
           this.visualSwitchState=false;
-          this.state = Status.Off;
+          this.switch = Switch.Off;
 
         }
       }
     });
-    return this.state;
   }
 
   switchState(){
 
-    if(this.state==Status.On)//If currentState==On -> turn Off
+    if(this.switch == Switch.On) //If currentState==On -> turn Off
     {
       this.db.list(this.dbPath).update('control',{state: 'off' });
       this.visualSwitchState=false;
-      this.state=Status.Off;
+      this.switch = Switch.Off;
     }
-    else if(this.state==Status.Off)//If currentState==Status.Off -> turn On
+    else if(this.switch == Switch.Off)//If currentState==Status.Off -> turn On
     {
       this.db.list(this.dbPath).update('control', {state: 'on' });
       this.visualSwitchState=true;
-      this.state=Status.On;
+      this.switch = Switch.On;
     }
   }
 
-  checkIfOwner()
+  checkIfOwner():Promise<boolean>
   {
-    let owner;
-    this.crudservice.get_userDetails()
-    .then(doc => {
-      owner = doc.data()['is_device_owner'];
-    });
-    return owner;
+     return new Promise((resolve) => 
+      this.crudservice.get_userDetails()
+      .then(doc => {
+        resolve(doc.data()['is_device_owner']);
+      }))
   }
 }

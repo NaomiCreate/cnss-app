@@ -1,7 +1,8 @@
-<div [ngSwitch]="state">
-    <div *ngSwitchCase="Status.StandBy"> </div>
-    <div *ngSwitchDefault>
-        <div class="toggel-switch">
+<div [ngSwitch]="switch">
+    <div *ngSwitchCase="state.StandBy"> </div>
+    <div *ngSwitchDefault> 
+        <label for="switch">Security system</label>
+        <div class="toggel-switch" name="switch">
             <label>Off</label>
             <label class="switch">
             <input  type="checkbox" [(ngModel)]="visualSwitchState" (click)="switchState()">
