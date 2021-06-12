@@ -112,3 +112,34 @@ button:focus {
 }
 
 
+
+
+#accordionInfo {
+    margin-top: 35px;
+}
+.card-header.info {
+    padding: 0px;
+    margin: 0px;
+}
+.mb-0 {
+    /* display: inline-flex; */
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    background: #dddfd4;
+}
+.card.info {
+    width: 750px;
+}
+.btn_info {
+    /* float: right; */
+    width: fit-content;
+    color: black;
+    background: #00ffff00;
+    border: #00ffff00;
+    font-size: medium;
+}
+/* #collapseInfo  */
+.card-body.info{
+    background: #000000ba;
+    color: antiquewhite;
+}

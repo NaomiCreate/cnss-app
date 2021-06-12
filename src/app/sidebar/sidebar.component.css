@@ -97,7 +97,7 @@
 }
 
 .closed-sidebar{
-    z-index: 5; /*Added to make sidebar above any other content*/
+    z-index: 1; /*Added to make sidebar above any other content*/
     width: 36px;
     position: fixed;
     top: 0;

@@ -1,54 +1,75 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div [ngSwitch]="connections_state">
-    <div *ngSwitchCase="state.Accept">
-
-        <!-- requests:Array<Connection>;
-             connections:Array<Connection>; -->
-
-                <!-- interface Connection{
-                    firstName: string;
-                    lastName: string;
-                    email: string;
-                    phone:number; 
-                  } -->
-
-            <div *ngFor="let request of  requests">
-                <div class="card" id="requests">
-                    <h5 class="card-title text-center">{{request.firstName}} {{request.lastName}}</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><label>First name</label><br>{{request.firstName}}</li>
-                        <li class="list-group-item"><label>Last name</label><br>{{request.lastName}}</li>
-                        <li class="list-group-item"><label>Email</label><br>{{request.email}}</li>
-                        <li class="list-group-item"><label>Phone</label><br>{{request.phone}}</li>
-                    </ul>
-                    <span>
-                        <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger">Reject request</a>
-                        <a style="float: right;" routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn btn-danger">Confirm request</a>
-                    </span>
-                </div>
-            </div>
-
-            <div *ngFor="let connection of  connections">
-                <div class="card" id="connections">
-                    <button class="btn-delete" (click)="DeleteConnection(connection.email)"><i class="fa fa-trash"></i></button>
-                    <h5 class="card-title text-center">{{connection.firstName}} {{connection.lastName}}</h5>
-                    <!-- <button class="btn-delete" (click)="DeleteRequest(contact.email)"><i class="fa fa-trash"></i></button> -->
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><label>First name</label><br>{{connection.firstName}}</li>
-                        <li class="list-group-item"><label>Last name</label><br>{{connection.lastName}}</li>
-                        <li class="list-group-item"><label>Email</label><br>{{connection.email}}</li>
-                        <li class="list-group-item"><label>Phone</label><br>{{connection.phone}}</li>
-                    </ul>
-                </div>
-            </div>
-       
-
-        <br/>
-        <br/>
-        <br/>
-
+<div class="accordion" id="accordionInfo">
+    <div class="card info">
+      <div class="card-header info" id="headingOne">
+        <h2 class="mb-0">
+          <h4 class="info_title">People I Get Alerts From</h4>
+          <button class="btn_info" type="button" data-toggle="collapse" data-target="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo">
+            <i class="fa fa-question-circle"></i>
+          </button>
+        </h2>
+      </div>
+  
+      <div id="collapseInfo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionInfo">
+        <div class="card-body info">
+            Here you can approve/reject requests from people who have invited you to receive alerts if their CNSS detects motion.<br>
+            You can confirm up to 20 contacts
+        </div>
+      </div>
     </div>
-    <div *ngSwitchCase="state.Deny">Currently, you are have no connections or request</div>
-    <div *ngSwitchDefault>Loading, please wait...</div>
+</div>
+<div class="card-list">
+    <div [ngSwitch]="connections_state">
+        <div *ngSwitchCase="state.Accept">
+
+            <!-- requests:Array<Connection>;
+                connections:Array<Connection>; -->
+
+                    <!-- interface Connection{
+                        firstName: string;
+                        lastName: string;
+                        email: string;
+                        phone:number; 
+                    } -->
+
+                <div *ngFor="let request of  requests">
+                    <div class="card" id="requests">
+                        <h5 class="card-title text-center">{{request.firstName}} {{request.lastName}}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><label>First name</label><br>{{request.firstName}}</li>
+                            <li class="list-group-item"><label>Last name</label><br>{{request.lastName}}</li>
+                            <li class="list-group-item"><label>Email</label><br>{{request.email}}</li>
+                            <li class="list-group-item"><label>Phone</label><br>{{request.phone}}</li>
+                        </ul>
+                        <span>
+                            <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger">Reject request</a>
+                            <a style="float: right;" routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn btn-danger">Confirm request</a>
+                        </span>
+                    </div>
+                </div>
+
+                <div *ngFor="let connection of  connections">
+                    <div class="card" id="connections">
+                        <button class="btn-delete" (click)="DeleteConnection(connection.email)"><i class="fa fa-trash"></i></button>
+                        <h5 class="card-title text-center">{{connection.firstName}} {{connection.lastName}}</h5>
+                        <!-- <button class="btn-delete" (click)="DeleteRequest(contact.email)"><i class="fa fa-trash"></i></button> -->
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><label>First name</label><br>{{connection.firstName}}</li>
+                            <li class="list-group-item"><label>Last name</label><br>{{connection.lastName}}</li>
+                            <li class="list-group-item"><label>Email</label><br>{{connection.email}}</li>
+                            <li class="list-group-item"><label>Phone</label><br>{{connection.phone}}</li>
+                        </ul>
+                    </div>
+                </div>
+        
+
+            <br/>
+            <br/>
+            <br/>
+
+        </div>
+        <div *ngSwitchCase="state.Deny">Currently, you are have no connections or request</div>
+        <div *ngSwitchDefault>Loading, please wait...</div>
+    </div>
 </div>

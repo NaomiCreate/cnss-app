@@ -1,6 +1,34 @@
 <div [ngSwitch]="state">
     <div *ngSwitchCase="Status.StandBy">Loading, please wait... </div>
     <div *ngSwitchDefault>
+
+        <div class="accordion" id="accordionInfo">
+            <div class="card info">
+              <div class="card-header info" id="headingOne">
+                  <!-- <h4 class="info_title">Settings Page</h4> -->
+                <h2 class="mb-0">
+                  <h4 class="info_title">Settings Page</h4>
+                  <button class="btn_info" type="button" data-toggle="collapse" data-target="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo">
+                    <i class="fa fa-question-circle"></i>
+                  </button>
+                </h2>
+              </div>
+          
+              <div id="collapseInfo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionInfo">
+                <div class="card-body info">
+                    Here you can edit your personal details.<br>
+                    If you own a CNSS, you can turn On/Off the security system sensor using the On\Off switch.<br>
+                    If you don't own a CNSS, on this page you can add the ID of your future CNSS.
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+
+
+
+
         <h3 *ngFor="let item of record">Welcome {{item.firstName}}, You are logged in. </h3>
         <h4>The Security system on / off switch:</h4>
         <app-system-control></app-system-control>

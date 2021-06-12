@@ -1,13 +1,24 @@
+.card-list {
+  text-align: -webkit-center;
+}
 .card#btn-add-section{
   /* background:RosyBrown; */
   background-color: rgba(241, 241, 241, 0);
   border:  rgba(241, 241, 241, 0);
   margin-top: 55px;
 }
-.card#add-section{
+.card#add-section-body{
   /* border:3px solid #1b2743; */
   border: 3px solid #2d0a32;
   width: 400px;
+}
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: 0.75rem 1.25rem;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  text-align: left;
 }
 .card-head{
 /* background-color: #0f1131; */
@@ -19,7 +30,7 @@ padding: 10px;
   color: bisque;
   font-weight: 600;
 }
-.card-body {
+#add_body {
   padding: 1.25rem;
   /* background-color: #d0cac0; */
   background-color: #d8b9ed;
@@ -37,7 +48,9 @@ padding: 10px;
   width: 400px;
   background-color: #875959;
  } 
-
+.add-section {
+  text-align: -webkit-center;
+}
 label{
   color: rgb(39, 95, 144);
   font-weight: bold;
