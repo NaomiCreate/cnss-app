@@ -1,12 +1,3 @@
-
-    
-.fa.fa-question-circle:hover + .hide {
-  display: block;
-  color: rgb(87, 0, 0);
-}
-
-
-
 h3{
   color: #0e272a;
   font-weight: bold;
@@ -22,11 +13,11 @@ th, td{
   padding: 8px 20px;
   background-color: rgba(0, 128, 128, 0.52);
   /* font-family: 'Snell Roundhand, cursive' ;/*is this needed??*/
-  color: aliceblue; 
+  color: white; 
 }
 
 th {
-  color:  rgba(243, 239, 239, 0.918);
+  color:  white;
   text-align: left;
   background-color:rgba(0, 0, 0, 0.329);
 }
@@ -68,7 +59,7 @@ label{
 }
 label.notes {
   font-size: 14px;
-  color: rgb(0, 0, 0);
+  color: rgb(127 0 0);
   margin: 0px;
   padding: 0px;
 }
