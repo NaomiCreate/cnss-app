@@ -157,18 +157,16 @@ export class HistoryComponent implements OnInit {
           //console.log("Debug::user.dbPath", this.user.dbPath)
           this.setLargestTimestap(this.user).then(res =>
           {
-            if(res){
-              this.setSmallestTimestap(this.user).then(res =>
-              {
-                this.user.nextTimestamp = this.user.searchLargestTimestamp; // set the next timestamp
-                //getAlerts
-                this.getNext(this.user, false);
-              })
-            }else{
-              this.user.hasAlerts = Status.Deny;
-            }
+            
+            this.setSmallestTimestap(this.user).then(res =>
+            {
+              this.user.nextTimestamp = this.user.searchLargestTimestamp; // set the next timestamp
+              //getAlerts
+              this.getNext(this.user, false);
+            })
+            
           
-          })
+          }).catch(()=>{this.user.hasAlerts = Status.Deny;});
           
         }
         else{
@@ -301,10 +299,12 @@ export class HistoryComponent implements OnInit {
       this.connections[index].hideHistory = false; //show history for HTML
       if(this.connections[index].alerts.length == 0){
 
-        this.setLargestTimestap(this.connections[index]).then(res =>
+        this.setLargestTimestap(this.connections[index])
+        .then((result) =>
           {
             console.log("ngInin => returnd from set largest time stamp")
-            this.setSmallestTimestap(this.connections[index]).then(res =>
+            this.setSmallestTimestap(this.connections[index])
+            .then(res =>
             {
               this.connections[index].nextTimestamp = this.connections[index].searchLargestTimestamp; // set the next timestamp
               //getAlerts
@@ -312,6 +312,7 @@ export class HistoryComponent implements OnInit {
             })
           
           })
+          .catch((reject) => {this.connections[index].hasAlerts = Status.Deny;})
         
       }
       
@@ -364,11 +365,16 @@ export class HistoryComponent implements OnInit {
 
     let code = `ref=>ref.orderByChild('timestamp').startAt(${UNIX_MIN_TIMESTAMP}).limitToLast(${1})`;
 
-    return new Promise((resolve) =>
+    return new Promise((resolve,reject) =>
     {
       this.data_subscriptions.push(this.db.list(person.dbPath,eval(code))
       .valueChanges()
       .subscribe(data => {
+
+        console.log("data",person.firstName,data)
+        if(person.largestTimestamp == UNIX_MAX_TIMESTAMP && data.length == 0){
+          reject(false);
+        }
 
         // This value changes triggers when new alert arrives
         if(data.length > 0){
@@ -393,7 +399,7 @@ export class HistoryComponent implements OnInit {
           }
           resolve(true);
         }
-        resolve(false);
+        reject(false);
     }))
     })
 
