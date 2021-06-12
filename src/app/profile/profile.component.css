@@ -1,12 +1,22 @@
-h3{
-  color: aliceblue;
-  font-weight: bold;
-  margin-top: 20%;
-  font-family: URW Chancery L, cursive;
-  margin-bottom: 40px;
+
+    
+.fa.fa-question-circle:hover + .hide {
+  display: block;
+  color: rgb(87, 0, 0);
 }
 
 
+
+h3{
+  color: #0e272a;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 40px;  
+}
+
+p{
+  font-weight: bold;
+}
 th, td{
   border: solid 3px  rgba(0, 0, 0, 0.527);
   padding: 8px 20px;
@@ -56,7 +66,12 @@ tr.noBorder{
 label{
   margin-left: 10px;
 }
-
+label.notes {
+  font-size: 14px;
+  color: rgb(0, 0, 0);
+  margin: 0px;
+  padding: 0px;
+}
 input{
   border-radius: 5px;
   border-color: #3e3f419a;
@@ -65,4 +80,23 @@ input{
 
 .error-msg{
   background-color: rgb(236, 236, 236);
+}
+ 
+a#change-psw{
+  padding-bottom: 30px;
+  font-weight: bold;
+}
+a#edit {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+#cancel{
+  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-left: 40px;
+}
+#update{
+  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-left: 0px;
 }

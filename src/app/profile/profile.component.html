@@ -24,107 +24,110 @@
             </div>
         </div>
 
+        <div class="page-content">
+            <h3 *ngFor="let item of record">Welcome {{item.firstName}}, you are currently logged in</h3>
+            
+            <app-system-control></app-system-control>
+
+            <!-- <h4>Your Details:</h4> -->
+
+            <div class="error-msg">
+                <!-- user error -->
+                <p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
+                <!-- firebase error handle -->
+                <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
+                <!-- the data registered in firebase -->
+                <p *ngIf="message.length > 0" class="text-info">{{message}}</p>
+            </div>
+
+            <p>Your details</p>
+            <table>
+                <tbody *ngFor="let item of record">
+                    <div *ngIf="!inEdit; else elseBlock">
+                        <tr>
+                            <th>First Name</th>    
+                            <td>{{item.firstName}}</td>
+                        </tr>
+                        <tr>
+                            <th>Last Name</th>    
+                            <td>{{item.lastName}}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>   
+                            <td>{{item.email}}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>   
+                            <td>{{item.phone}}</td>
+                        </tr>
+                        <tr *ngIf="item.is_device_owner; else elseNotOwningCNSSBlock">
+                            <th>Are you a CNSS owner?<br>
+                                <label class="notes">*In order to edit your device id, click on "Edit"</label>
+                            </th>  
+                            <td>Yes</td>
+                        </tr>
+                        <!-- <tr *ngIf="item.is_device_owner">
+                            <label>In order to edit your device id, click on "Edit"</label> 
+                        </tr> -->
+                        <ng-template #elseNotOwningCNSSBlock>
+                            <th>CNSS owner?</th>     
+                            <td>No</td>
+                        </ng-template>
+                        <!-- <tr *ngIf="item.editIsDeviceOwner">
+                            <label>In order to edit your device id, click on "Edit"</label>            
+                        </tr> -->
+                        <!-- <tr class="noBorder"> -->
+                            <a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary" id="edit">Edit</a>
+                            <!-- <p></p> -->
+                            <!-- <a href="#" (click)="changePassword('1234567')" routerLink="/profile">Change password</a>                    -->
+                        <!-- </tr> -->
+                    </div>
+                    
+                    <!-- next lines willshow after pressing Edit Contact: -->
+                    <ng-template #elseBlock>  
+                        <tr>
+                            <th>First Name</th>    
+                            <td><input type="text" [(ngModel)]="item.editFirstName" class="from-control"></td>
+                        </tr>
+                        <tr>
+                            <th>Last Name</th>    
+                            <td><input type="text" [(ngModel)]="item.editLastName" class="from-control"></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>   
+                            <td>{{item.email}}</td>
+                            
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>   
+                            <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
+                        </tr>
+
+                        <tr>
+                            <th>Are you a CNSS owner?</th>
+                            <td class="ownership" name="ownership">
+                                <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="true" />  
+                                <label>Yes</label><br>  
+                                <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="false" />
+                                <label>No</label><br>  
+                            </td>
+                        </tr>
+                        <tr *ngIf="item.editIsDeviceOwner">
+                            <th>Device ID</th>   
+                            <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
+                        </tr>
+                            
+                        <button id="update" (click)="updateRecord(item)">Update</button>
+                        <button id="cancel" (click)="inEdit = false">Cancel</button> 
+                                      
+                        </ng-template>
+                </tbody>
+                <a id="change-psw" href="#" routerLink="/change-password">Change password</a>                    
+            </table>
 
 
 
-
-
-        <h3 *ngFor="let item of record">Welcome {{item.firstName}}, you are currently logged in</h3>
-        
-        <app-system-control></app-system-control>
-
-        <!-- <h4>Your Details:</h4> -->
-
-        <div class="error-msg">
-            <!-- user error -->
-            <p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
-            <!-- firebase error handle -->
-            <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
-            <!-- the data registered in firebase -->
-            <p *ngIf="message.length > 0" class="text-info">{{message}}</p>
         </div>
-
-        <table>
-            <tbody *ngFor="let item of record">
-                <div *ngIf="!inEdit; else elseBlock">
-                    <tr>
-                        <th>First Name:</th>    
-                        <td>{{item.firstName}}</td>
-                    </tr>
-                    <tr>
-                        <th>Last Name:</th>    
-                        <td>{{item.lastName}}</td>
-                    </tr>
-                    <tr>
-                        <th>Email:</th>   
-                        <td>{{item.email}}</td>
-                    </tr>
-                    <tr>
-                        <th>Phone Number:</th>   
-                        <td>{{item.phone}}</td>
-                    </tr>
-                    <tr *ngIf="item.is_device_owner; else elseNotOwningCNSSBlock">
-                        <th>Are you a CNSS Owner?</th>  
-                        <td>Yes</td>
-                    </tr>
-                    <tr *ngIf="item.is_device_owner">
-                        <label>In order to edit your device id, click on "Edit"</label> 
-                    </tr>
-                    <ng-template #elseNotOwningCNSSBlock>
-                        <th>CNSS Owner?</th>     
-                        <td>No</td>
-                    </ng-template>
-                    <!-- <tr *ngIf="item.editIsDeviceOwner">
-                        <label>In order to edit your device id, click on "Edit"</label>            
-                    </tr> -->
-                    <tr class="noBorder">
-                        <p></p>
-                        <p></p>
-                        <a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary">Edit</a>
-                        <!-- <p></p> -->
-                        <!-- <a href="#" (click)="changePassword('1234567')" routerLink="/profile">Change password</a>                    -->
-                    </tr>
-                </div>
-                
-                <!-- next lines willshow after pressing Edit Contact: -->
-                <ng-template #elseBlock>  
-                    <tr>
-                        <th>First Name:</th>    
-                        <td><input type="text" [(ngModel)]="item.editFirstName" class="from-control"></td>
-                    </tr>
-                    <tr>
-                        <th>Last Name:</th>    
-                        <td><input type="text" [(ngModel)]="item.editLastName" class="from-control"></td>
-                    </tr>
-                    <tr>
-                        <th>Email:</th>   
-                        <td>{{item.email}}</td>
-                        
-                    </tr>
-                    <tr>
-                        <th>Phone Number:</th>   
-                        <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
-                    </tr>
-
-                    <tr>
-                        <th>Are you a CNSS Owner?</th>
-                        <td class="ownership" name="ownership">
-                            <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="true" />  
-                            <label>Yes</label><br>  
-                            <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="false" />
-                            <label>No</label><br>  
-                        </td>
-                    </tr>
-                    <tr *ngIf="item.editIsDeviceOwner">
-                        <th>Device ID:</th>   
-                        <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
-                    </tr>
-                        <tr><button (click)="updateRecord(item)">Update</button></tr>
-                        <tr><button id="cancel" (click)="inEdit = false">Cancel</button></tr>            
-                    </ng-template>
-            </tbody>
-            <a href="#" routerLink="/change-password">Change password</a>                    
-        </table>
     </div>
 </div>
 

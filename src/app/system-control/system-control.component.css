@@ -1,15 +1,24 @@
 /* for toggel switch: */
+
+p{
+  font-weight: bold;
+}
 .toggel-switch{
   display: flex;
   align-items: center;
-  margin: 5%;
+  margin-bottom: 20px;
+  /* place-content: center; */
     /* position: absolute; */
     /* left: 53%;
     top: 15%; */
     /* align-items: center; */
 }
+
+h4{
+  color:#0e272a;
+}
 label{
-    color: rgba(255, 255, 255, 0.616);
+    color: #0e272a;
 }
 .switch {
     position: relative;
