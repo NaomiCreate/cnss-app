@@ -17,11 +17,13 @@ a {
     display: table-cell;
     background-color: #ffffff17;
     color: beige;
+    padding: 5px;
 }
 .card.connection_search{
     display: table-cell;
     background-color: #ffffff17;
     color: beige;
+    padding: 5px;
 }
 .searchCheckbox{
     text-align: center;
@@ -31,7 +33,7 @@ a {
 }
 .card-title {
     background-color: none;
-    color: darksalmon;
+    color: #dbdee7;
 }
 .card-subtitle{
     margin-top: 0;
@@ -67,10 +69,12 @@ a {
 .card.connection_alert{
     display: table-cell;
     background-color: #fffffe;
+    padding: 10px;
 }
 .card.user_alert{
     display: table-cell;
     background-color: #fffffe;
+    padding: 10px;
 }
 .card-btn-controls {
     padding: 2px;
@@ -81,8 +85,16 @@ a {
 }
 button.btn-controls {
     border: none;
-    background-color: coral;
-    color: #0f292c;
+    /* background-color: coral;
+    color: #0f292c; */
+    border-color: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #0e272a;
+    color: #fffffe;
+    margin: 3px;
+    padding: 5px;
+    clear: right;
 }
 .btn-controls#prev_btn{
     float: left;
@@ -106,21 +118,57 @@ button.btn-controls {
     margin-bottom: 100px;
     background-color: #173e43;
     border: 3px solid #2d0a32;
-
+    padding: 10px;
 }
 .card.user{
     margin-top:  30px; 
     margin-bottom: 100px;
     background-color: #173e43;
     border: 3px solid #2d0a32;
+    padding: 10px;
 }
 button.showOrHideBtn{
-    color: #0f292c;
-    background-color: #fae596;
-    border-color: #fae596;
+    background-color: #0e272a;
+    color: #fffffe;
         margin-top: 35px;
 }
 .searchInput{
     border-radius: 5px;
 
 }
+
+.date .far{
+    margin-right: 10px;
+}
+
+.time .far{
+    margin-right: 10px;
+}
+
+.email .fa{
+    margin-right: 10px;
+}
+
+.phone .fa{
+    margin-right: 10px;
+}
+
+label{
+    margin-right: 5px;
+}
+
+.email, .phone, .card-subtitle, lable{
+    color: whitesmoke;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  transform: scale(1.5);
+  padding: 10px;
+}
+

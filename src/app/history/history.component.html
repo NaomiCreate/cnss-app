@@ -41,7 +41,7 @@
 
                      <!-- the same view can be shown in more than one case -->
                      <div *ngSwitchCase="state.Accept">
-
+                            <h6 class="card-subtitle mb-2 text-center">Alerts Sent From Your Device</h6>
                             <div [ngSwitch]="user.hasAlerts">
                                    <!-- the same view can be shown in more than one case -->
                                    <div *ngSwitchCase="state.Accept">
@@ -52,14 +52,16 @@
                                                         <button class="btn-delete"
                                                                (click)="deleteAlert(user, alert.alertID)"><i
                                                                       class="fa fa-trash"></i></button>
-                                                        <h5 class="card-title text-center">Alert was sent from my CNSS
-                                                               device at:</h5>
-                                                        <p>{{alert.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</p>
-                                                        <!-- <p>"Alert"</p>
-                                                               <p>{{alert.image_path}}</p>
-                                                               <p>{{alert.notes}}</p> -->
-                                                        <p>For Testig: {{alert.alertID}}</p>
-                                                        <p>For Testig: {{alert.timestamp}}</p>
+                                                        <!-- <h5 class="card-title">Alert was sent from my CNSS device at:</h5> -->
+                                                        <div class="date">
+                                                               <i class='far fa-calendar'></i>
+                                                               {{alert.timestamp | date:'dd/MM/yyyy'}}
+                                                        </div>
+                                                        <div class="time">
+                                                               <i class='far fa-clock'></i>
+                                                               {{alert.timestamp | date:'HH:mm:ss'}}
+                                                        </div>
+                                                        <div style="color: rgb(156, 156, 143);">For Testig: {{alert.alertID}}      {{alert.timestamp}}</div>
                                                  </div>
                                           </div>
 
@@ -79,14 +81,14 @@
                                           <div class="card user_search">
                                                  <form (ngSubmit)="search(user)">
                                                         <div class="searchCheckbox">
-                                                               <label>Show All </label>
+                                                               <label>Show All</label>
                                                                <input class="checkbox" type="checkbox" name="showAll"
                                                                       [checked]="user.showAll"
                                                                       (change)="user.showAll = !user.showAll">
                                                         </div>
                                                         <div class="search_inputs">
                                                                <div class="search_start">
-                                                                      <label>Start :</label>
+                                                                      <label>Start</label>
                                                                       <input name="fromDate" type="Date"
                                                                              [(ngModel)]="user.fromDate"
                                                                              class="searchInput"
@@ -97,7 +99,7 @@
                                                                              [disabled]="user.showAll">
                                                                </div>
                                                                <div class="search_end">
-                                                                      <label>End :</label>
+                                                                      <label>End</label>
                                                                       <input name="toDate" type="date"
                                                                              [(ngModel)]="user.toDate"
                                                                              class="searchInput"
@@ -128,7 +130,7 @@
                                                         </div>
                                                         <div class="search_inputs">
                                                                <div class="search_start">
-                                                                      <label>Start :</label>
+                                                                      <label>Start</label>
                                                                       <input name="fromDate" type="Date"
                                                                              [(ngModel)]="user.fromDate"
                                                                              class="searchInput"
@@ -139,7 +141,7 @@
                                                                              [disabled]="user.showAll">
                                                                </div>
                                                                <div class="search_end">
-                                                                      <label>End :</label>
+                                                                      <label>End</label>
                                                                       <input name="toDate" type="date"
                                                                              [(ngModel)]="user.toDate"
                                                                              class="searchInput"
@@ -196,10 +198,18 @@
 
                                           <!-- <div class="card" id="connection"> -->
                                           <div class="card connection">
-                                                 <h5 class="card-title text-center">{{connection.firstName}}
-                                                        {{connection.lastName}}</h5>
-                                                 <p class="card-subtitle">{{connection.email}}</p>
-                                                 <p class="card-subtitle">{{connection.phone}}</p>
+                                                 <h6 class="card-subtitle mb-2 text-center">Alerts Recieved From</h6>
+                                                 <h5 class="card-title text-center">{{connection.firstName}} {{connection.lastName}}</h5>
+                                                 <!-- <p class="card-subtitle">{{connection.email}}</p>
+                                                 <p class="card-subtitle">{{connection.phone}}</p> -->
+                                                 <div class="email">
+                                                        <i class='fa fa-envelope'></i>
+                                                        {{connection.email}}
+                                                 </div>
+                                                 <div class="phone">
+                                                        <i class='fa fa-phone'></i>
+                                                        {{connection.phone}}
+                                                 </div>
 
                                                  <div *ngIf="connection.hideHistory; else elseBlock">
                                                         <button class="showOrHideBtn"
@@ -219,20 +229,19 @@
                                                                              <br />
                                                                              <!-- <div class="card" id="connection_alert"> -->
                                                                              <div class="card connection_alert">
-                                                                                    <h5 class="card-title text-center">
+                                                                                    <!-- <h5 class="card-title">
                                                                                            Alert recieved from
                                                                                            {{connection.firstName}}'s
-                                                                                           CNSS device at:</h5>
-                                                                                    <p>{{alert.timestamp |
-                                                                                           date:'dd/MM/yyyy HH:mm:ss'}}
-                                                                                    </p>
-                                                                                    <p>For Testig: {{alert.alertID}}</p>
-                                                                                    <p>For Testig: {{alert.timestamp}}
-                                                                                    </p>
-                                                                                    <!-- <p>"Alert"</p>
-                                                                                    <p>{{alert.image_path}}</p>
-
-                                                                                    <p>{{alert.notes}}</p> -->
+                                                                                           CNSS device at:</h5> -->
+                                                                                    <div class="date">
+                                                                                           <i class='far fa-calendar'></i>
+                                                                                           {{alert.timestamp | date:'dd/MM/yyyy'}}
+                                                                                    </div>
+                                                                                    <div class="time">
+                                                                                           <i class='far fa-clock'></i>
+                                                                                           {{alert.timestamp | date:'HH:mm:ss'}}
+                                                                                    </div>
+                                                                                    <div style="color: rgb(156, 156, 143);">For Testig: {{alert.alertID}}      {{alert.timestamp}}</div>
                                                                              </div>
                                                                       </div>
 
@@ -261,7 +270,7 @@
                                                                                     </div>
                                                                                     <div class="search_inputs">
                                                                                            <div class="search_start">
-                                                                                                  <label>Start :</label>
+                                                                                                  <label>Start</label>
                                                                                                   <input name="fromDate"
                                                                                                          type="Date"
                                                                                                          [(ngModel)]="connection.fromDate"
@@ -274,7 +283,7 @@
                                                                                                          [disabled]="connection.showAll">
                                                                                            </div>
                                                                                            <div class="search_end">
-                                                                                                  <label>End :</label>
+                                                                                                  <label>End</label>
                                                                                                   <input name="toDate"
                                                                                                          type="date"
                                                                                                          [(ngModel)]="connection.toDate"
@@ -290,8 +299,7 @@
                                                                                     <button type="submit"
                                                                                            class="btn float-right search_btn"
                                                                                            [disabled]="!connection.showAll&&(connection.fromDate==null||connection.fromTime==null||connection.toDate==null||connection.toTime==null)">
-                                                                                           Search<i
-                                                                                                  class="fa fa-search"></i>
+                                                                                           Search <i class="fa fa-search"></i>
                                                                                     </button>
                                                                              </form>
                                                                       </div>
@@ -310,7 +318,7 @@
                                                                                     </div>
                                                                                     <div class="search_inputs">
                                                                                            <div class="search_start">
-                                                                                                  <label>Start :</label>
+                                                                                                  <label>Start</label>
                                                                                                   <input name="fromDate"
                                                                                                          type="Date"
                                                                                                          [(ngModel)]="connection.fromDate"
@@ -323,7 +331,7 @@
                                                                                                          [disabled]="connection.showAll">
                                                                                            </div>
                                                                                            <div class="search_end">
-                                                                                                  <label>End :</label>
+                                                                                                  <label>End</label>
                                                                                                   <input name="toDate"
                                                                                                          type="date"
                                                                                                          [(ngModel)]="connection.toDate"
