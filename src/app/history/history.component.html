@@ -14,8 +14,7 @@
      
          <div id="collapseInfo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionInfo">
            <div class="card-body info">
-              Here you can view your alert history (if you own a CNSS), and the alert history of people who have decided to share their alert history with you.<br>
-              You can run a search for certain alerts at 2 time points you set.
+              Here you can view your alert history (if you own a CNSS device),<br>and the alert history of people who have decided to share their alert history with you.<br>
            </div>
          </div>
        </div>
@@ -395,7 +394,7 @@
 
               </div>
 
-              <div *ngSwitchCase="state.Deny">Currently, you are not a contact of any security system owner</div>
+              <div *ngSwitchCase="state.Deny">Currently, you are not a contact of any CNSS device owner</div>
 
               <!--default case when there are no matches -->
               <div *ngSwitchDefault> Loading, please wait... </div>

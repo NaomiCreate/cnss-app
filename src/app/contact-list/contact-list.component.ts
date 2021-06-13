@@ -27,7 +27,7 @@ interface AddContactSection {
   icon: string;
 }
 
-const MAX_CONTACTS_AND_CONNECTIONS = 3; //20;
+const MAX_CONTACTS_AND_CONNECTIONS = 5; //20;
 
 @Component({
   selector: 'app-contact-list',

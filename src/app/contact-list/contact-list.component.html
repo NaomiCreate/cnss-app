@@ -16,10 +16,10 @@
   
       <div id="collapseInfo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionInfo">
         <div class="card-body info">
-            Here you can add up to 20 contacts who will be alerted if your CNSS detects motion.<br>
-            In order for them to become your contact, they must approve your request.<br>
-            You can also delete contacts so that they will no longer receive alerts from your CNSS,<br>
-            and Determine whether you want contacts to view your alert history or not.
+            Here you can add up to 5 contacts who will be alerted if your CNSS device detects motion.<br><br>
+            In order for them to become your contact, they must approve your request.<br><br>
+            If you no longer want a contact to receive your device alerts you can delete them<br>(garbage bin icon).<br><br>
+            If you want to change your contacts permission to view your alert history you can set it through 'Edit'.
         </div>
       </div>
     </div>
@@ -204,7 +204,7 @@
                 <br />
 
             </div>
-            <div *ngSwitchCase="state.Deny">Currently, you have no contacts in your contact list</div>
+            <div *ngSwitchCase="state.Deny">Currently, your contact list is empty</div>
             <div *ngSwitchDefault>Loading, please wait...</div>
         </div>
     </div>

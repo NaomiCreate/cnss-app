@@ -13,8 +13,10 @@
   
       <div id="collapseInfo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionInfo">
         <div class="card-body info">
-            Here you can approve/reject requests from people who have invited you to receive alerts if their CNSS detects motion.<br>
-            You can confirm up to 20 contacts
+            Here you can approve/reject requests from people who have invited you to receive alerts from their CNSS device.<br>
+            You can have up to 5 contacts.<br/><br/>
+
+            If your contact enabled their history sharing with you, you will be able to view it on the history page.
         </div>
       </div>
     </div>
@@ -69,7 +71,7 @@
             <br/>
 
         </div>
-        <div *ngSwitchCase="state.Deny">Currently, you are have no connections or request</div>
+        <div *ngSwitchCase="state.Deny">Currently, you have no connections or requests</div>
         <div *ngSwitchDefault>Loading, please wait...</div>
     </div>
 </div>
