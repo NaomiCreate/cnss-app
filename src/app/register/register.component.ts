@@ -31,6 +31,7 @@ export class RegisterComponent implements OnInit {
     device_id: ''
   }
 
+  public next:number = 1;
   password: string = '';
   passwordVerif: string = '';
 

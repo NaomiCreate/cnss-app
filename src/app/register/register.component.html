@@ -6,17 +6,64 @@
 <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
 
 <title>Login Page</title>
-   <!--Made with love by Mutiullah Samim -->
-   
-	<!--Bootsrap 4 CDN-->
-	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
-    
-    <!--Fontawesome CDN-->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 
 
-<div class="card">
+<div *ngIf="next==1" class="card">
+	<div class="card-header">
+		Welcome to the CNSS website
+	</div>
+
+	<div class="card-body">
+
+		<p class="card-text">
+			CNSS stands for 'Collaborative Network of Home Security Systems'.
+			<br><br>
+			If you are currently not a CNSS security system owner,
+			choose the option 'I don't own a CNSS security system' when registering.
+			<br>
+			<br>
+			Once you confirm requests from other security system owners
+			you will be able to veiw alerts recieved from their devices.
+			<br>
+		</p>
+
+		
+		<a href="#" routerLink="/login">Back to Log in</a>
+		<input type="submit" value="Next" class="btn float-right login_btn" (click)="next=2">
+
+	</div>
+</div>
+
+
+<div *ngIf="next==2" class="card">
+	<div class="card-header">
+		Welcome to the CNSS website
+	</div>
+
+	<div class="card-body">
+
+		<p class="card-text">
+			If you are a CNSS security system owner,
+			<br>
+			<br>
+			You may register as a non security system owner and later update your device through the settings.
+			<br>
+			<br>
+			Or configure your device (insturctions can be found in the user guide that was given to you),
+			Select option 'I own a CNSS security system' and enter your device ID. 
+		</p>
+
+		<input type="submit" value="Back" class="btn float-left login_btn" (click)="next=1">
+		<input type="submit" value="Next" class="btn float-right login_btn" (click)="next=3">
+
+	</div>
+</div>
+
+
+
+<div *ngIf="next== 3" class="card">
 	<div class="card-header">
 		<h3>Registration Form</h3>
 	</div>
@@ -24,9 +71,6 @@
 	<div class="error-msg">
 		<!-- user error -->
 		<p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
-		<!-- firebase error handle -->
-		<!-- <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p> -->
-		<!-- the data registered in firebase -->
 		<p *ngIf="message.length > 0" class="text-info">{{message}}</p>
 	</div>
 
@@ -90,10 +134,8 @@
 					<label class="notes">Enter the device ID you received while configuring your device</label>
 				</div>
 				
-				<div class="register">
+				<div id="bottom-div" class="form-group">
 					<a href="#" routerLink="/login">Back to Log in</a>
-				</div>
-				<div class="form-group">
 					<input type="submit" value="Register" class="btn float-right login_btn" [disabled]="!rForm.valid">
 				</div>
 			</form>

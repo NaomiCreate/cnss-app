@@ -97,4 +97,8 @@ label.notes {
     color: rgb(127 0 0);
     margin: 0px;
     padding: 0px;
-  }
+}
+
+#bottom-div{
+    margin-top: 20px;
+}
