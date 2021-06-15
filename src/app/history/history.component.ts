@@ -93,7 +93,7 @@ const UNIX_MAX_TIMESTAMP =  Number.MAX_SAFE_INTEGER;
 
 
 //---added for search
-const ALERT_LIMIT = 3;//The value should be: limit+1 
+const ALERT_LIMIT = 5;//The value should be: limit+1 
 
 @Component({
   selector: 'app-history',
