@@ -126,12 +126,12 @@ export class RegisterComponent implements OnInit {
         this.dbData = this.db.list(dbPath).snapshotChanges()
           .subscribe(data => {
             if (data[0] == undefined) {
-              this.errorMessage = "Device id is not registered in the system";
+              this.errorMessage = "Device ID is not registered in the system";
             }
             else {
               this.crudservice.get_uidFromDeviceID(this.userInfoRecord.device_id).then((doc) => {
                 if (doc.exists) {
-                  this.errorMessage = "The device id is not available";
+                  this.errorMessage = "The device ID is not available";
                 }
                 else {
                   this.authservice.registerWithEmail(this.userInfoRecord.email, this.password)
@@ -185,7 +185,7 @@ export class RegisterComponent implements OnInit {
       return false
     }
     if (this.userInfoRecord.is_device_owner == true && this.userInfoRecord.device_id.length == 0) {
-      this.errorMessage = "Enter your device id";
+      this.errorMessage = "Enter your device ID";
       return false
     }
     //NEED TO ADD: The device id is already in use

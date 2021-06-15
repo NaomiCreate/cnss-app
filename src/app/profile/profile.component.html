@@ -65,20 +65,19 @@
                         </tr>
                         <tr *ngIf="item.is_device_owner; else elseNotOwningCNSSBlock">
                             <th>Are you a CNSS owner?<br>
-                                <label class="notes">*In order to edit your device id, click on "Edit"</label>
+                                <label class="notes">*To change your device ID, click on "Edit"</label>
                             </th>  
                             <td>Yes</td>
                         </tr>
                         <ng-template #elseNotOwningCNSSBlock>
                             <th>Are you a CNSS owner?<br>
-                                <label class="notes">*In order to add a device id, click on "Edit"</label>
+                                <label class="notes">*To add a device ID, click on "Edit"</label>
                             </th>     
                             <td>No</td>
                         </ng-template>
 
                         <button class="btn btn-danger" *ngIf = "item.is_device_owner; notOwner" id="cancelOwnership" (click)="cancleOwnership()">
                             Cancel Ownership
-                            <!-- <button  id="cancelOwnership" (click)="cancleOwnership()">Cancel Ownership</button> -->
                         </button>
                         <button (click)="editRecord(item)" class="btn btn-primary" id="edit">Edit</button>
                          
@@ -104,7 +103,7 @@
                             <td><input type="text" [(ngModel)]="item.editPhone" class="from-control"></td>
                         </tr>
 
-                        <tr>
+                        <tr *ngIf="!item.editIsDeviceOwner">
                             <th>Are you a CNSS owner?</th>
                             <td class="ownership" name="ownership">
                                 <input type="radio"  [(ngModel)]="item.editIsDeviceOwner" [value]="true" />  

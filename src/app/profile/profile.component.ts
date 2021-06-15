@@ -53,8 +53,6 @@ export class ProfileComponent implements OnInit {
       this.subscriptions.push(
         this.crudservice.get_userInfo().subscribe(data => {
 
-          // alert("on snap changes");
-
           /**This trcord is displayed in HTML, it returns an array */
           this.record = data.map(c => {
 
@@ -103,62 +101,142 @@ export class ProfileComponent implements OnInit {
 
       if(this.validateForm(new_record)){
 
-        let dbPath = `/device-list/` + new_record['device_id'] ;//beginig of path to realtime database
-        this.dbData = this.db.list(dbPath).snapshotChanges()
-        .subscribe(data => {
-
-          if((data[0] == undefined || new_record['device_id'].length == 0) && new_record['is_device_owner'] == true){ //The device does not exist in the system Or empty
-            this.errorMessage = "The device id does not exist in the system";
-          }
-          else {//The device exist in the system OR record['is_device_owner']==false
-            if(new_record['is_device_owner'] == false){
-              new_record['device_id'] = '';
+        // new owner
+        if(new_record.is_device_owner && !this.record[0].is_device_owner){
+          console.log("new owner");
+          this.setDeviceID(new_record)
+          .then(
+            () => {
+              this.updateUser(new_record) 
             }
-            //if(confirm("Are you sure you want to edit your details?")){
-
-              if (new_record['is_device_owner'] == true) {
-
-                this.crudservice.get_uidFromDeviceID(new_record['device_id']).then((doc) => {
-
-                  if (doc.exists && doc.data()[`${new_record['device_id']}`] != this.authservice.currentUserId) {
-                    this.errorMessage = "The device id is not available";
-                  }
-                  else {
-                    
-                    if(confirm("Are you sure you want to edit your details?")){
-
-                      this.crudservice.add_deviceToUid(new_record.device_id).then(()=>{
-
-                        this.crudservice.update_user(new_record.email, new_record);
-                        this.message = "The update saved successfully";
-                        this.inEdit = false;
-                       
-
-                      })
-                        .catch(error => { console.log(error); })
-                    }
-
-                  }
-                })
-              }
-              else {
-
-                if(confirm("Are you sure you want to edit your details?")){
-                  this.crudservice.update_user(new_record.email, new_record);
-                  this.message = "The update saved successfully";
-                  this.inEdit = false;
-                }
-              }
-          }
-        });
+          )
+          .catch((error) => console.log("Error, device id could not be set"));
+        }
+        // user changed their device id
+        else if(new_record.device_id != this.record[0].device_id){
+          console.log("device id change");
+          this.changeDeviceID(new_record)
+          .then(
+            () => {
+              this.updateUser(new_record) 
+            }
+          )
+          .catch((error) => console.log("Error, device id could not be changed"));
+        }
+        // no change in device id
+        else{
+          console.log("device id kept");
+          this.updateUser(new_record)   
+        }
       }
-    
+  }
+
+  updateUser(new_record:UserRecord){
+
+    if(confirm("Are you sure you want to edit your details?")){
+      this.crudservice.update_user(new_record.email, new_record);
+      this.message = "The update was successfully saved";
+      this.inEdit = false;
+    }  
+
+  }
+
+  setDeviceID(new_record:UserRecord):Promise<boolean>{
+
+    return new Promise((resolve,reject) => {
+      let dbPath = `/device-list/` + new_record.device_id
+      this.verifyDevice(dbPath)
+      .then(
+        (valid:boolean) => {
+
+          console.log("device valid", valid);
+
+          // check id device already exists
+          this.crudservice.get_uidFromDeviceID(new_record.device_id)
+          .then(
+            (result) => {
+              if (result.exists) {
+                this.errorMessage = "The device ID is not available";
+                reject(true);
+              }
+              else{
+                // add device to list under current user
+                this.crudservice.add_deviceToUid(new_record.device_id)
+                .then(() => resolve(true))
+              }
+            }
+          )
+        }    
+      ).catch(
+        (invalid:boolean) => {
+          console.log("device invalid", !invalid);
+          this.errorMessage = "The device ID does not exist in the system";
+          reject(true);
+        }
+      )
+    })
+  }
+
+  changeDeviceID(new_record:UserRecord):Promise<boolean>{
+
+    // user contacts will remain, device will be erased from device-to-uid and changed to new device
+    return new Promise((resolve,reject) => {
+      let dbPath = `/device-list/` + new_record.device_id
+      this.verifyDevice(dbPath)
+      .then(
+        (valid:boolean) => {
+          console.log("device valid", valid);
+          
+          // check id device already exists
+          this.crudservice.get_uidFromDeviceID(new_record.device_id)
+          .then(
+            (result) => {
+              if (result.exists) {
+                this.errorMessage = "The device ID is not available";
+                reject(true);
+              }
+              else{
+                // add device to list under current user
+                this.crudservice.delete_deviceToUid(this.record[0].device_id);
+                this.crudservice.add_deviceToUid(new_record.device_id)
+                .then(() => resolve(true))
+              }
+            }
+          )
+        }    
+      ).catch(
+        (invalid:boolean) => {
+          console.log("device invalid", !invalid);
+          this.errorMessage = "The device ID does not exist in the system";
+          reject(true);
+        }
+      )
+    })
+  }
+
+  verifyDevice(dbPath: any):Promise<boolean>{
+
+    return new Promise(
+      (resolve, reject) => {
+        this.db.list(dbPath).query.once("value")
+        .then(
+          (result) => {
+            if(result.exists()){
+              resolve(true);
+            }
+            else{
+              reject(false);
+            }
+          }
+        ).catch(() => reject(false));
+      }
+    )
   }
 
   cancleOwnership(){
 
     // ask if user is sure, warn about all actions taken
-    if (confirm("Are you sure you want to cancle your ownership?\nThis action will remove all your contacts and erase your devices history.")) {
+    if (confirm("Are you sure you want to cancle your ownership?\nThis action will remove all your contacts and erase your device history.")) {
       
       // remove user from all connected-to  and requests
       this.crudservice.get_AllContacts().get().toPromise()
@@ -215,17 +293,12 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  changeDeviceID(){
-
-    // user contacts will remain, device will be erased from device-to-uid
-
-  }
 
 
   /**This method returns true if all fields in edit HTML are valid */
   validateForm(record: UserRecord): boolean {
     if (record.device_id.length == 0 && record.is_device_owner == true) {
-      this.errorMessage = "Please enter your device id";
+      this.errorMessage = "Please enter your device ID";
       return false;
     }
     if (record.firstName.length === 0) {
