@@ -235,6 +235,9 @@ export class ProfileComponent implements OnInit {
 
   cancleOwnership(){
 
+    this.errorMessage = '';
+    this.message = '';
+
     // ask if user is sure, warn about all actions taken
     if (confirm("Are you sure you want to cancle your ownership?\nThis action will remove all your contacts and erase your device history.")) {
       
