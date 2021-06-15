@@ -3,7 +3,7 @@ import { AuthService } from '../services/auth.service';//So the sidebar appears 
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {CrudService} from '../services/crud.service';
 import { AuthGuard } from '../guards/auth.guard';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,21 +13,44 @@ import { Observable } from 'rxjs';
 export class SidebarComponent implements OnInit{
   isSidebarOpen:boolean = false; //will hold the sidebar state 
 
-  // is_device_owner:any;
-  // dbData:any;
+  is_device_owner:boolean = false;
+  dbData:Subscription;
 
   constructor(public authservice: AuthService, public router: Router, public crudservice:CrudService) { }
 
   toggleSideBar()
   { 
+    this.isOwner();
     if(this.isSidebarOpen==true)   
       this.isSidebarOpen = false; 
     else // this.isSidebarOpen==false
       this.isSidebarOpen = true; 
-
   }
+
+
+  isOwner(){
+
+    this.dbData = this.crudservice.get_userInfo().subscribe(
+      (result) => {
+        if(result.length > 0){
+          if(result[0].payload.doc.data().is_device_owner){
+            this.is_device_owner = true;
+          }
+          else{
+            this.is_device_owner = false;
+          }
+        }
+      }
+    )
+      
+  }
+
   ngOnInit(): void {}
 
-  ngOnDestroy(){}
+  ngOnDestroy(){
+    if(this.dbData != null){
+      this.dbData.unsubscribe();
+    }
+  }
 
 }
