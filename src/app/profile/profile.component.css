@@ -77,17 +77,23 @@ a#change-psw{
   padding-bottom: 30px;
   font-weight: bold;
 }
-a#edit {
+button#edit {
   margin-top: 30px;
   margin-bottom: 30px;
 }
 #cancel{
   margin-bottom: 30px;
   margin-top: 30px;
-  margin-left: 40px;
+  margin-left: 0px;
+}
+#cancelOwnership{
+  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-left: 0px;
+  margin-right: 60px;
 }
 #update{
   margin-bottom: 30px;
   margin-top: 30px;
-  margin-left: 0px;
+  margin-left: 40px;
 }

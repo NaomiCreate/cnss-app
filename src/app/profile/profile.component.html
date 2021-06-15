@@ -69,21 +69,19 @@
                             </th>  
                             <td>Yes</td>
                         </tr>
-                        <!-- <tr *ngIf="item.is_device_owner">
-                            <label>In order to edit your device id, click on "Edit"</label> 
-                        </tr> -->
                         <ng-template #elseNotOwningCNSSBlock>
-                            <th>CNSS owner?</th>     
+                            <th>Are you a CNSS owner?<br>
+                                <label class="notes">*In order to add a device id, click on "Edit"</label>
+                            </th>     
                             <td>No</td>
                         </ng-template>
-                        <!-- <tr *ngIf="item.editIsDeviceOwner">
-                            <label>In order to edit your device id, click on "Edit"</label>            
-                        </tr> -->
-                        <!-- <tr class="noBorder"> -->
-                            <a routerLink="/profile" (click)="editRecord(item)" class="btn btn-primary" id="edit">Edit</a>
-                            <!-- <p></p> -->
-                            <!-- <a href="#" (click)="changePassword('1234567')" routerLink="/profile">Change password</a>                    -->
-                        <!-- </tr> -->
+
+                        <button class="btn btn-danger" *ngIf = "item.is_device_owner; notOwner" id="cancelOwnership" (click)="cancleOwnership()">
+                            Cancel Ownership
+                            <!-- <button  id="cancelOwnership" (click)="cancleOwnership()">Cancel Ownership</button> -->
+                        </button>
+                        <button (click)="editRecord(item)" class="btn btn-primary" id="edit">Edit</button>
+                         
                     </div>
                     
                     <!-- next lines willshow after pressing Edit Contact: -->
@@ -119,9 +117,9 @@
                             <th>Device ID</th>   
                             <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
                         </tr>
-                            
-                        <button id="update" (click)="updateRecord(item)">Update</button>
+                         
                         <button id="cancel" (click)="inEdit = false">Cancel</button> 
+                        <button id="update" (click)="updateRecord(item)">Update</button>
                                       
                         </ng-template>
                 </tbody>
@@ -134,3 +132,6 @@
     </div>
 </div>
 
+<br/>
+<!-- FOR TESTING: -->
+<!-- <button id="cancelOwnership" (click)="cancleOwnership()">Cancle Ownership</button> -->

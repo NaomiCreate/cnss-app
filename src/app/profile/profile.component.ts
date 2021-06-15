@@ -53,6 +53,8 @@ export class ProfileComponent implements OnInit {
       this.subscriptions.push(
         this.crudservice.get_userInfo().subscribe(data => {
 
+          // alert("on snap changes");
+
           /**This trcord is displayed in HTML, it returns an array */
           this.record = data.map(c => {
 
@@ -130,6 +132,7 @@ export class ProfileComponent implements OnInit {
                         this.crudservice.update_user(new_record.email, new_record);
                         this.message = "The update saved successfully";
                         this.inEdit = false;
+                       
 
                       })
                         .catch(error => { console.log(error); })
@@ -150,6 +153,72 @@ export class ProfileComponent implements OnInit {
         });
       }
     
+  }
+
+  cancleOwnership(){
+
+    // ask if user is sure, warn about all actions taken
+    if (confirm("Are you sure you want to cancle your ownership?\nThis action will remove all your contacts and erase your devices history.")) {
+      
+      // remove user from all connected-to  and requests
+      this.crudservice.get_AllContacts().get().toPromise()
+      .then(
+        (result)=>{
+          console.log(result)
+          result.forEach(
+            (contact) => {
+              if(contact.data().confirmed){
+                console.log("contact_uid",contact.data().uid);
+                console.log("my_email",this.authservice.currentUserName);
+                this.crudservice.delete_connection(contact.data().uid, this.authservice.currentUserName);
+              }
+              else{
+                console.log("contact_uid",contact.data().uid);
+                console.log("my_email",this.authservice.currentUserName);
+                this.crudservice.delete_request(contact.data().uid, this.authservice.currentUserName);
+              }
+
+              // remove contact from contact list
+              console.log("my_UID",this.authservice.currentUserId);
+              console.log("contacts_email",contact.data().email);
+              console.log("*******");
+              this.crudservice.delete_contact(this.authservice.currentUserId, contact.data().email)
+            })
+        })
+
+      // remove device from device-list in realtime
+      this.crudservice.get_userDetails()
+      .then(
+        (result)=>{
+
+          // inorder not to erase by mistake all devices
+          if(result.data().device_id != ''){
+            // erase history
+            let dbPath = `/devices/${result.data().device_id}`;
+            console.log("dbPath",dbPath);
+            this.db.database.ref(dbPath).remove()
+
+            // remove device-to-uid entry
+            this.crudservice.delete_deviceToUid(result.data().device_id);
+          }
+
+          if(result.data().is_device_owner){
+            // set device-id to '' and ownership to false
+            this.crudservice.resetOwnership();
+          }
+        
+        }
+      )    
+    }
+    
+    
+
+  }
+
+  changeDeviceID(){
+
+    // user contacts will remain, device will be erased from device-to-uid
+
   }
 
 

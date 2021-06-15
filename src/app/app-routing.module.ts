@@ -23,7 +23,6 @@ const routes: Routes = [
   {path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   {path: 'connected-to', component: ConnectedToComponent, canActivate: [AuthGuard] },
-  {path: 'system-control', component: SystemControlComponent, canActivate: [ManagerGuard]},
   {path: "**", component: PageNotFoundComponent}
 ];
 

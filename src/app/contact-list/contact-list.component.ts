@@ -202,7 +202,7 @@ export class ContactListComponent implements OnInit {
               .then((d) => {
                 if (d.exists) {
                   this.cleanMessages();
-                  this.errorMessageNewContact = "You already send request to this person.";
+                  this.errorMessageNewContact = "You already sent a request to this person";
                   resolve(false);
                 }
                 else {

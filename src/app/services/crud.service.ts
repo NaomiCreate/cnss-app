@@ -89,6 +89,14 @@ export class CrudService {
     this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + recordId).update(record);//'contacts' is the collection name
   }
 
+  // resetUsersDeviceID(){
+  //   this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + this.authservice.currentUserName).update({device_id:""});
+  // }
+
+  resetOwnership(){
+    this.fireservices.doc('users/'+this.authservice.currentUserId + '/' + 'user-info/' + this.authservice.currentUserName).update({is_device_owner: false, device_id:''});
+  }
+
   update_request_to_confirmed(uid:string,email:string)
   {
     console.log("update_contact_confirmed",'users/'+uid + '/' + 'contacts/' + email);
@@ -165,6 +173,10 @@ export class CrudService {
   {
     console.log("delete_request: ",'users/' + uid + '/' + 'requests/' +request_email);
     this.fireservices.doc('users/' + uid + '/' + 'requests/' +request_email).delete();
+  }
+
+  delete_deviceToUid(device_id:string){
+    this.fireservices.doc('deviceToUid/' + device_id).delete();
   }
 
   getHistoryPermission(connection_uid:string){

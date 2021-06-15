@@ -31,33 +31,27 @@ export class SystemControlComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //check if the user owns CNSS system
-    this.checkIfOwner().then((result) => {
-
-      if(result){
-        this.crudservice.get_userInfo().subscribe(data => {
-
-          this.deviceId = data[0].payload.doc.data()['device_id'];//Get user device id
-          console.log("Debug::user.deviceId", this.deviceId)
-
-          this.dbPath = `/devices/${this.deviceId}`; //the path to the State attribute in the real-time database
-          console.log("Debug::this.dbPath", this.dbPath)
-          
-          this.checkState();//show current switch state on the screen
-        })
+    this.crudservice.get_userDetails()
+    .then(
+      (result)=>{
+        if(result.data().is_device_owner){
+          this.deviceId = result.data().device_id;
+          this.dbPath = `/devices/${this.deviceId}`;
+        }
+        this.isOwner();
       }
-
-    })
-   
+    )  
   }
 
   checkState(){
+
+    console.log("IN checkState");
 
     this.db.database.ref(this.dbPath+"/control").on('value',(snap)=>{
       if(snap.val() == null || snap.val() == undefined)
       {
         //create path and defined it as off
-        this.db.list(this.dbPath).update('control',{state: 'off' });
+        //this.db.list(this.dbPath).update('control',{state: 'off' });
         this.switch = Switch.Off;
       }
       else
@@ -75,6 +69,7 @@ export class SystemControlComponent implements OnInit {
         }
       }
     });
+    
   }
 
   switchState(){
@@ -93,12 +88,20 @@ export class SystemControlComponent implements OnInit {
     }
   }
 
-  checkIfOwner():Promise<boolean>
-  {
-     return new Promise((resolve) => 
-      this.crudservice.get_userDetails()
-      .then(doc => {
-        resolve(doc.data()['is_device_owner']);
-      }))
+  isOwner(){
+    this.crudservice.get_userInfo().subscribe(
+      (result) => {
+        if(result.length > 0){
+          // alert(`isOwner: ${result[0].payload.doc.data().is_device_owner}`);
+          if(!result[0].payload.doc.data().is_device_owner){
+            this.switch = Switch.StandBy;
+          }
+          else{
+            this.checkState();
+          }
+        }
+      }
+    )
   }
+
 }
