@@ -160,6 +160,10 @@
                                     <div *ngIf="request.shareHistory;else not_share">Yes</div>
                                     <ng-template #not_share>No</ng-template>
                                 </li>
+                                <li class="list-group-item">
+                                    <div *ngIf="request.confirmed;else not_confirmed"><label>Request accepted</label></div>
+                                    <ng-template #not_confirmed><label>Waiting for contact's confirmation</label></ng-template>
+                                </li>
                                 <!-- <li class="list-group-item"><label>Confirmed</label><br>{{request.confirmed}}</li> -->
                             </ul>
                             <button (click)="editRecord(request)" class="btn-edit">Edit</button>         
@@ -188,6 +192,10 @@
                                             [(ngModel)]="request.editShareHistory" [value]="false" />
                                         <label>No</label><br>
                                     </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div *ngIf="request.confirmed;else not_confirmed"><label>Request accepted</label></div>
+                                    <ng-template #not_confirmed><label>Waiting for contact's confirmation</label></ng-template>
                                 </li>
                                 <!-- <li class="list-group-item"><label>Confirmed</label><br>{{request.confirmed}}</li> -->
                             </ul>
