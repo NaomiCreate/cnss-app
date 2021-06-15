@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { Subscription } from 'rxjs';
 import { OwnerGuard } from '../guards/owner.guard';
 import { AuthService } from '../services/auth.service';
 import { CrudService } from '../services/crud.service';
@@ -24,6 +25,7 @@ export class SystemControlComponent implements OnInit {
 
   public deviceId: string;
   public dbPath:string;
+  public dbData:Subscription;
 
 
   constructor(public authservice: AuthService, public crudservice:CrudService, private db: AngularFireDatabase, private ownerguard: OwnerGuard) { }
@@ -89,7 +91,7 @@ export class SystemControlComponent implements OnInit {
   }
 
   isOwner(){
-    this.crudservice.get_userInfo().subscribe(
+    this.dbData = this.crudservice.get_userInfo().subscribe(
       (result) => {
         if(result.length > 0){
           // alert(`isOwner: ${result[0].payload.doc.data().is_device_owner}`);
@@ -102,6 +104,19 @@ export class SystemControlComponent implements OnInit {
         }
       }
     )
+  }
+
+  // loosePermition(){
+  //   if(this.dbData != null){
+  //     this.dbData.unsubscribe();
+  //   }
+  // }
+
+
+  ngOnDestroy(){
+    if(this.dbData != null){
+      this.dbData.unsubscribe();
+    }
   }
 
 }

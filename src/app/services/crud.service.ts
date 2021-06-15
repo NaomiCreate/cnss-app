@@ -19,22 +19,22 @@ export class CrudService {
   
 
 //For real time data base
-  device_listed(device_id: string,is_device_owner:boolean){
+  // device_listed(device_id: string,is_device_owner:boolean){
 
-    if(is_device_owner == true)
-    {
-      let dbPath = `/device-list/` + 'device_id';//beginig of path to realtime database
-      let dbData = this.db.list(dbPath).snapshotChanges()
-      .subscribe(data => {
-        if(data[0]==undefined)
-          return true;
-        else{
-          return false;
-        }
-      })
-    }
+  //   if(is_device_owner == true)
+  //   {
+  //     let dbPath = `/device-list/` + 'device_id';//beginig of path to realtime database
+  //     let dbData = this.db.list(dbPath).snapshotChanges()
+  //     .subscribe(data => {
+  //       if(data[0]==undefined)
+  //         return true;
+  //       else{
+  //         return false;
+  //       }
+  //     })
+  //   }
 
-  }
+  // }
  
   
   //create_userInfo adds to the collection 'user-info', a document in firebase, that including details about the registrant 
@@ -190,6 +190,7 @@ export class CrudService {
   {
     return this.fireservices.collection('deviceToUid').doc(device_id).get().toPromise();
   }
+
   
 
 }

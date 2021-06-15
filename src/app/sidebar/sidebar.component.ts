@@ -47,6 +47,12 @@ export class SidebarComponent implements OnInit{
 
   ngOnInit(): void {}
 
+  looseSubscription(){
+    if(this.dbData != null){
+      this.dbData.unsubscribe();
+    }
+  }
+
   ngOnDestroy(){
     if(this.dbData != null){
       this.dbData.unsubscribe();

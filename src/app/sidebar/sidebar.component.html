@@ -7,7 +7,7 @@
             </div>   
                                       
             <div class= "list-items">           
-                <a routerLink="/login" class="list-item" (click)="authservice.logout()">
+                <a routerLink="/login" class="list-item" (click)="looseSubscription(); authservice.logout()">
                     <i class="material-icons">arrow_right</i>
                     Logout
                 </a>       
