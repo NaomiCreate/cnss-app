@@ -394,10 +394,10 @@
 
               </div>
 
-              <div *ngSwitchCase="state.Deny">Currently, you are not a contact of any CNSS device owner</div>
+              <div class="card user card-subtitle" *ngSwitchCase="state.Deny">Currently, you are not a contact of any CNSS device owner</div>
 
               <!--default case when there are no matches -->
-              <div *ngSwitchDefault> Loading, please wait... </div>
+              <div class="card user card-subtitle" *ngSwitchDefault> Loading, please wait... </div>
               <!--For state.StandBy-->
        </div>
 
