@@ -84,10 +84,6 @@ a {
     -webkit-box-pack: center; */
 }
 button.btn-controls {
-    border: none;
-    /* background-color: coral;
-    color: #0f292c; */
-    border-color: none;
     margin-top: 10px;
     margin-bottom: 10px;
     background-color: #0e272a;
@@ -96,6 +92,16 @@ button.btn-controls {
     padding: 5px;
     clear: right;
 }
+
+button.btn-controls:hover {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #fffffe;
+    margin: 3px;
+    padding: 5px;
+    clear: right;
+}
+
 .btn-controls#prev_btn{
     float: left;
 }

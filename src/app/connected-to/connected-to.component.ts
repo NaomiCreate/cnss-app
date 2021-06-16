@@ -140,19 +140,19 @@ export class ConnectedToComponent implements OnInit {
   }
   
   confirmRequest(emailToConfirm:string){
-    if(confirm("Are you sure you want to confirm this request?")){
-      this.crudservice.get_uidFromEmail(emailToConfirm)
-        .then((doc) => {
-          if(doc.exists){
-            //tranfer the request to connected to.
-            this.crudservice.update_connectedTo(this.authservice.currentUserId,emailToConfirm,doc.data()[emailToConfirm]);
-            //delete from requests
-            this.crudservice.delete_request(this.authservice.currentUserId, emailToConfirm)
-            //udate contacts to be: confirmed: true
-            this.crudservice.update_request_to_confirmed(doc.data()[emailToConfirm],this.authservice.currentUserName);
-          }
-      }).catch(error => {console.log(error)});
-    }
+    
+    this.crudservice.get_uidFromEmail(emailToConfirm)
+      .then((doc) => {
+        if(doc.exists){
+          //tranfer the request to connected to.
+          this.crudservice.update_connectedTo(this.authservice.currentUserId,emailToConfirm,doc.data()[emailToConfirm]);
+          //delete from requests
+          this.crudservice.delete_request(this.authservice.currentUserId, emailToConfirm)
+          //udate contacts to be: confirmed: true
+          this.crudservice.update_request_to_confirmed(doc.data()[emailToConfirm],this.authservice.currentUserName);
+        }
+    }).catch(error => {console.log(error)});
+    
   }
 
   ngOnDestroy(){

@@ -2,44 +2,61 @@
   text-align: -webkit-center;
 }
 .card#connections { 
-  margin-top:50px;
-  margin-bottom: 20px;
-  width: 400px;
-  background-color: #598763;
-
+    margin-top:20px;
+    margin-bottom: 20px;
+    width: 400px;
+    background-color: #062036f6;
+    border: 3px solid #2d0a32;
  }   
+ 
  .card#requests { 
-  margin-top:50px;
-  margin-bottom: 20px;
-  width: 400px;
-  background-color: #875959;
- } 
+    margin-top:20px;
+    margin-bottom: 20px;
+    width: 400px;
+    background-color: #173e43;
+    border: 3px solid #2d0a32;
+ }
+ 
+ .card-title{
+    margin: 20px;
+    color: #dbdee7;
+    font-weight: 600;
+ }
 
-/* .card { 
-  margin-top:50px;
-  margin-bottom: 20px;
-  width: 340px;
- }  */
+ #title-connection{
+   margin-top: 0px;
+ }
+
 label{
-  color: rgb(39, 95, 144);
+  color: #0d3a5ff6;
   font-weight: bold;
   font-family: URW Chancery L, cursive;
 }
+
 #reject{
   float: left;
- }
+}
 
-/* a{
-  color: bisque;
-  background-color: #3e3f41;
-  border-color: #3e3f41; 
+#btn-accept:hover{
+  background-color: #85a3bb;
+  border-color:  #dde4e9; 
+  width: 150px;
+  margin: 3px;
+}
+
+#btn-accept {
+  color: #fff;
+  background-color: #041d31;
+  border-color:#dde4e9;
   width: 150px;
   margin: 3px;     
   margin:3px;
   padding: 5px;
   border-radius: 5px;
   width: 150px;
-} */
+  float: right
+}
+
 
 a:hover{
   color: bisque;

@@ -37,7 +37,7 @@
                         </ul>
                         <span>
                             <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger" id="reject">Reject request</a>
-                            <a style="float: right;" routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn btn-danger">Confirm request</a>
+                            <a routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn" id="btn-accept">Confirm request</a>
                         </span>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 <div *ngFor="let connection of  connections">
                     <div class="card" id="connections">
                         <button class="btn-delete" (click)="DeleteConnection(connection.email)"><i class="fa fa-trash"></i></button>
-                        <h5 class="card-title text-center">{{connection.firstName}} {{connection.lastName}}</h5>
+                        <h5 id="title-connection" class="card-title text-center">{{connection.firstName}} {{connection.lastName}}</h5>
                         <!-- <button class="btn-delete" (click)="DeleteRequest(contact.email)"><i class="fa fa-trash"></i></button> -->
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><label>First name</label><br>{{connection.firstName}}</li>

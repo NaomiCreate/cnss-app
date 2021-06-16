@@ -50,16 +50,16 @@
                 <div id = "msg" *ngIf="messageNewContact.length > 0" name="message">{{messageNewContact}}</div>
             </div>
             <div class="card-body" id="add_body">
+                <input type="email" class="from-control" name="input" [(ngModel)]="new_contact.email" placeholder="Email"
+                    required>
+                <br />
                 <input type="text" class="from-control" name="input" [(ngModel)]="new_contact.firstName"
                     placeholder="First name" required>
                 <br />
                 <input type="text" class="from-control" name="input" [(ngModel)]="new_contact.lastName"
                     placeholder="Last name" required>
                 <br />
-                <input type="email" class="from-control" name="input" [(ngModel)]="new_contact.email" placeholder="Email"
-                    required>
-                <br />
-
+    
                 <div id="history-share">
                     <p>Share your history with this contact?</p>
                     <div id="radio-choice">
