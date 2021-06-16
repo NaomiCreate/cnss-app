@@ -170,7 +170,7 @@ button:focus {
 
 .error-comment{
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     background-color: #8f0513b2;
     border-color:  10px#52040c;
     padding: 10px;
@@ -181,7 +181,7 @@ button:focus {
 
 .success-comment{
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     background-color: #0d3a5fbd;
     border: 3px solid #2d0a32;
     padding: 10px;

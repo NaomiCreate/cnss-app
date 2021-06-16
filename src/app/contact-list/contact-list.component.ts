@@ -63,7 +63,7 @@ export class ContactListComponent implements OnInit {
 
   messageEditContact = '';
   errorMessageEditContact = ''; //validation error handle
-  error: { name: string, message: string } = { name: '', message: '' }; //firebase error handle
+  // error: { name: string, message: string } = { name: '', message: '' }; //firebase error handle
 
   subscription: Subscription;
   constructor(private router: Router, private authservice: AuthService, public crudservice: CrudService) { }
@@ -168,7 +168,7 @@ export class ContactListComponent implements OnInit {
               });
           }
           else {
-            this.errorMessageNewContact = "You reached the maximum amount of contacts/requests";
+            this.errorMessageNewContact = "You reached your contact list limit. Cannot add contact.";
           }
         })
     }
@@ -202,7 +202,7 @@ export class ContactListComponent implements OnInit {
               .then((d) => {
                 if (d.exists) {
                   this.cleanMessages();
-                  this.errorMessageNewContact = "You already sent a request to this person";
+                  this.errorMessageNewContact = "You already sent a request to this user";
                   resolve(false);
                 }
                 else {
@@ -210,7 +210,7 @@ export class ContactListComponent implements OnInit {
                   this.crudservice.get_AllRequests(futureContactUid).get().toPromise().then((r) => {
                     this.crudservice.get_AllConnections(futureContactUid).get().toPromise().then((c) => {
                       if (r.size + c.size >= MAX_CONTACTS_AND_CONNECTIONS) {
-                        this.errorMessageNewContact = "The person you want to add has the maximum number of connections+requests. Contact this person.";
+                        this.errorMessageNewContact = "This user reached his requests limit. Cannot add contact ";
                         resolve(false);
                       }
                       else {
@@ -261,7 +261,7 @@ export class ContactListComponent implements OnInit {
 
           this.crudservice.update_requests(Record['uid'])
             .then(() => {
-              this.messageNewContact = "New contact Request added succesfully"
+              this.messageNewContact = "New contact request sent succesfully"
 
 
               //create_NewContact is defined in crud.service.ts file
@@ -304,11 +304,11 @@ export class ContactListComponent implements OnInit {
     record['lastName'] = recordData.editLastName;
     record['shareHistory'] = recordData.editShareHistory;
     if (recordData.editFirstName.length === 0) {
-      this.errorMessageEditContact = "Please enter the edited first name of the contact";
+      this.errorMessageEditContact = "Please enter contact's first name";
       return;
     }
     else if (recordData.editLastName.length === 0) {
-      this.errorMessageEditContact = "Please enter the edited last name of the contact";
+      this.errorMessageEditContact = "Please enter contact's  last name";
       return;
     }
     else {
@@ -358,24 +358,29 @@ export class ContactListComponent implements OnInit {
   validateForm() {
     this.cleanMessages();
     if (this.new_contact.firstName.length === 0) {
-      this.errorMessageNewContact = "Please enter the first name of the person you would like to add";
+      this.errorMessageNewContact = "Enter contact's first name";
       return false
     }
     if (this.new_contact.lastName.length === 0) {
-      this.errorMessageNewContact = "Please enter the last name of the person you would like to add";
+      this.errorMessageNewContact = "Enter contact's last name";
       return false
     }
     if (this.new_contact.email.length === 0) {
-      this.errorMessageNewContact = "Please enter the email address of the person you would like to add";
+      this.errorMessageNewContact = "Enter contact's email";
       return false
     }
     if (this.new_contact.email == this.authservice.currentUserName) {
       console.log("same email");
-      this.errorMessageNewContact = "Your email cannot be added to your contacts email list";
+      this.errorMessageNewContact = "Your email cannot be added to your contact list";
       return false
     }
     this.errorMessageNewContact = '';
     return true;
+  }
+
+  clearNewContactMessages(){
+    this.messageNewContact = "";
+    this.errorMessageNewContact = "";
   }
 
   cleanMessages() {

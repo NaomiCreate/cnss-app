@@ -29,7 +29,7 @@
 <div class="add-section">
     <div class="card" id="btn-add-section">
         <button class="collapse-btn" type="button" data-toggle="collapse" data-target="#collapseAddContact"
-        aria-expanded="false" aria-controls="collapseAddContact" (click)="collapseAddContact()">
+        aria-expanded="false" aria-controls="collapseAddContact" (click)="collapseAddContact(); clearNewContactMessages()">
             {{addSection.showAddContactBtnTitle}}
             <span class="material-icons">{{addSection.icon}}</span>
         </button>
@@ -42,15 +42,12 @@
                     Add new Contact
                 </h5>
             </div>
-            <div>
+            <div class="new-user-comment">
                 <!-- user error -->
-                <p *ngIf="errorMessageNewContact.length > 0" class="text-danger" name="error_message">
+                <div id = "error-msg" *ngIf="errorMessageNewContact.length > 0" name="error_message">
                     {{errorMessageNewContact}}
-                </p>
-                <!-- firebase error handle -->
-                <p *ngIf="error.message.length > 0" class="text-danger" name="error_message">{{error.message}}</p>
-                <!-- the data registered in firebase -->
-                <p *ngIf="messageNewContact.length > 0" class="text-info" name="message">{{messageNewContact}}</p>
+                </div>
+                <div id = "msg" *ngIf="messageNewContact.length > 0" name="message">{{messageNewContact}}</div>
             </div>
             <div class="card-body" id="add_body">
                 <input type="text" class="from-control" name="input" [(ngModel)]="new_contact.firstName"
@@ -84,19 +81,22 @@
 
 <div class="container-content">
     <div class="card-list">
-        <div class="error-msg">
-            <!-- user error -->
+
+        <!-- <div class="error-msg">
             <p *ngIf="errorMessageEditContact.length > 0" class="text-danger">{{errorMessageEditContact}}</p>
-            <!-- firebase error handle -->
-            <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
-            <!-- the data registered in firebase -->
             <p *ngIf="messageEditContact.length > 0" class="text-info">{{messageEditContact}}</p>
-        </div>
+        </div> -->
 
         <div [ngSwitch]="contacts_state">
             <div *ngSwitchCase="state.Accept">
 
                 <div *ngFor="let contact of contacts">
+                    <div class="error-msg">
+                        <!-- user error -->
+                        <p class="error-comment" *ngIf="errorMessageEditContact.length > 0">{{errorMessageEditContact}}</p>
+                        <p class="success-comment" *ngIf="messageEditContact.length > 0">{{messageEditContact}}</p>
+                    </div>
+
                     <div *ngIf="!contact.inEdit; else elseBlock">
                         <div class="card" id="contacts">
                             <button class="btn-delete" (click)="DeleteContact(contact.email)"><i class="fa fa-trash"></i></button>
@@ -111,6 +111,10 @@
                                     <div *ngIf="contact.shareHistory;else not_share">Yes</div>
                                     <ng-template #not_share>No</ng-template>
                                 </li>
+                                <li class="list-group-item">
+                                    <div *ngIf="contact.confirmed; else not_confirmed"><label>Request accepted</label></div>
+                                    <ng-template #not_confirmed><label>Waiting for contact's confirmation</label></ng-template>
+                                </li>
                                 <!-- <li class="list-group-item"><label>Confirmed</label><br>{{contact.confirmed}}</li> -->
                             </ul>
                             <button (click)="editRecord(contact)" class="btn-edit">Edit</button>         
@@ -122,10 +126,10 @@
                             <h5 class="card-title text-center">{{contact.firstName}} {{contact.lastName}}</h5>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><label>First name</label><br>    
-                                    <input type="text" id="first_name" [(ngModel)]="contact.editFirstName" class="edit-from-control" placeholder="First name">
+                                    <input  type="text" id="first_name" [(ngModel)]="contact.editFirstName" class="edit-from-control edit" placeholder="First name">
                                 </li>
                                 <li class="list-group-item"><label>Last name</label><br>
-                                    <input type="text" id="last_name" [(ngModel)]="contact.editLastName" class="edit-from-control" placeholder="Last name">
+                                    <input  type="text" id="last_name" [(ngModel)]="contact.editLastName" class="edit-from-control edit" placeholder="Last name">
                                 </li>
                                 <li class="list-group-item"><label>Email</label><br>{{contact.email}}</li>
                                 <li class="list-group-item"><label>Phone</label><br>{{contact.phone}}</li>
@@ -139,6 +143,10 @@
                                         <label>No</label><br>
                                     </div>
                                 </li>
+                                <li class="list-group-item">
+                                    <div *ngIf="contact.confirmed; else not_confirmed"><label>Request accepted</label></div>
+                                    <ng-template #not_confirmed><label>Waiting for contact's confirmation</label></ng-template>
+                                </li>
                                 <!-- <li class="list-group-item"><label>Confirmed</label><br>{{contact.confirmed}}</li> -->
                             </ul>
                             <span>
@@ -150,6 +158,13 @@
                 </div>
 
                 <div *ngFor="let request of requests">
+
+                    <div class="error-msg">
+                        <!-- user error -->
+                        <p class="error-comment" *ngIf="errorMessageEditContact.length > 0">{{errorMessageEditContact}}</p>
+                        <p class="success-comment" *ngIf="messageEditContact.length > 0">{{messageEditContact}}</p>
+                    </div>
+
                     <div *ngIf="!request.inEdit; else elseBlock">
                         <div class="card" id="requests">
                             <button class="btn-delete" (click)="DeleteRequest(request.email)"><i class="fa fa-trash"></i></button>
@@ -164,7 +179,7 @@
                                     <ng-template #not_share>No</ng-template>
                                 </li>
                                 <li class="list-group-item">
-                                    <div *ngIf="request.confirmed;else not_confirmed"><label>Request accepted</label></div>
+                                    <div *ngIf="request.confirmed; else not_confirmed"><label>Request accepted</label></div>
                                     <ng-template #not_confirmed><label>Waiting for contact's confirmation</label></ng-template>
                                 </li>
                                 <!-- <li class="list-group-item"><label>Confirmed</label><br>{{request.confirmed}}</li> -->
@@ -179,10 +194,10 @@
                             <h5 class="card-title text-center">{{request.firstName}} {{request.lastName}}</h5>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><label>First name</label><br>
-                                    <input type="text" id="first_name" [(ngModel)]="request.editFirstName" class="edit-from-control" placeholder="First name">
+                                    <input  type="text" id="first_name" [(ngModel)]="request.editFirstName" class="edit-from-control edit" placeholder="First name">
                                 </li>
                                 <li class="list-group-item"><label>Last name</label><br>
-                                    <input type="text" id="last_name" [(ngModel)]="request.editLastName" class="edit-from-control" placeholder="Last name">
+                                    <input type="text" id="last_name" [(ngModel)]="request.editLastName" class="edit-from-control edit" placeholder="Last name">
                                 </li>
                                 <li class="list-group-item"><label>Email</label><br>{{request.email}}</li>
                                 <li class="list-group-item"><label>Phone</label><br>{{request.phone}}</li>
@@ -209,10 +224,6 @@
                         </div>
                     </ng-template>
                 </div>
-
-                <br />
-                <br />
-                <br />
 
             </div>
             <div class="comment" *ngSwitchCase="state.Deny">Currently, your contact list is empty</div>

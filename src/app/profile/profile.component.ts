@@ -154,7 +154,7 @@ export class ProfileComponent implements OnInit {
       .then(
         (valid:boolean) => {
 
-          console.log("device valid", valid);
+          // console.log("device valid", valid);
 
           // check id device already exists
           this.crudservice.get_uidFromDeviceID(new_record.device_id)
@@ -174,7 +174,7 @@ export class ProfileComponent implements OnInit {
         }    
       ).catch(
         (invalid:boolean) => {
-          console.log("device invalid", !invalid);
+          // console.log("device invalid", !invalid);
           this.errorMessage = "The device ID does not exist in the system";
           reject(true);
         }
@@ -190,7 +190,7 @@ export class ProfileComponent implements OnInit {
       this.verifyDevice(dbPath)
       .then(
         (valid:boolean) => {
-          console.log("device valid", valid);
+          // console.log("device valid", valid);
           
           // check id device already exists
           this.crudservice.get_uidFromDeviceID(new_record.device_id)
@@ -211,7 +211,7 @@ export class ProfileComponent implements OnInit {
         }    
       ).catch(
         (invalid:boolean) => {
-          console.log("device invalid", !invalid);
+          // console.log("device invalid", !invalid);
           this.errorMessage = "The device ID does not exist in the system";
           reject(true);
         }
@@ -245,7 +245,7 @@ export class ProfileComponent implements OnInit {
 
    
     let confirmed:boolean = false;
-    if(confirm("Are you sure you want to cancle your ownership?\nThis action will remove all your contacts and erase your device history.")){
+    if(confirm("Are you sure you want to cancle your CNSS device ownership?\nThis action will remove all your contacts and erase your device history.")){
       if(confirm("Click ok to cancle CNSS device ownership")){
         confirmed = true;
       }
@@ -260,24 +260,24 @@ export class ProfileComponent implements OnInit {
       this.crudservice.get_AllContacts().get().toPromise()
       .then(
         (result)=>{
-          console.log(result)
+          // console.log(result)
           result.forEach(
             (contact) => {
               if(contact.data().confirmed){
-                console.log("contact_uid",contact.data().uid);
-                console.log("my_email",this.authservice.currentUserName);
+                // console.log("contact_uid",contact.data().uid);
+                // console.log("my_email",this.authservice.currentUserName);
                 this.crudservice.delete_connection(contact.data().uid, this.authservice.currentUserName);
               }
               else{
-                console.log("contact_uid",contact.data().uid);
-                console.log("my_email",this.authservice.currentUserName);
+                // console.log("contact_uid",contact.data().uid);
+                // console.log("my_email",this.authservice.currentUserName);
                 this.crudservice.delete_request(contact.data().uid, this.authservice.currentUserName);
               }
 
               // remove contact from contact list
-              console.log("my_UID",this.authservice.currentUserId);
-              console.log("contacts_email",contact.data().email);
-              console.log("*******");
+              // console.log("my_UID",this.authservice.currentUserId);
+              // console.log("contacts_email",contact.data().email);
+              // console.log("*******");
               this.crudservice.delete_contact(this.authservice.currentUserId, contact.data().email)
             })
         })
@@ -291,7 +291,7 @@ export class ProfileComponent implements OnInit {
           if(result.data().device_id != ''){
             // erase history
             let dbPath = `/devices/${result.data().device_id}`;
-            console.log("dbPath",dbPath);
+            // console.log("dbPath",dbPath);
             this.db.database.ref(dbPath).remove()
 
             // remove device-to-uid entry

@@ -37,14 +37,15 @@ padding: 10px;
   color: whitesmoke;
 }
 .card#contacts { 
-  margin-top:50px;
+  margin-top:20px;
   margin-bottom: 20px;
   width: 400px;
-  background-color: #598763;
+  background-color: #062036f6;
+  border: 3px solid #2d0a32;
 
  }   
  .card#requests { 
-  margin-top:50px;
+  margin-top:20px;
   margin-bottom: 20px;
   width: 400px;
   /* background-color: #875959; */
@@ -89,14 +90,39 @@ input[type="text"],input[type="email"]{
   width:60%;
 }
 
+input.edit{
+  border: 1px solid #0c020e26;
+  border-radius: 4px;
+}
+
+
 #history-share{
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.error-msg{
+/* .error-msg{
   background-color: rgba(236, 236, 236, 0);
+} */
+
+#error-msg{
+  /* padding-top: 20px; */
+  background-color: #daaaafb2;
+  border-color:  10px#52040c;
+  color: #8f0513;
+  font-weight: bolder;
+  
+  
 }
+
+#msg{
+  /* padding-top: 20px; */
+  background:#dddfd4;
+  font-weight: bolder;
+  color: #0d3a5ffb;
+  font-weight: bolder;
+}
+
 
 
 
