@@ -5,7 +5,6 @@
         <div class="accordion" id="accordionInfo">
             <div class="card info">
               <div class="card-header info" id="headingOne">
-                  <!-- <h4 class="info_title">Settings Page</h4> -->
                 <div class="mb-0">
                   <h4 class="info_title">CNSS Settings</h4>
                   <button class="btn_info" type="button" data-toggle="collapse" data-target="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo">
@@ -27,19 +26,18 @@
         </div>
 
         <div class="page-content">
-            <h3 *ngFor="let item of record">Welcome {{item.firstName}}, you are currently logged in</h3>
-            
+            <h3 *ngFor="let item of record">Welcome {{item.firstName}},</h3>
+            <h6>you are currently logged in</h6>
             <app-system-control></app-system-control>
 
-            <!-- <h4>Your Details:</h4> -->
 
             <div class="error-msg">
                 <!-- user error -->
-                <p *ngIf="errorMessage.length > 0" class="text-danger">{{errorMessage}}</p>
+                <p class="error-comment" *ngIf="errorMessage.length > 0">{{errorMessage}}</p>
                 <!-- firebase error handle -->
-                <p *ngIf="error.message.length > 0" class="text-danger">{{error.message}}</p>
+                <!-- <p class="error-comment" *ngIf="error.message.length > 0">{{error.message}}</p> -->
                 <!-- the data registered in firebase -->
-                <p *ngIf="message.length > 0" class="text-info">{{message}}</p>
+                <p class="success-comment" *ngIf="message.length > 0">{{message}}</p>
             </div>
 
             <p>Your details</p>
@@ -76,6 +74,7 @@
                         </ng-template>
 
                         <button class="btn btn-danger" *ngIf = "item.is_device_owner; notOwner" id="cancelOwnership" (click)="cancleOwnership()">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             Cancel Ownership
                         </button>
                         <button (click)="editRecord(item)" class="btn btn-primary" id="edit">Edit</button>
@@ -116,12 +115,14 @@
                             <td><input type="text" [(ngModel)]="item.editDeviceID" class="from-control"></td>
                         </tr>
                          
-                        <button id="cancel" (click)="inEdit = false">Cancel</button> 
+                        <button id="cancel" (click)="inEdit = false; clearMessages()">Cancel</button> 
                         <button id="update" (click)="updateRecord(item)">Update</button>
                                       
                         </ng-template>
                 </tbody>
-                <a id="change-psw" href="#" routerLink="/change-password">Change password</a>                    
+                <a id="change-psw" href="#" routerLink="/change-password">Change password
+                    <!-- <i class="fa fa-key" aria-hidden="true"></i> -->
+                </a>                    
             </table>
 
 

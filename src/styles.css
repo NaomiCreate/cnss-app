@@ -40,8 +40,8 @@ a {
 }
 .btn-danger {
     color: #fff;
-    background-color: #d10c20;
-    border-color:  #fc5b6b86;
+    background-color: #8f0513;
+    border-color:  10px#52040c;
     width: 150px;
     margin: 3px;     
     margin:3px;
@@ -78,7 +78,7 @@ button:focus {
     outline: none;
 }
 .btn-danger:hover{
-    background-color: #f5949cc2;
+    background-color: #d85d69;
     border-color:  #f5949cc2; 
     width: 150px;
     margin: 3px;
@@ -161,6 +161,28 @@ button:focus {
     margin-top: 30px;
     margin-bottom: 100px;
     background-color: #173e43;
+    border: 3px solid #2d0a32;
+    padding: 10px;
+    color:whitesmoke;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.error-comment{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: #8f0513b2;
+    border-color:  10px#52040c;
+    padding: 10px;
+    color:whitesmoke;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.success-comment{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: #0d3a5fbd;
     border: 3px solid #2d0a32;
     padding: 10px;
     color:whitesmoke;

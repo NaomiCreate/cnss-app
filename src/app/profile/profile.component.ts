@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
 
   message = '';
   errorMessage = ''; //validation error handle
-  error: { name: string, message: string } = { name: '', message: '' }; //firebase error handle
+  // error: { name: string, message: string } = { name: '', message: '' }; //firebase error handle
 
   dbData: Subscription;
   subscriptions: Subscription[] = [];
@@ -71,10 +71,15 @@ export class ProfileComponent implements OnInit {
       );
     }
   }
+  
+  clearMessages(){
+    this.message = '';
+    this.errorMessage = '';
+  }
 
   //will fire after the user clicks "Edit Contant"
   editRecord(item: any) {
-    this.message = '';
+    this.clearMessages();
     this.inEdit = true; //Following this determination, we will see on the screen what appears in html under the tag #elseBlock
     item.editFirstName = item.firstName;
     item.editLastName = item.lastName;
@@ -238,8 +243,18 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = '';
     this.message = '';
 
+   
+    let confirmed:boolean = false;
+    if(confirm("Are you sure you want to cancle your ownership?\nThis action will remove all your contacts and erase your device history.")){
+      if(confirm("Click ok to cancle CNSS device ownership")){
+        confirmed = true;
+      }
+    }
+
+    
+
     // ask if user is sure, warn about all actions taken
-    if (confirm("Are you sure you want to cancle your ownership?\nThis action will remove all your contacts and erase your device history.")) {
+    if (confirmed) {
       
       // remove user from all connected-to  and requests
       this.crudservice.get_AllContacts().get().toPromise()
