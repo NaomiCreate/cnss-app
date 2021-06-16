@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase';
+import { Subscription } from 'rxjs';
 
 export interface User {
   email: string;
@@ -16,10 +17,11 @@ export class AuthService {
 
 
   authState: any = null;
+  subscription:Subscription;
 
   constructor(private firebaseAuth: AngularFireAuth, private router: Router) {
 
-    this.firebaseAuth.authState.subscribe((auth =>{
+    this.subscription = this.firebaseAuth.authState.subscribe((auth =>{
       this.authState = auth;
     }))
 
@@ -47,7 +49,7 @@ export class AuthService {
   }
 
   get currentUser(): any{
-    console.log("Debug:: auth.service currentUser ", this.authState)
+    //console.log("Debug:: auth.service currentUser ", this.authState)
     return (this.authState !== null) ? this.authState : null;
   } 
 
@@ -91,10 +93,16 @@ export class AuthService {
 
   //logout functions
   logout() {
-    console.log("Debug:: auth.service logout()")
+    //console.log("Debug:: auth.service logout()")
     this.firebaseAuth.signOut();
+    //this.subscription.unsubscribe();
     this.router.navigate(['/login']);//navigate to login page
   }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
+
 
   /**TESTING */
 

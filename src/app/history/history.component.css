@@ -113,10 +113,10 @@ button.btn-controls:hover {
 }
 .search_start{
     float: left;
+    margin-bottom: 30px;
 }
 .search_end{
     float: right;
-    margin: 3px;
     margin-bottom: 30px;
 }
 .card.connection{
@@ -140,7 +140,6 @@ button.showOrHideBtn{
 }
 .searchInput{
     border-radius: 5px;
-
 }
 
 .date .fa{

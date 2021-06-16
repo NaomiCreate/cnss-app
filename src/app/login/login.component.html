@@ -42,7 +42,7 @@
 				<div class="input-group-prepend">
 					<span class="input-group-text"><i class="fas fa-key"></i></span>
 				</div>
-				<input type="password" formControlName="userInputPassword" class="form-control" placeholder="Enter your current password">
+				<input type="password" formControlName="userInputPassword" class="form-control" placeholder="Enter password">
 				<div class="alert alert-danger" *ngIf="rForm.controls['userInputPassword'].touched && !rForm.controls['userInputPassword'].valid">Password should be atleast 6 characters</div>
 			</div>
 

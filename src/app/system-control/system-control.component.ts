@@ -47,7 +47,7 @@ export class SystemControlComponent implements OnInit {
 
   checkState(){
 
-    console.log("IN checkState");
+    console.log("Debug:: system-control checkState()");
 
     this.db.database.ref(this.dbPath+"/control").on('value',(snap)=>{
       if(snap.val() == null || snap.val() == undefined)

@@ -302,7 +302,7 @@ export class HistoryComponent implements OnInit {
         this.setLargestTimestap(this.connections[index])
         .then((result) =>
           {
-            console.log("ngInin => returnd from set largest time stamp")
+            // console.log("ngInin => returnd from set largest time stamp")
             this.setSmallestTimestap(this.connections[index])
             .then(res =>
             {
@@ -371,7 +371,7 @@ export class HistoryComponent implements OnInit {
       .valueChanges()
       .subscribe(data => {
 
-        console.log("data",person.firstName,data)
+        // console.log("data",person.firstName,data)
         if(person.largestTimestamp == UNIX_MAX_TIMESTAMP && data.length == 0){
           reject(false);
         }
@@ -439,7 +439,6 @@ export class HistoryComponent implements OnInit {
       );
     }
     else{
-      console.log()
       this.toastr.info(`${person.firstName} ${person.lastName} has a new alert`,"Notice", 
         {timeOut: 15000} 
       );
@@ -494,7 +493,7 @@ export class HistoryComponent implements OnInit {
 
           
             person.alerts = data.map(doc => {return this.getAlert(doc)}) //empty alerts, incase - snapshotChanges
-            console.log("Debug::Test user alerts: ",person.alerts)
+            // console.log("Debug::Test user alerts: ",person.alerts)
 
             //sort alerts by date
             person.alerts.sort((a, b) => {return a.timestamp-b.timestamp}).reverse();
@@ -544,37 +543,37 @@ export class HistoryComponent implements OnInit {
 
   shallPass(person:Connection | User, data:any):boolean{
 
-    console.log("shall pass:", data);
+    // console.log("shall pass:", data);
 
     if(person.PREV_FLAG){
-      console.log("prev flag");
+      // console.log("prev flag");
       return true;
     } 
     else if(person.NEXT_FLAG){
-      console.log("next flag");
+      // console.log("next flag");
       return true;
     }
     else if(person.alerts.length > 0 && this.hasNext(person)
             && data.length > 0  
             &&  data[data.length - 1].payload.val()['timestamp'] <= person.alerts[0].timestamp){
 
-      console.log("update flag");
+      // console.log("update flag");
       return true;
     }
     else if(person.alerts.length > 1 && !this.hasNext(person)
             && data.length > 0  
             &&  data[data.length - 1].payload.val()['timestamp'] <= person.alerts[0].timestamp){
-      console.log("removing last");
+      // console.log("removing last");
       return true;
     }
     else if(person.alerts.length == 1 && !this.hasNext(person)
             && data.length > 0  
             &&  data[data.length - 1].payload.val()['timestamp'] >= person.alerts[0].timestamp){
-      console.log("independent flag");
+      // console.log("independent flag");
       return true;
     }
 
-    console.log("you shall not pass");
+    //console.log("you shall not pass");
     return false;
           
     
@@ -586,7 +585,7 @@ export class HistoryComponent implements OnInit {
   */
   get_code(person:Connection | User, prev:boolean){
 
-    console.log("In get code")
+    // console.log("In get code")
 
     //let start: number;
     let code: string;
@@ -713,7 +712,7 @@ getSmallestTimestap(timestamp:number,  person: User | Connection):Promise<number
     .once("value")
     .then(data => {
 
-      data.forEach(c => {console.log("getSmallestTimestap", c.val()["timestamp"])})
+      // data.forEach(c => {console.log("getSmallestTimestap", c.val()["timestamp"])})
       if(data.exists){
         data.forEach(c => {resolve(c.val()["timestamp"])})
       }
@@ -733,9 +732,9 @@ getSmallestTimestap(timestamp:number,  person: User | Connection):Promise<number
   dateToTimestamp(timePoint:Date,datePoint:Date)
   {
     var date = new Date(datePoint + ' ' + timePoint); 
-    console.log("Search Debug:: timePoint=",timePoint);
-    console.log("Search Debug:: datePoint=",datePoint);
-    console.log("Search Debug:: date=",date);
+    // console.log("Search Debug:: timePoint=",timePoint);
+    // console.log("Search Debug:: datePoint=",datePoint);
+    // console.log("Search Debug:: date=",date);
 
     //let date = new Date(time.year, time.month-1, time.day, time.hour, time.minutes, time.seconds);
     //let date = new Date(time.date.getFullYear(), time.date.getMonth()-1, time.date.getDay(), time.time.getHours(), time.time.getMinutes());

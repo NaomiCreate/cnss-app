@@ -59,13 +59,13 @@ padding: 10px;
 label{
   color: #0d3a5ff6;
   font-weight: bold;
-  font-family: URW Chancery L, cursive;
+  /* font-family: URW Chancery L; */
 } 
 
 #choice{
   color: whitesmoke;
   font-weight: bold;
-  font-family: URW Chancery L, cursive;
+  /* font-family: URW Chancery L; */
 } 
 
 button#cancel {
