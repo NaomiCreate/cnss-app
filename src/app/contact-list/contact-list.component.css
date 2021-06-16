@@ -27,13 +27,14 @@ padding: 10px;
 }
 .card-title {
   margin: 8px;
-  color: bisque;
+  color: #dbdee7;
   font-weight: 600;
 }
 #add_body {
-  padding: 1.25rem;
+  padding: 30px;
   /* background-color: #d0cac0; */
-  background-color: #d8b9ed;
+  background-color: #210325;
+  color: whitesmoke;
 }
 .card#contacts { 
   margin-top:50px;
@@ -46,79 +47,56 @@ padding: 10px;
   margin-top:50px;
   margin-bottom: 20px;
   width: 400px;
-  background-color: #875959;
+  /* background-color: #875959; */
+  background-color: #173e43;
+  border: 3px solid #2d0a32;
  } 
 .add-section {
   text-align: -webkit-center;
 }
+
 label{
-  color: rgb(39, 95, 144);
+  color: #0d3a5ff6;
   font-weight: bold;
   font-family: URW Chancery L, cursive;
 } 
+
+#choice{
+  color: whitesmoke;
+  font-weight: bold;
+  font-family: URW Chancery L, cursive;
+} 
+
 button#cancel {
   float: left;
 }
-/* input[type="radio"], input[type="checkbox"] {
-  margin-right: 10px;
-  margin-left: 40px;
-} */
-/* input{
-  border-radius: 5px;
-  border-color: #3e3f419a;
-} */
+
 input[type="radio"]{
-  margin: 0 10px 0 10px;
+  /* margin: 0 10px 0 10px; */
+  margin: 5px;
+}
+
+#radio-choice{
+  align-self: center;
+  align-content: center;
+}
+
+input[type="text"],input[type="email"]{
+  border-radius: 3px;
+  border:#0c020e;
+  margin: 5px;
+  height: 30px;
+  width:60%;
+}
+
+#history-share{
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .error-msg{
   background-color: rgba(236, 236, 236, 0);
 }
-/*
-input[type="radio"]{
-    margin: 0 10px 0 10px;
-}
 
-a:hover{
-  color: bisque;
-  background-color: #747679;
-  border-color:  #747679; 
-
-}
-
-#cancel{
-  margin-bottom: 40px;
-}
-
-input{
-  border-radius: 5px;
-  border-color: #3e3f419a;
-}
-
-.error-msg{
-  background-color: rgb(236, 236, 236);
-}
-.btn-danger {
-  color: #fff;
-  background-color: #fc5b6b86;
-  border-color:  #fc5b6b86;
-  width: 150px;
-  margin: 3px;     
-  margin:3px;
-  padding: 5px;
-  border-radius: 5px;
-  width: 150px;
-}
-.btn-danger:hover{
-    background-color: #f5949cc2;
-    border-color:  #f5949cc2; 
-    width: 150px;
-    margin: 3px;
-}
-#table1 {
-  margin-bottom: 30px
-} */
-
-/* align-self: center; */
 
 

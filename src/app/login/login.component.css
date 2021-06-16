@@ -32,6 +32,8 @@
 
 .card-header h3{
     color: white;
+    font-variant-caps: small-caps;
+    font-size: xx-large; 
 }
 
 

@@ -137,12 +137,12 @@ button.showOrHideBtn{
 
 }
 
-.date .far{
+.date .fa{
     margin-right: 10px;
 }
 
-.time .far{
-    margin-right: 10px;
+.time .fa{
+    margin-right: 12px;
 }
 
 .email .fa{

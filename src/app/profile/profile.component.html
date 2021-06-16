@@ -1,17 +1,17 @@
 <div [ngSwitch]="state">
-    <div *ngSwitchCase="Status.StandBy">Loading, please wait... </div>
+    <div class="comment" *ngSwitchCase="Status.StandBy">Loading, please wait... </div>
     <div *ngSwitchDefault>
 
         <div class="accordion" id="accordionInfo">
             <div class="card info">
               <div class="card-header info" id="headingOne">
                   <!-- <h4 class="info_title">Settings Page</h4> -->
-                <h2 class="mb-0">
+                <div class="mb-0">
                   <h4 class="info_title">CNSS Settings</h4>
                   <button class="btn_info" type="button" data-toggle="collapse" data-target="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo">
                     <i class="fa fa-question-circle"></i>
                   </button>
-                </h2>
+                </div>
               </div>
           
               <div id="collapseInfo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionInfo">
@@ -131,5 +131,3 @@
 </div>
 
 <br/>
-<!-- FOR TESTING: -->
-<!-- <button id="cancelOwnership" (click)="cancleOwnership()">Cancle Ownership</button> -->

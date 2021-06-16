@@ -26,10 +26,15 @@
 }
 
 .card-header h3{
-     color: white; 
-    
-    
-    
+    color: #ffffff;
+    font-variant-caps: small-caps;
+    font-size: xx-large; 
+}
+
+.welcome{
+    color: #ffffff;
+    font-variant-caps: small-caps;
+    font-size: x-large; 
 }
 
 

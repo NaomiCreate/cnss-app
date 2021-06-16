@@ -11,17 +11,19 @@
 
 
 <div *ngIf="next==1" class="card">
-	<div class="card-header">
+	<div class="card-header welcome">
 		Welcome to the CNSS website
 	</div>
 
 	<div class="card-body">
 
+		<p class="text-center">
+			<b>Collaborative Network of Home Security Systems</b>
+		</p>
+
 		<p class="card-text">
-			CNSS stands for 'Collaborative Network of Home Security Systems'.
-			<br><br>
-			If you are currently not a CNSS security system owner,
-			choose the option 'I don't own a CNSS security system' when registering.
+			If you are currently <b>not a CNSS security system owner</b>,
+			choose the option <mark>'I don't own a CNSS security system'</mark> when registering.
 			<br>
 			<br>
 			Once you confirm requests from other security system owners
@@ -38,21 +40,21 @@
 
 
 <div *ngIf="next==2" class="card">
-	<div class="card-header">
+	<div class="card-header welcome">
 		Welcome to the CNSS website
 	</div>
 
 	<div class="card-body">
 
 		<p class="card-text">
-			If you are a CNSS security system owner,
+			<b>If you are a CNSS security system owner</b>,
 			<br>
 			<br>
 			You may register as a non security system owner and later update your device through the settings.
 			<br>
 			<br>
 			Or configure your device (insturctions can be found in the user guide that was given to you),
-			Select option 'I own a CNSS security system' and enter your device ID. 
+			Select option <mark>'I own a CNSS security system'</mark> and enter your device ID. 
 		</p>
 
 		<input type="submit" value="Back" class="btn float-left login_btn" (click)="next=1">

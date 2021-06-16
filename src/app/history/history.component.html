@@ -4,12 +4,12 @@
 <div class="accordion" id="accordionInfo">
        <div class="card info">
          <div class="card-header info" id="headingOne">
-           <h2 class="mb-0">
-             <h4 class="info_title">Alerts History</h4>
+           <div class="mb-0">
+             <h4 class="info_title">History</h4>
              <button class="btn_info" type="button" data-toggle="collapse" data-target="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo">
                <i class="fa fa-question-circle"></i>
              </button>
-           </h2>
+       </div>
          </div>
      
          <div id="collapseInfo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionInfo">
@@ -53,11 +53,11 @@
                                                                       class="fa fa-trash"></i></button>
                                                         <!-- <h5 class="card-title">Alert was sent from my CNSS device at:</h5> -->
                                                         <div class="date">
-                                                               <i class='far fa-calendar'></i>
+                                                               <i class='fa fa-calendar'></i>
                                                                {{alert.timestamp | date:'dd/MM/yyyy'}}
                                                         </div>
                                                         <div class="time">
-                                                               <i class='far fa-clock'></i>
+                                                               <i class='fa fa-clock'></i>
                                                                {{alert.timestamp | date:'HH:mm:ss'}}
                                                         </div>
                                                         <div style="color: rgb(156, 156, 143);">For Testig: {{alert.alertID}}      {{alert.timestamp}}</div>
@@ -394,10 +394,10 @@
 
               </div>
 
-              <div class="card user card-subtitle" *ngSwitchCase="state.Deny">Currently, you are not a contact of any CNSS device owner</div>
+              <div class="comment" *ngSwitchCase="state.Deny">Currently, you are not a contact of any CNSS device owner</div>
 
               <!--default case when there are no matches -->
-              <div class="card user card-subtitle" *ngSwitchDefault> Loading, please wait... </div>
+              <div class="comment" *ngSwitchDefault> Loading, please wait... </div>
               <!--For state.StandBy-->
        </div>
 
