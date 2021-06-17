@@ -177,3 +177,11 @@ input[type=checkbox]
   padding: 10px;
 }
 
+.debug{
+    color: #FFFFFE;
+}
+
+.debug:hover{
+    color: rgb(156, 156, 143);
+}
+

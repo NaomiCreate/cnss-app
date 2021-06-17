@@ -7,7 +7,7 @@
             </div>   
                                       
             <div class= "list-items">           
-                <a routerLink="/login" class="list-item" (click)="looseSubscription(); authservice.logout()">
+                <a routerLink="/login" class="list-item" (click)="authservice.logout()">
                     <i class="material-icons">arrow_right</i>
                     Logout
                 </a>       
@@ -15,13 +15,14 @@
                     <i class="material-icons">arrow_right</i>
                     Settings
                 </a>
-                <a *ngIf="is_device_owner" routerLink="/contact-list" routerLinkActive="selected" class="list-item">
+                <a id="owners" *ngIf="is_device_owner" routerLink="/contact-list" routerLinkActive="selected" class="list-item">
                     <i class="material-icons">arrow_right</i>
-                    Manage my alert sharing / Send requests
+                    Manage my alert sharing / Send requests      
                 </a>
+                <label>*CNSS owenrs only</label>
                 <a routerLink="/connected-to" routerLinkActive="selected" class="list-item">
                     <i class="material-icons">arrow_right</i>
-                    Recieved requests   
+                    Recieved requests  
                 </a>
                 <a routerLink="/history" routerLinkActive="selected" class="list-item">
                     <i class="material-icons">arrow_right</i>

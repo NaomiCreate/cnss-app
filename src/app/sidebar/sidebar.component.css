@@ -108,3 +108,20 @@
     flex-wrap: wrap;
     align-content: center;
 }
+
+
+
+
+/*---------title--------------*/
+label{
+    color:whitesmoke;
+    font-size: 14px;
+    margin-left: 50%;
+    margin-top: 0%;
+    padding-top: 0%;
+    font-style: oblique;
+}
+
+#owners{
+    padding-bottom: 0%;
+}

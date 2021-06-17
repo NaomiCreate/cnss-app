@@ -60,7 +60,7 @@
                                                                <i class='fa fa-clock-o'></i>
                                                                {{alert.timestamp | date:'HH:mm:ss'}}
                                                         </div>
-                                                        <div style="color: rgb(156, 156, 143);">For Testig: {{alert.alertID}}      {{alert.timestamp}}</div>
+                                                        <div class="debug">{{alert.alertID}} {{alert.timestamp}}</div>
                                                  </div>
                                           </div>
 
@@ -169,7 +169,7 @@
                      </div>
 
                      <div *ngSwitchCase="state.Deny"> 
-                            <p class="card-subtitle">Currently, you are not a security system owner</p>
+                            <p class="card-subtitle">Currently, you are not a CNSS security system owner</p>
                      </div>
                      <!--default case when there are no matches -->
                      <div *ngSwitchDefault> 
@@ -240,7 +240,7 @@
                                                                                            <i class='far fa-clock'></i>
                                                                                            {{alert.timestamp | date:'HH:mm:ss'}}
                                                                                     </div>
-                                                                                    <div style="color: rgb(156, 156, 143);">For Testig: {{alert.alertID}}      {{alert.timestamp}}</div>
+                                                                                    <div class="debug">{{alert.alertID}} {{alert.timestamp}}</div>
                                                                              </div>
                                                                       </div>
 

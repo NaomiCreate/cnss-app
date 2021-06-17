@@ -330,17 +330,18 @@ export class ContactListComponent implements OnInit {
             if (doc.exists) {
               this.crudservice.delete_contact(this.authservice.currentUserId, email);
               this.crudservice.delete_connection(doc.data()[email], this.authservice.currentUserName);
+              this.messageEditContact = 'Contact deleted successfully';
             }
           }).catch(error => { console.log(error) });
       }
 
     }
-    this.messageEditContact = 'Contact deleted successfully';
+    
   }
 
   DeleteRequest(email: string) {
     this.cleanMessages();
-    if (confirm("Are you sure you want to cancle this Request?")) {
+    if (confirm("Are you sure you want to cancle this request?")) {
       this.crudservice.get_uidFromEmail(email)
         .then((doc) => {
           if (doc.exists) {
@@ -348,11 +349,10 @@ export class ContactListComponent implements OnInit {
             this.crudservice.delete_request(doc.data()[email], this.authservice.currentUserName);
             //delete Y from the contacts on X
             this.crudservice.delete_contact(this.authservice.currentUserId, email)//.then(()=> this.set_contacts());
-
+            this.messageEditContact = 'The request deleted successfully';
           }
         }).catch(error => { console.log(error) });
     }
-    this.messageEditContact = 'The request deleted successfully';
   }
 
   validateForm() {

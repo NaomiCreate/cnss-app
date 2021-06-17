@@ -13,7 +13,7 @@ import { Observable, Subscription } from 'rxjs';
 export class SidebarComponent implements OnInit{
   isSidebarOpen:boolean = false; //will hold the sidebar state 
 
-  is_device_owner:boolean = false;
+  is_device_owner:boolean = true;
   dbData:Subscription;
 
   constructor(public authservice: AuthService, public router: Router, public crudservice:CrudService) { }
@@ -30,28 +30,28 @@ export class SidebarComponent implements OnInit{
 
   isOwner(){
 
-    this.dbData = this.crudservice.get_userInfo().subscribe(
-      (result) => {
-        if(result.length > 0){
-          if(result[0].payload.doc.data().is_device_owner){
-            this.is_device_owner = true;
-          }
-          else{
-            this.is_device_owner = false;
-          }
-        }
-      }
-    )
+    // this.dbData = this.crudservice.get_userInfo().subscribe(
+    //   (result) => {
+    //     if(result.length > 0){
+    //       if(result[0].payload.doc.data().is_device_owner){
+    //         this.is_device_owner = true;
+    //       }
+    //       else{
+    //         this.is_device_owner = false;
+    //       }
+    //     }
+    //   }
+    // )
       
   }
 
   ngOnInit(): void {}
 
-  looseSubscription(){
-    if(this.dbData != null){
-      this.dbData.unsubscribe();
-    }
-  }
+  // looseSubscription(){
+  //   if(this.dbData != null){
+  //     this.dbData.unsubscribe();
+  //   }
+  // }
 
   ngOnDestroy(){
     if(this.dbData != null){

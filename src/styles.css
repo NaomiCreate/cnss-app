@@ -99,6 +99,7 @@ button:focus {
     border-color: #f1c46f;
     align-self: flex-end;
     width: 55px;
+    height: 43px;
     color: #000000e0;
     float: right;
 }
