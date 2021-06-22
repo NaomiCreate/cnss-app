@@ -26,8 +26,8 @@
 			choose the option <mark>'I don't own a CNSS security system'</mark> when registering.
 			<br>
 			<br>
-			Once you confirm requests from other security system owners,
-			you will be able to veiw alerts recieved from their devices.
+			After you accept requests from other security system owners,
+			you will be able to view alerts received from their devices.
 			<br>
 		</p>
 
@@ -50,11 +50,11 @@
 			<b>If you are a CNSS security system owner</b>,
 			<br>
 			<br>
-			You may register as a non security system owner and later update your device through the settings.
+			You may register as a non-security system owner and later update your device ID through the settings.
 			<br>
 			<br>
-			Or, configure your device (insturctions can be found in the user guide that was given to you),
-			Select option <mark>'I own a CNSS security system'</mark> and enter your device ID. 
+			If you already configured your device (see User Guide),
+			Select the option <mark>'I own a CNSS security system'</mark> when registering, and enter your device ID. 
 		</p>
 
 		<input type="submit" value="Back" class="btn float-left login_btn" (click)="next=1">
@@ -84,42 +84,42 @@
 						<span class="input-group-text"><i class="fa fa-envelope"></i></span>
 					</div>
 					<input type="email" formControlName="userInputEmail" class="form-control" placeholder="Enter email">	
-					<div class="alert alert-danger" *ngIf="rForm.controls['userInputEmail'].touched && !rForm.controls['userInputEmail'].valid">Email is required in format: username@example.com</div>
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputEmail'].dirty && !rForm.controls['userInputEmail'].valid">Email is required in format: username@example.com</div>
 				</div>
 				<div class="input-group form-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fas fa-key"></i></span>
 					</div>
 					<input type="password" formControlName="userInputPassword" class="form-control" placeholder="Enter password">
-					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPassword'].touched && !rForm.controls['userInputPassword'].valid">Password should be atleast 6 characters</div>
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPassword'].dirty && !rForm.controls['userInputPassword'].valid">Password should be at least 6 characters</div>
 				</div>
 				<div class="input-group form-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fas fa-key"></i></span>
 					</div>
 					<input type="password" formControlName="userInputPasswordValidation" class="form-control" placeholder="Confirm password">
-					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPasswordValidation'].touched && !rForm.controls['userInputPasswordValidation'].valid">Password should be atleast 6 characters</div>
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPasswordValidation'].dirty && !rForm.controls['userInputPasswordValidation'].valid">Password should be at least 6 characters</div>
 				</div>
 				<div class="input-group form-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fas fa-user"></i></span>
 					</div>
 					<input type="name" formControlName="userInputFirstName" class="form-control" placeholder="Enter first name">
-					<div class="alert alert-danger" *ngIf="rForm.controls['userInputFirstName'].touched && !rForm.controls['userInputFirstName'].valid">First name is required</div>
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputFirstName'].dirty && !rForm.controls['userInputFirstName'].valid">First name is required</div>
 				</div>
 				<div class="input-group form-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fas fa-user"></i></span>
 					</div>
 					<input type="name" formControlName="userInputLastName" class="form-control" placeholder="Enter last name">
-					<div class="alert alert-danger" *ngIf="rForm.controls['userInputLastName'].touched && !rForm.controls['userInputLastName'].valid">Last name is required</div>
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputLastName'].dirty && !rForm.controls['userInputLastName'].valid">Last name is required</div>
 				</div>
 				<div class="input-group form-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text"><i class="fas fa-phone"></i></span>
 					</div>
 					<input type="phone" formControlName="userInputPhone" class="form-control" placeholder="Enter phone number (digits only)">
-					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPhone'].touched && !rForm.controls['userInputPhone'].valid">Phone number is required (10 digits)</div>
+					<div class="alert alert-danger" *ngIf="rForm.controls['userInputPhone'].dirty && !rForm.controls['userInputPhone'].valid">Phone number is required (10 digits)</div>
 				</div>
 
 				<div class="ownrship">
@@ -138,7 +138,7 @@
 				
 				<div id="bottom-div" class="form-group">
 					<a href="#" routerLink="/login">Back to Log in</a>
-					<input type="submit" value="Register" class="btn float-right login_btn" [disabled]="!rForm.valid">
+					<input type="submit" value="Register" class="btn float-right login_btn" [disabled]="rForm.invalid">
 				</div>
 			</form>
 

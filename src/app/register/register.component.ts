@@ -57,17 +57,12 @@ export class RegisterComponent implements OnInit {
     //here we will specifie the validations
     
     this.rForm = fb.group({
-      'userInputEmail': [null, Validators.compose([Validators.required, Validators.email])],
-      'userInputPassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
-      'userInputPasswordValidation': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
-      'userInputFirstName':[null,Validators.required],
-      'userInputLastName':[null,Validators.required],
-      'userInputPhone': [null, Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
-      // 'userInputIsOwner':'',
-      // 'userInputIsDeviceOwner':[null,Validators.required],
-      // 'userInputDeviceId':''
-
-      //'userInputDeviceId':[null,Validators.required]
+      'userInputEmail': ['', Validators.compose([Validators.required, Validators.email])],
+      'userInputPassword': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputPasswordValidation': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputFirstName':['',Validators.required],
+      'userInputLastName':['',Validators.required],
+      'userInputPhone': ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
     });
   }
 

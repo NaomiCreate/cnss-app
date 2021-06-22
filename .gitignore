@@ -52,6 +52,7 @@ Thumbs.db
 /.firebase
 /.firebaserc
 /firebase.json
+/firestore.rules
 
 
 

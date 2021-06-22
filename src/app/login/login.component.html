@@ -35,7 +35,7 @@
 					<span class="input-group-text"><i class="fa fa-envelope"></i></span>
 				</div>
 				<input type="email" formControlName="userInputEmail" class="form-control" placeholder="Enter email">
-				<div class="alert alert-danger" *ngIf="rForm.controls['userInputEmail'].touched && !rForm.controls['userInputEmail'].valid">Email is required in format: username@example.com</div>
+				<div class="alert alert-danger" *ngIf="rForm.controls['userInputEmail'].dirty && !rForm.controls['userInputEmail'].valid">Email is required in format: username@example.com</div>
 
 			</div>
 			<div class="input-group form-group">
@@ -43,12 +43,12 @@
 					<span class="input-group-text"><i class="fas fa-key"></i></span>
 				</div>
 				<input type="password" formControlName="userInputPassword" class="form-control" placeholder="Enter password">
-				<div class="alert alert-danger" *ngIf="rForm.controls['userInputPassword'].touched && !rForm.controls['userInputPassword'].valid">Password should be atleast 6 characters</div>
+				<div class="alert alert-danger" *ngIf="rForm.controls['userInputPassword'].dirty && !rForm.controls['userInputPassword'].valid">Password should be at least 6 characters</div>
 			</div>
 
 			<div class="clickable">
 				<div class="form-group">
-					<input type="submit" class="btn float-right login_btn" value="Log in"  [disabled]="!rForm.valid">
+					<input type="submit" class="btn float-right login_btn" value="Log in"  [disabled]="rForm.invalid">
 				</div>
 
 				<div class="register">

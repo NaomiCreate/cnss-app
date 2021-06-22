@@ -43,10 +43,10 @@ export class ChangePasswordComponent implements OnInit {
   constructor(private fb: FormBuilder, public authservice: AuthService, private router: Router) {
     //here we will specifie the validations
     this.rForm = fb.group({
-      'userInputEmail': [null, Validators.compose([Validators.required, Validators.email])],//[null,Validators.required], //Validators.email?
-      'userInputCurrentPassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
-      'userInputFuturePassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
-      'userInputFuturePasswordValidation': [null, Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputEmail': ['', Validators.compose([Validators.required, Validators.email])],//[null,Validators.required], //Validators.email?
+      'userInputCurrentPassword': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputFuturePassword': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'userInputFuturePasswordValidation': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
     });
   }
 

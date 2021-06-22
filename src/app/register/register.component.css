@@ -88,14 +88,18 @@ label{
     margin-left: 10px;
     color:gray;
 }
-input.ng-invalid.ng-touched,textarea.ng-invalid.ng-touched{
-    border: 2px solid red;
+input.ng-invalid.ng-dirty,textarea.ng-invalid.ng-dirty{
+    border: 1px solid red;
+    border-radius: 5px;
     width: 300px;
 }
 .alert.alert-danger{
     padding: 2px;
     font-size: 12px;
-    width: 350px
+    width: 350px;
+    margin:0px;
+    background-color: #f8eed757;
+    border-color: #ffffff;
 }
 label.notes {
     font-size: 14px;

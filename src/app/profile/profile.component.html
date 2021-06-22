@@ -18,7 +18,7 @@
                     Here you can edit your personal details.<br>
                     Your phone number and email will be visible to your contacts.<br>
                     If you are a CNSS device owner, you can turn the security system On/Off using the switch.<br>
-                    To register a new CNSS device click on 'Edit'.<br/><br/>
+                    To register a new CNSS device click 'Edit'.<br/><br/>
                     Note: when you change your password you will remain logged in.
                 </div>
               </div>
@@ -62,13 +62,13 @@
                         </tr>
                         <tr *ngIf="item.is_device_owner; else elseNotOwningCNSSBlock">
                             <th>Are you a CNSS owner?<br>
-                                <label class="notes">*To change your device ID, click on "Edit"</label>
+                                <label class="notes">*To change your device ID, click "Edit"</label>
                             </th>  
                             <td>Yes</td>
                         </tr>
                         <ng-template #elseNotOwningCNSSBlock>
                             <th>Are you a CNSS owner?<br>
-                                <label class="notes">*To add a device ID, click on "Edit"</label>
+                                <label class="notes">*To add a device ID, click "Edit"</label>
                             </th>     
                             <td>No</td>
                         </ng-template>

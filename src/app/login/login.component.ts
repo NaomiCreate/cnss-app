@@ -43,8 +43,8 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,private authservice: AuthService, private router: Router) { 
     //here we will specifie the validations
     this.rForm = fb.group({
-      'userInputEmail': [null, Validators.compose([Validators.required, Validators.email])],
-      'userInputPassword': [null, Validators.compose([Validators.required, Validators.minLength(6)])]
+      'userInputEmail': ['', Validators.compose([Validators.required, Validators.email])],
+      'userInputPassword': ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     });
   }
   
