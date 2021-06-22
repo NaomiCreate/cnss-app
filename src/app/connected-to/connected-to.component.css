@@ -7,7 +7,17 @@
     width: 400px;
     background-color: #062036f6;
     border: 3px solid #2d0a32;
- }   
+ } 
+
+ #request-title{
+  margin-bottom: 5px;
+ }
+ 
+ .card-subtitle{
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: beige;
+}
  
  .card#requests { 
     margin-top:20px;

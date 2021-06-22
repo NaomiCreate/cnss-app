@@ -28,7 +28,8 @@
 
                 <div *ngFor="let request of  requests">
                     <div class="card" id="requests">
-                        <h5 class="card-title text-center">{{request.firstName}} {{request.lastName}}</h5>
+                        <h5 id="request-title" class="card-title text-center">{{request.firstName}} {{request.lastName}}</h5>
+                        <div class="card-subtitle">wants to add you to their contact list</div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><label>First name</label><br>{{request.firstName}}</li>
                             <li class="list-group-item"><label>Last name</label><br>{{request.lastName}}</li>
@@ -37,7 +38,7 @@
                         </ul>
                         <span>
                             <a routerLink="/connected-to"  (click)="rejectRequest(request.email)" class="btn btn-danger" id="reject">Reject request</a>
-                            <a routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn" id="btn-accept">Confirm request</a>
+                            <a routerLink="/connected-to"  (click)="confirmRequest(request.email)" class="btn" id="btn-accept">Accept request</a>
                         </span>
                     </div>
                 </div>
