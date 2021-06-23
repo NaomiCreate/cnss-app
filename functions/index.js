@@ -10,6 +10,8 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
 
+//1624368667048
+
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 // exports.helloWorld = functions.https.onRequest((request, response) => {
@@ -20,14 +22,6 @@ const db = admin.firestore();
 
 const { SENDER_EMAIL, SENDER_PASSWORD } = process.env;
 
-const mailTransport = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: SENDER_EMAIL,
-    pass: SENDER_PASSWORD,
-  },
-});
-
 exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
   .onWrite(
     (snapshot, context) => { 
@@ -36,44 +30,6 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
       sendMail(snapshot, context);
 
       return true;
-    //   const { before, after } = snapshot;
-
-    //   if (before.val() == null) {//New alert created
-    //     functions.logger.info('context.params.device_ID =', context.params.device_ID);
-
-    //     // get owners uID from device ID
-    //     const deviceRef = db.collection('deviceToUid').doc(context.params.device_ID);
-    //     const uidDoc = await deviceRef.get();
-
-    //     if(!uidDoc.exists){
-    //       functions.logger.info("No such document!");
-    //       return;
-    //     }
-
-    //     console.log('owners uID:', uidDoc.data()[context.params.device_ID]);
-
-    //     // get users email from uID
-    //     const userRef = db.collection('users').doc(uidDoc.data()[context.params.device_ID]).collection('user-info');
-    //     const userInfo = await userRef.get();
-
-    //     if(!userInfo.exists){
-    //       functions.logger.info("No such collection!");
-    //       return;
-    //     }
-
-    //     const email = userInfo[0].id; // owners email
-
-
-    //     const mailOptions = {
-    //       from: 'CNSS <noreply@firebase.com',
-    //       to: email,
-    //       subject: 'Sending Email using Node.js',
-    //       text: 'That was easy!'
-    //     };
-
-    //     const info = await mailTransport.sendMail(mailOptions);
-    //     console.log("Message sent: ", info.messageId)
-      // }
     }
   );
 
@@ -106,6 +62,17 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
       }
 
       const email = userInfo.docs[0].id; // owners email
+
+      const mailTransport = nodemailer.createTransport({
+        service: 'gmail',
+        // host: 'smtp.gmail.com',
+        // port: 465,
+        // secure: true, 
+        auth: {
+          user: SENDER_EMAIL,
+          pass: SENDER_PASSWORD,
+        },
+      });
     
       console.log('DEBUG:: FROM: ',SENDER_EMAIL);
       console.log('DEBUG:: TO: ', email);
@@ -114,11 +81,17 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
         from: 'CNSS <noreply@firebase.com',
         to: email,
         subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
+        text: 'Another email, for testing'
       };
 
-      const info = await mailTransport.sendMail(mailOptions);
-      console.log("Message sent: ", info.messageId)
+      mailTransport.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+          console.log("Message sent: ", info.messageId);
+        }
+      });
     }
   }
 
