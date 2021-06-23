@@ -57,17 +57,38 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
       const userInfo = await userRef.get();
 
       if(userInfo.empty){
-        functions.logger.info("No such collection!");
+        functions.logger.info("No such collection (1)!");
         return;
       }
 
       const email = userInfo.docs[0].id; // owners email
+      const firstName =  userInfo.docs[0].data().firstName;
+      const lastName = userInfo.docs[0].data().lastName;
+      const phone = userInfo.docs[0].data().phone;
+
+      // get users contact
+      const contactRef = db.collection('users').doc(uidDoc.data()[context.params.device_ID]).collection('contacts');
+      const contactList = await contactRef.get();
+
+      if(contactList.empty){
+        functions.logger.info("No such collection (2)!");
+      }
+     
+      let contacts = []; // initialize contact list
+
+      contactList.forEach(
+        (doc) => {
+          if(doc.data().confirmed){
+            contacts.push(doc.id);
+          }
+        }
+      )
+
+      console.log("DEBUG:: CONTACTS:", contacts);
+      
 
       const mailTransport = nodemailer.createTransport({
         service: 'gmail',
-        // host: 'smtp.gmail.com',
-        // port: 465,
-        // secure: true, 
         auth: {
           user: SENDER_EMAIL,
           pass: SENDER_PASSWORD,
@@ -78,10 +99,15 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
       console.log('DEBUG:: TO: ', email);
 
       const mailOptions = {
-        from: 'CNSS <noreply@firebase.com',
+        from: 'CNSS <noreply@firebase.com>',
         to: email,
-        subject: 'Sending Email using Node.js',
-        text: 'Another email, for testing'
+        bcc: contacts,
+        subject: `${firstName} ${lastName} | CNSS device | Motion detected`,
+        text: `Suspicious movement detected from ${firstName} ${lastName}'s CNSS device,
+               Please check it out.
+               Contact details:
+               Phone: ${phone}
+               Email: ${email}`
       };
 
       mailTransport.sendMail(mailOptions, function (error, info) {
