@@ -94,20 +94,23 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
           pass: SENDER_PASSWORD,
         },
       });
+
     
       console.log('DEBUG:: FROM: ',SENDER_EMAIL);
       console.log('DEBUG:: TO: ', email);
+
 
       const mailOptions = {
         from: 'CNSS <noreply@firebase.com>',
         to: email,
         bcc: contacts,
         subject: `${firstName} ${lastName} | CNSS device | Motion detected`,
-        text: `Suspicious movement detected from ${firstName} ${lastName}'s CNSS device,
-               Please check it out.
-               Contact details:
-               Phone: ${phone}
-               Email: ${email}`
+        html: `<p dir=ltr>Suspicious movement detected from ${firstName} ${lastName}'s CNSS device,<br>
+              please check it out.<br>
+              Contact details:<br>
+              Phone: ${phone}<br>
+              Email: ${email}<br></p>`
+        
       };
 
       mailTransport.sendMail(mailOptions, function (error, info) {
