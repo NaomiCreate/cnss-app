@@ -54,7 +54,13 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
 
       // get users email from uID
       const userRef = db.collection('users').doc(uidDoc.data()[context.params.device_ID]).collection('user-info');
-      const userInfo = await userRef.get();
+      //const userInfo = await userRef.get();
+
+      // get users contact
+      const contactRef = db.collection('users').doc(uidDoc.data()[context.params.device_ID]).collection('contacts');
+      //const contactList = await contactRef.get();
+
+      const [userInfo, contactList] =  await Promise.all([userRef.get(), contactRef.get()]);
 
       if(userInfo.empty){
         functions.logger.info("No such collection (1)!");
@@ -66,10 +72,7 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
       const lastName = userInfo.docs[0].data().lastName;
       const phone = userInfo.docs[0].data().phone;
 
-      // get users contact
-      const contactRef = db.collection('users').doc(uidDoc.data()[context.params.device_ID]).collection('contacts');
-      const contactList = await contactRef.get();
-
+      
       if(contactList.empty){
         functions.logger.info("No such collection (2)!");
       }
@@ -118,7 +121,6 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
           console.log(error);
         } else {
           console.log('Email sent: ' + info.response);
-          console.log("Message sent: ", info.messageId);
         }
       });
     }
