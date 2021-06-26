@@ -10,27 +10,15 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
 
-//1624368667048
-
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-// The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
-
 const { SENDER_EMAIL, SENDER_PASSWORD } = process.env;
 
 exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
   .onWrite(
-    (snapshot, context) => { 
-
-      console.log('DEBUG:: IN ONWRITE');
-      sendMail(snapshot, context);
-
+    async (snapshot, context) => { 
+      await sendMail(snapshot, context);
       return true;
     }
+
   );
 
   async function sendMail(snapshot, context){
@@ -54,11 +42,9 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
 
       // get users email from uID
       const userRef = db.collection('users').doc(uidDoc.data()[context.params.device_ID]).collection('user-info');
-      //const userInfo = await userRef.get();
 
       // get users contact
       const contactRef = db.collection('users').doc(uidDoc.data()[context.params.device_ID]).collection('contacts');
-      //const contactList = await contactRef.get();
 
       const [userInfo, contactList] =  await Promise.all([userRef.get(), contactRef.get()]);
 
@@ -76,16 +62,11 @@ exports.test = functions.database.ref("/devices/{device_ID}/history/{alert_ID}")
       if(contactList.empty){
         functions.logger.info("No such collection (2)!");
       }
-     
-      let contacts = []; // initialize contact list
 
-      contactList.forEach(
-        (doc) => {
-          if(doc.data().confirmed){
-            contacts.push(doc.id);
-          }
-        }
-      )
+      let contacts = contactList.docs
+                      .filter((doc) => doc.data().confirmed)
+                      .map((doc) => doc.id);
+     
 
       console.log("DEBUG:: CONTACTS:", contacts);
       
