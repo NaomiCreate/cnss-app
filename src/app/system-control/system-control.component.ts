@@ -33,27 +33,40 @@ export class SystemControlComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.crudservice.get_userDetails()
-    .then(
-      (result)=>{
-        if(result.data().is_device_owner){
-          this.deviceId = result.data().device_id;
-          this.dbPath = `/devices/${this.deviceId}`;
+    this.isOwner(); // start listener
+    
+  }
+
+  isOwner(){
+
+    this.dbData = this.crudservice.get_userInfo().subscribe(
+      (result) => {
+        if(result.length > 0){
+
+          // not a device owner
+          if(!result[0].payload.doc.data().is_device_owner){
+            this.switch = Switch.StandBy;
+          }
+
+          // device owner
+          else{
+      
+            this.deviceId = result[0].payload.doc.data().device_id;//result.data().device_id;
+            this.dbPath = `/devices/${this.deviceId}`;
+            this.checkState();
+             
+          }
         }
-        this.isOwner();
       }
-    )  
+    )
   }
 
   checkState(){
 
-    console.log("Debug:: system-control checkState()");
-
     this.db.database.ref(this.dbPath+"/control").on('value',(snap)=>{
       if(snap.val() == null || snap.val() == undefined)
       {
-        //create path and defined it as off
-        //this.db.list(this.dbPath).update('control',{state: 'off' });
+        this.visualSwitchState=false;
         this.switch = Switch.Off;
       }
       else
@@ -74,6 +87,7 @@ export class SystemControlComponent implements OnInit {
     
   }
 
+
   switchState(){
 
     if(this.switch == Switch.On) //If currentState==On -> turn Off
@@ -90,27 +104,8 @@ export class SystemControlComponent implements OnInit {
     }
   }
 
-  isOwner(){
-    this.dbData = this.crudservice.get_userInfo().subscribe(
-      (result) => {
-        if(result.length > 0){
-          // alert(`isOwner: ${result[0].payload.doc.data().is_device_owner}`);
-          if(!result[0].payload.doc.data().is_device_owner){
-            this.switch = Switch.StandBy;
-          }
-          else{
-            this.checkState();
-          }
-        }
-      }
-    )
-  }
 
-  // loosePermition(){
-  //   if(this.dbData != null){
-  //     this.dbData.unsubscribe();
-  //   }
-  // }
+
 
 
   ngOnDestroy(){
